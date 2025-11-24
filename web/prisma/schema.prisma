@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id              String          @id @default(cuid())
+  name            String?
+  email           String          @unique
+  emailVerified   DateTime?
+  image           String?
+  password        String?
+  role            Role            @default(USER)
+  posts           Review[]
+  comments        Comment[]
+  accounts        Account[]
+  sessions        Session[]
+  Authenticators  Authenticator[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model Review {
+  id        String    @id @default(uuid())
+  title     String
+  content   String
+  mintiness      Int
+  tasteScore     Int?
+  chocoRichness  Int?
+  published      Boolean    @default(true)
+  userId    String
+  chocolateId    Int
+  chocolate Chocolate  @relation(fields: [chocolateId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Comment {
+  id        String    @id @default(uuid())
+  content   String
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  reviewId    String
+  review      Review      @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Brand {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  country    String?
+  chocolates Chocolate[]
+
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Category {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  slug       String      @unique
+  sortOrder  Int         @default(0)
+  chocolates Chocolate[]
+
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Chocolate {
+  id            Int       @id @default(autoincrement())
+  name          String
+  brandId       Int
+  categoryId    Int?
+  description   String?
+  cacaoPercent  Decimal?  @db.Decimal(5, 2)  // 例: 62.50
+  hasMint       Boolean   @default(true)
+  status        Int       @default(0)        // 0: proposed, 1: approved, 2: archived など（任意）
+  price         Int?
+
+  brand         Brand     @relation(fields: [brandId], references: [id])
+  category      Category? @relation(fields: [categoryId], references: [id])
+  reviews       Review[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([brandId, name])                 // 同ブランド内で同名を禁止
+}
