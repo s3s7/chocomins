@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Role } from '@prisma/client'
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
