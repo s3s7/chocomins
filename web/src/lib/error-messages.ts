@@ -9,6 +9,8 @@ export const getErrorMessage = (errorCode: ErrorCode | string): string => {
       process.env.NODE_ENV === 'production'
         ? '登録できませんでした。入力内容をご確認ください'
         : 'このメールアドレスは既に登録されています',
+    NOT_FOUND: '投稿が見つかりません',
+    FORBIDDEN: 'この操作を行う権限がありません',
   }
 
   return messages[errorCode as ErrorCode] || '予期せぬエラーが発生しました'
