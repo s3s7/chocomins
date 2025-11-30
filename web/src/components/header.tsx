@@ -33,6 +33,20 @@ export function Header() {
         {session?.user ? (
           <div className="flex items-center space-x-2">
             <span>こんにちは, {session.user.name || session.user.email}</span>
+             <Link
+              href="/reviews"
+              className="rounded bg-blue-500 px-3 py-1 text-white"
+            >
+              投稿一覧
+            </Link>
+            {session.user.role === Role.ADMIN && (
+	          <Link
+	            href="/admin"
+	            className="rounded bg-yellow-500 px-3 py-1 text-white"
+	          >
+	            管理者ページ
+	          </Link>
+	        )}
               <button
                 onClick={handleLogout}
                 className="rounded bg-red-500 px-3 py-1 text-white"

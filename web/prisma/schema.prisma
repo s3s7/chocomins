@@ -16,7 +16,7 @@ model User {
   image           String?
   password        String?
   role            Role            @default(USER)
-  posts           Review[]
+  reviews           Review[]
   comments        Comment[]
   accounts        Account[]
   sessions        Session[]
@@ -34,7 +34,7 @@ model Review {
   chocoRichness  Int?
   published      Boolean    @default(true)
   userId    String
-  chocolateId    Int
+  chocolateId    String
   chocolate Chocolate  @relation(fields: [chocolateId], references: [id])
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments  Comment[]
@@ -112,7 +112,7 @@ enum Role {
 }
 
 model Brand {
-  id         Int         @id @default(autoincrement())
+  id         String      @id @default(uuid())
   name       String      @unique
   country    String?
   chocolates Chocolate[]
@@ -122,7 +122,7 @@ model Brand {
 }
 
 model Category {
-  id         Int         @id @default(autoincrement())
+  id         String      @id @default(cuid())
   name       String      @unique
   slug       String      @unique
   sortOrder  Int         @default(0)
@@ -133,10 +133,10 @@ model Category {
 }
 
 model Chocolate {
-  id            Int       @id @default(autoincrement())
+  id            String      @id @default(uuid())
   name          String
-  brandId       Int
-  categoryId    Int?
+  brandId       String
+  categoryId    String?
   description   String?
   cacaoPercent  Decimal?  @db.Decimal(5, 2)  // 例: 62.50
   hasMint       Boolean   @default(true)
