@@ -1,8 +1,14 @@
 import { z } from 'zod'
 
 export const chocolateSchema = z.object({
-  title: z.string().min(1, 'タイトルは必須です'),
-  content: z.string().min(1, '本文は必須です'),
+  name: z.string().min(1, '商品名は必須です'),
+  description: z.string().min(1),
+  cacaoPercent: z.coerce.number().min(0),
+  hasMint: z.coerce.boolean(),
+    status: z.coerce.number(),
+  price: z.coerce.number(),
+  brandId:z.string().min(1),
+  categoryId: z.string().min(1).optional(),
 })
 
 export type ChocolateInput = z.infer<typeof chocolateSchema>

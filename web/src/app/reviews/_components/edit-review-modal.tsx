@@ -45,6 +45,7 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
       reviewId: review.id,
       title: review.title,
       content: review.content,
+      mintiness: review.mintiness,
     },
   })
 

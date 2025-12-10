@@ -2,11 +2,11 @@
 
 import { auth } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
-import { ReviewInput, reviewSchema } from '@/schemas/review'
+import { ChocolateInput, chocolateSchema } from '@/schemas/chocolate'
 import { ActionResult, ErrorCodes } from '@/types'
-import { createReviewInDB } from '@/services/create-review'
+import { createChocolateInDB } from '@/services/create-chocolate'
 
-export async function createReview(
+export async function createChocolate(
   _: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> {
@@ -19,14 +19,21 @@ export async function createReview(
   }
 
   // フォームデータから投稿情報を取得
-  const input: ReviewInput = {
-    title: formData.get('title')?.toString() ?? '',
-    content: formData.get('content')?.toString() ?? '',
-    mintiness: Number(formData.get('mintiness') ?? 0),
+  const input: ChocolateInput = {
+    name: formData.get('name')?.toString() ?? '',
+    description: formData.get('description')?.toString() ?? '',
+    cacaoPercent: Number(formData.get('cacaoPercent') ?? 0),
+  status: Number(formData.get('status') ?? 0),
+  price: Number(formData.get('price') ?? 0),
+
+  // boolean に変換（チェックボックスの場合など）
+  hasMint: formData.get('hasMint') === 'true', // or 'on' などフォームの値に合わせて
+    brandId: formData.get('brandId')?.toString() ?? '',
+    categoryId: formData.get('categoryId')?.toString() ?? '',
   }
 
   // バリデーションチェック
-  const parsed = reviewSchema.safeParse(input)
+  const parsed = chocolateSchema.safeParse(input)
   if (!parsed.success) {
     // 入力が不正な場合
     return { isSuccess: false, errorCode: ErrorCodes.INVALID_INPUT }
@@ -34,13 +41,13 @@ export async function createReview(
 
   try {
     // 投稿データをデータベースに保存
-    await createReviewInDB({
+    await createChocolateInDB({
       ...parsed.data,        // バリデーション済みの title と content
-      userId: session.user.id // 認証済みユーザーの ID を追加
+   
     })
 
     // 投稿一覧ページのキャッシュを再検証（最新の投稿を表示）
-    revalidatePath('/reviews')
+    revalidatePath('/chocolates')
 
     // 成功時は isSuccess: true を返す
     return { isSuccess: true }

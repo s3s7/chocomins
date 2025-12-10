@@ -3,13 +3,27 @@ import { ErrorCodes } from '@/types'
 
 type UpdateChocolateInput = {
   chocolateId: string
+  description: string
+  cacaoPercent: number
   name: string
   hasMint: boolean
   status: number
   brandId: string
+  price: number
+  categoryId?: string | null
 }
 
-export async function updateChocolateInDB({ chocolateId, name, hasMint, status ,brandId}: UpdateChocolateInput) {
+export async function updateChocolateInDB({
+  chocolateId,
+  name,
+  description,
+  cacaoPercent,
+  hasMint,
+  status,
+  brandId,
+  price,
+  categoryId,
+}: UpdateChocolateInput) {
   const chocolate = await prisma.chocolate.findUnique({ where: { id: chocolateId } })
 
   // 投稿の存在チェック
@@ -31,6 +45,15 @@ export async function updateChocolateInDB({ chocolateId, name, hasMint, status ,
   // 投稿の更新
   return await prisma.chocolate.update({
     where: { id: chocolateId },
-    data: { name, hasMint, status },
+    data: {
+      name,
+      description,
+      cacaoPercent,
+      hasMint,
+      status,
+      price,
+      brandId,
+      categoryId: categoryId ?? null,
+    },
   })
 }
