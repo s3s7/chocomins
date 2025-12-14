@@ -11,19 +11,23 @@ import { useState, useTransition } from 'react'
 
 type ChocolateItemProps = {
   chocolate: ChocolateWithUser
-  currentUserId: string
+  // currentUserId: string
   currentUserRole: string
 }
 
 export function ChocolateItem({
   chocolate,
-  currentUserId,
   currentUserRole,
 }: ChocolateItemProps) {
   const [editing, setEditing] = useState(false)
 
-  const isOwner = chocolate.userId === currentUserId
+
   const isAdmin = currentUserRole === Role.ADMIN
+
+  const cacaoPercentText =
+    chocolate.cacaoPercent != null
+      ? `${chocolate.cacaoPercent.toString()}%`
+      : '-'
 
   const [isPending, startTransition] = useTransition()
   const handleDelete = () => {
@@ -50,19 +54,48 @@ export function ChocolateItem({
 
   return (
     <>
-      <li className="space-y-2 rounded border p-4">
-        <h3 className="text-lg font-semibold">{chocolate.title}</h3>
-        <p className="text-sm text-gray-600">
-          by {chocolate.user?.name ?? '匿名'} /{' '}
-          <span suppressHydrationWarning>
-            {new Date(chocolate.createdAt).toLocaleString()}
-          </span>
-        </p>
-        <p className="text-sm text-gray-600">ミント感: {chocolate.mintiness}</p>
-        <p>{chocolate.content}</p>
+      <li className="space-y-3 rounded border p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold">{chocolate.name}</h3>
+            <p className="text-xs text-gray-500">
+              作成日:{' '}
+              <span suppressHydrationWarning>
+                {new Date(chocolate.createdAt).toLocaleString()}
+              </span>
+            </p>
+          </div>
+          <div className="text-right text-sm">
+            <p>ブランドID: {chocolate.brandId}</p>
+            <p>カテゴリID: {chocolate.categoryId ?? '未設定'}</p>
+          </div>
+        </div>
 
-        {(isOwner || isAdmin) && (
-          <div className="mt-2 flex gap-2">
+        <p className="whitespace-pre-line text-sm text-gray-700">
+          {chocolate.description || '説明はありません'}
+        </p>
+
+        <dl className="grid grid-cols-2 gap-2 text-sm">
+          <div>
+            <dt className="text-gray-500">カカオ含有率</dt>
+            <dd>{cacaoPercentText}</dd>
+          </div>
+          <div>
+            <dt className="text-gray-500">ミント入り</dt>
+            <dd>{chocolate.hasMint ? 'あり' : 'なし'}</dd>
+          </div>
+          <div>
+            <dt className="text-gray-500">ステータス</dt>
+            <dd>{chocolate.status}</dd>
+          </div>
+          <div>
+            <dt className="text-gray-500">価格</dt>
+            <dd>{chocolate.price != null ? `${chocolate.price}円` : '未設定'}</dd>
+          </div>
+        </dl>
+
+        {isAdmin && (
+          <div className="mt-3 flex gap-2">
             <Button size="sm" onClick={() => setEditing(true)}>
               編集
             </Button>

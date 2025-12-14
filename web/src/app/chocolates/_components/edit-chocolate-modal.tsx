@@ -20,6 +20,7 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
+  FormDescription,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -43,18 +44,30 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
     resolver: zodResolver(editChocolateSchema),
     defaultValues: {
       chocolateId: chocolate.id,
-      title: chocolate.title,
-      content: chocolate.content,
-      mintiness: chocolate.mintiness,
+      name: chocolate.name,
+      description: chocolate.description ?? '',
+      cacaoPercent: Number(chocolate.cacaoPercent ?? 0),
+      hasMint: chocolate.hasMint,
+      status: chocolate.status ?? 0,
+      price: chocolate.price ?? 0,
+      brandId: chocolate.brandId,
+      categoryId: chocolate.categoryId ?? undefined,
     },
   })
 
   const onSubmit = (values: EditChocolateInput) => {
     const formData = new FormData()
     formData.append('chocolateId', values.chocolateId)
-    formData.append('title', values.title)
-    formData.append('content', values.content)
-    formData.append('mintiness', String(values.mintiness))
+    formData.append('name', values.name)
+    formData.append('description', values.description)
+    formData.append('cacaoPercent', String(values.cacaoPercent))
+    formData.append('hasMint', String(values.hasMint))
+    formData.append('status', String(values.status))
+    formData.append('price', String(values.price))
+    formData.append('brandId', values.brandId)
+    if (values.categoryId) {
+      formData.append('categoryId', values.categoryId)
+    }
     startTransition(() => {
       dispatch(formData)
     })
@@ -86,12 +99,12 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
 
             <FormField
               control={form.control}
-              name="title"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>タイトル</FormLabel>
+                  <FormLabel>商品名</FormLabel>
                   <FormControl>
-                    <Input placeholder="タイトルを入力" {...field} />
+                    <Input placeholder="商品名を入力" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -100,12 +113,158 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
 
             <FormField
               control={form.control}
-              name="content"
+              name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>本文</FormLabel>
+                  <FormLabel>商品説明</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="本文を入力" rows={4} {...field} />
+                    <Textarea rows={4} placeholder="商品の説明を入力" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="cacaoPercent"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>カカオ含有率 (%)</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      step="0.1"
+                      min={0}
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={(event) =>
+                        field.onChange(
+                          event.target.value === ''
+                            ? 0
+                            : Number.isNaN(event.target.valueAsNumber)
+                              ? 0
+                              : event.target.valueAsNumber,
+                        )
+                      }
+                    />
+                  </FormControl>
+                  <FormDescription>例: 62.5</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="hasMint"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center justify-between rounded-md border p-3">
+                    <FormLabel className="text-base">ミント入り</FormLabel>
+                    <FormControl>
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4"
+                        checked={field.value}
+                        onChange={(event) => field.onChange(event.target.checked)}
+                        ref={field.ref}
+                        name={field.name}
+                        onBlur={field.onBlur}
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ステータス</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      min={0}
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={(event) =>
+                        field.onChange(
+                          event.target.value === ''
+                            ? 0
+                            : Number.isNaN(event.target.valueAsNumber)
+                              ? 0
+                              : event.target.valueAsNumber,
+                        )
+                      }
+                    />
+                  </FormControl>
+                  <FormDescription>0: 提案, 1: 承認 など</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>価格 (円)</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      min={0}
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={(event) =>
+                        field.onChange(
+                          event.target.value === ''
+                            ? 0
+                            : Number.isNaN(event.target.valueAsNumber)
+                              ? 0
+                              : event.target.valueAsNumber,
+                        )
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="brandId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ブランドID</FormLabel>
+                  <FormControl>
+                    <Input placeholder="ブランドIDを入力" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>カテゴリID (任意)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="カテゴリIDを入力"
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={(event) =>
+                        field.onChange(event.target.value || undefined)
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
