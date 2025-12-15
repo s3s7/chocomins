@@ -1,6 +1,6 @@
 'use client'
 
-import { startTransition, useActionState, useEffect } from 'react'
+import { startTransition, useActionState, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -8,6 +8,13 @@ import { createChocolate } from '@/app/actions/chocolate/create'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import {
   Form,
   FormField,
@@ -20,8 +27,15 @@ import {
 import { ChocolateInput, chocolateSchema } from '@/schemas/chocolate'
 import { getErrorMessage } from '@/lib/error-messages'
 
+type BrandOption = {
+  id: string
+  name: string
+}
+
 export const ChocolateForm = () => {
   const [state, dispatch, isPending] = useActionState(createChocolate, null)
+  const [brandOptions, setBrandOptions] = useState<BrandOption[]>([])
+  const [brandLoading, setBrandLoading] = useState(true)
 
   const form = useForm<ChocolateInput>({
     resolver: zodResolver(chocolateSchema),
@@ -65,6 +79,23 @@ export const ChocolateForm = () => {
       toast.error(getErrorMessage(state.errorCode))
     }
   }, [state, form])
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await fetch('/api/brands', { cache: 'no-store' })
+        if (!response.ok) throw new Error('Failed to fetch brands')
+        const data = await response.json()
+        setBrandOptions(data.brands ?? [])
+      } catch (error) {
+        console.error('Failed to load brands', error)
+        toast.error('ブランド一覧の取得に失敗しました')
+      } finally {
+        setBrandLoading(false)
+      }
+    }
+    fetchBrands()
+  }, [])
 
   return (
     <Form {...form}>
@@ -216,10 +247,32 @@ export const ChocolateForm = () => {
           name="brandId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>ブランドID</FormLabel>
-              <FormControl>
-                <Input placeholder="ブランドIDを入力" {...field} />
-              </FormControl>
+              <FormLabel>ブランド</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                value={field.value || undefined}
+                disabled={isPending || brandLoading || brandOptions.length === 0}
+              >
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder={brandLoading ? '取得中...' : 'ブランドを選択'} />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {brandOptions.length === 0 ? (
+                    <div className="px-2 py-2 text-sm text-muted-foreground">
+                      ブランドが登録されていません
+                    </div>
+                  ) : (
+                    brandOptions.map((brand) => (
+                      <SelectItem key={brand.id} value={brand.id}>
+                        {brand.name} ({brand.id})
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+              <FormDescription>登録済みのブランドから選択してください</FormDescription>
               <FormMessage />
             </FormItem>
           )}

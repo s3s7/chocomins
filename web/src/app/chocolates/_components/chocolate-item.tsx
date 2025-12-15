@@ -1,17 +1,22 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { ChocolateWithUser } from '@/types'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Chocolate, Role } from '@prisma/client'
 import { EditChocolateModal } from './edit-chocolate-modal'
-import { Role } from '@prisma/client'
 import { deleteChocolate } from '@/app/actions/chocolate/delete'
 import { toast } from 'sonner'
 import { getErrorMessage } from '@/lib/error-messages'
 import { useState, useTransition } from 'react'
 
 type ChocolateItemProps = {
-  chocolate: ChocolateWithUser
-  // currentUserId: string
+  chocolate: Chocolate
   currentUserRole: string
 }
 
@@ -65,8 +70,8 @@ export function ChocolateItem({
               </span>
             </p>
           </div>
-          <div className="text-right text-sm">
-            <p>ブランドID: {chocolate.brandId}</p>
+          <div className="text-right text-sm space-y-2">
+            <p>ブランドID: {chocolate.brandId ?? '未設定'}</p>
             <p>カテゴリID: {chocolate.categoryId ?? '未設定'}</p>
           </div>
         </div>

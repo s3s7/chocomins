@@ -1,8 +1,8 @@
-import { ChocolateWithUser } from '@/types'
+import { Chocolate } from '@prisma/client'
 import { ChocolateItem } from './chocolate-item'
 
 type ChocolateListProps = {
-  chocolates: ChocolateWithUser[]
+  chocolates: Chocolate[]
   currentUserRole: string
 }
 

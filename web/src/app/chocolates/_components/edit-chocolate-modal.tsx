@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState, startTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useActionState } from 'react'
@@ -25,20 +25,28 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { updateChocolate } from '@/app/actions/chocolate/update'
-import { ChocolateWithUser } from '@/types'
-import { startTransition } from 'react'
+import { Chocolate } from '@prisma/client'
 import { EditChocolateInput, editChocolateSchema } from '@/schemas/chocolate'
 import { getErrorMessage } from '@/lib/error-messages'
 
 type Props = {
-  chocolate: ChocolateWithUser
+  chocolate: Chocolate
   open: boolean
   onCloseAction: () => void
 }
 
 export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
   const [state, dispatch, isPending] = useActionState(updateChocolate, null)
+  const [brandOptions, setBrandOptions] = useState<{ id: string; name: string }[]>([])
+  const [brandLoading, setBrandLoading] = useState(true)
 
   const form = useForm<EditChocolateInput>({
     resolver: zodResolver(editChocolateSchema),
@@ -84,6 +92,23 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
       toast.error(getErrorMessage(state.errorCode))
     }
   }, [state, form, onCloseAction])
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await fetch('/api/brands', { cache: 'no-store' })
+        if (!response.ok) throw new Error('Failed to fetch brands')
+        const data = await response.json()
+        setBrandOptions(data.brands ?? [])
+      } catch (error) {
+        console.error('Failed to load brands', error)
+        toast.error('ブランド一覧の取得に失敗しました')
+      } finally {
+        setBrandLoading(false)
+      }
+    }
+    fetchBrands()
+  }, [])
 
   return (
     <Dialog open={open} onOpenChange={onCloseAction}>
@@ -239,15 +264,46 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
             <FormField
               control={form.control}
               name="brandId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>ブランドID</FormLabel>
-                  <FormControl>
-                    <Input placeholder="ブランドIDを入力" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const options =
+                  field.value &&
+                  !brandOptions.some((brand) => brand.id === field.value)
+                    ? [{ id: field.value, name: field.value }, ...brandOptions]
+                    : brandOptions
+                return (
+                  <FormItem>
+                    <FormLabel>ブランド</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || undefined}
+                      disabled={isPending || brandLoading || options.length === 0}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={brandLoading ? '取得中...' : 'ブランドを選択'}
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {options.length === 0 ? (
+                          <div className="px-2 py-2 text-sm text-muted-foreground">
+                            ブランドが登録されていません
+                          </div>
+                        ) : (
+                          options.map((brand) => (
+                            <SelectItem key={brand.id} value={brand.id}>
+                              {brand.name} ({brand.id})
+                            </SelectItem>
+                          ))
+                        )}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>登録済みブランドから選択してください</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
             />
 
             <FormField
