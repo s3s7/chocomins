@@ -18,11 +18,13 @@ export async function updateReview(
     reviewId: formData.get('reviewId')?.toString() ?? '',
     title: formData.get('title')?.toString() ?? '',
     content: formData.get('content')?.toString() ?? '',
+     mintiness: Number(formData.get('mintiness') ?? 0),
   }
 
   const parsed = reviewSchema.safeParse({
     title: input.title,
     content: input.content,
+      mintiness: input.mintiness,
   })
 
   if (!parsed.success)
@@ -33,6 +35,7 @@ export async function updateReview(
       reviewId: input.reviewId,
       title: parsed.data.title,
       content: parsed.data.content,
+        mintiness: input.mintiness,
       userId: session.user.id,
       userRole: session.user.role,
     })

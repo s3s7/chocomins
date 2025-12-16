@@ -11,5 +11,7 @@
   "tailwindCSS.includeLanguages": {
     "typescript": "typescript",
     "typescriptreact": "typescriptreact"
-  }
+  },
+  // 既存設定…
+  "cSpell.words": ["mintiness"],
 }

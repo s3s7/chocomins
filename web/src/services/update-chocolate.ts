@@ -1,0 +1,59 @@
+import { prisma } from '@/lib/prisma'
+import { ErrorCodes } from '@/types'
+
+type UpdateChocolateInput = {
+  chocolateId: string
+  description: string
+  cacaoPercent: number
+  name: string
+  hasMint: boolean
+  status: number
+  brandId: string
+  price: number
+  categoryId?: string | null
+}
+
+export async function updateChocolateInDB({
+  chocolateId,
+  name,
+  description,
+  cacaoPercent,
+  hasMint,
+  status,
+  brandId,
+  price,
+  categoryId,
+}: UpdateChocolateInput) {
+  const chocolate = await prisma.chocolate.findUnique({ where: { id: chocolateId } })
+
+  // 投稿の存在チェック
+  if (!chocolate) {
+    console.error(`Chocolate not found: chocolateId=${chocolateId} brandId=${brandId} `)
+    throw new Error(ErrorCodes.NOT_FOUND)
+  }
+
+  // // 認可チェック
+  // const isOwner = chocolate.userId === userId
+  // const isAdmin = userRole === Role.ADMIN
+  // if (!isOwner && !isAdmin) {
+  //   console.error(
+  //     `Unauthorized update attempt: chocolateId=${chocolateId}, userId=${userId}, role=${userRole}`,
+  //   )
+  //   throw new Error(ErrorCodes.FORBIDDEN)
+  // }
+
+  // 投稿の更新
+  return await prisma.chocolate.update({
+    where: { id: chocolateId },
+    data: {
+      name,
+      description,
+      cacaoPercent,
+      hasMint,
+      status,
+      price,
+      brandId,
+      categoryId: categoryId ?? null,
+    },
+  })
+}
