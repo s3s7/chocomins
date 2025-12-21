@@ -1,7 +1,7 @@
 'use client'
 
 import { startTransition, useActionState, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, type ControllerRenderProps } from 'react-hook-form'
 import { toast } from 'sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createChocolate } from '@/app/actions/chocolate/create'
@@ -23,6 +23,7 @@ import {
   FormControl,
   FormMessage,
   FormDescription,
+  useFormField,
 } from '@/components/ui/form'
 import { ChocolateInput, chocolateSchema } from '@/schemas/chocolate'
 import { getErrorMessage } from '@/lib/error-messages'
@@ -110,7 +111,7 @@ export const ChocolateForm = () => {
             <FormItem>
               <FormLabel>商品名</FormLabel>
               <FormControl>
-                <Input placeholder="商品名を入力" {...field} />
+                <Input placeholder="商品名を入力" autoComplete="off" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -164,25 +165,7 @@ export const ChocolateForm = () => {
         <FormField
           control={form.control}
           name="hasMint"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center justify-between rounded-md border p-3">
-                <FormLabel className="text-base">ミント入り</FormLabel>
-                <FormControl>
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4"
-                    checked={field.value}
-                    onChange={(event) => field.onChange(event.target.checked)}
-                    ref={field.ref}
-                    name={field.name}
-                    onBlur={field.onBlur}
-                  />
-                </FormControl>
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
+          render={({ field }) => <HasMintCheckboxField field={field} />}
         />
 
         <FormField
@@ -249,13 +232,15 @@ export const ChocolateForm = () => {
             <FormItem>
               <FormLabel>ブランド</FormLabel>
               <Select
+                name={field.name}
                 onValueChange={field.onChange}
-                value={field.value || undefined}
+                // value={field.value || undefined}
+                value={field.value ?? ""} // 未選択は ""
                 disabled={isPending || brandLoading || brandOptions.length === 0}
               >
                 <FormControl>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder={brandLoading ? '取得中...' : 'ブランドを選択'} />
+                    <SelectValue placeholder={brandLoading ? '取得中...' : '選択してください'} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -266,7 +251,7 @@ export const ChocolateForm = () => {
                   ) : (
                     brandOptions.map((brand) => (
                       <SelectItem key={brand.id} value={brand.id}>
-                        {brand.name} ({brand.id})
+                        {brand.name}
                       </SelectItem>
                     ))
                   )}
@@ -304,5 +289,42 @@ export const ChocolateForm = () => {
         </Button>
       </form>
     </Form>
+  )
+}
+
+type HasMintCheckboxFieldProps = {
+  field: ControllerRenderProps<ChocolateInput, 'hasMint'>
+}
+
+function HasMintCheckboxField({ field }: HasMintCheckboxFieldProps) {
+  return (
+    <FormItem>
+      <HasMintCheckboxContent field={field} />
+      <FormMessage />
+    </FormItem>
+  )
+}
+
+function HasMintCheckboxContent({ field }: HasMintCheckboxFieldProps) {
+  const { formItemId } = useFormField()
+
+  return (
+    <div className="flex items-center justify-between rounded-md border p-3">
+      <FormLabel className="text-base" htmlFor={formItemId}>
+        ミント入り
+      </FormLabel>
+      <FormControl>
+        <input
+          id={formItemId}
+          type="checkbox"
+          className="h-4 w-4"
+          checked={field.value}
+          onChange={(event) => field.onChange(event.target.checked)}
+          ref={field.ref}
+          name={field.name}
+          onBlur={field.onBlur}
+        />
+      </FormControl>
+    </div>
   )
 }
