@@ -24,11 +24,15 @@ export async function updateChocolateInDB({
   price,
   categoryId,
 }: UpdateChocolateInput) {
-  const chocolate = await prisma.chocolate.findUnique({ where: { id: chocolateId } })
+  const chocolate = await prisma.chocolate.findUnique({
+    where: { id: chocolateId },
+  })
 
   // 投稿の存在チェック
   if (!chocolate) {
-    console.error(`Chocolate not found: chocolateId=${chocolateId} brandId=${brandId} `)
+    console.error(
+      `Chocolate not found: chocolateId=${chocolateId} brandId=${brandId} `,
+    )
     throw new Error(ErrorCodes.NOT_FOUND)
   }
 

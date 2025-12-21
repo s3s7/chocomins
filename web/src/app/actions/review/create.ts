@@ -23,6 +23,7 @@ export async function createReview(
     title: formData.get('title')?.toString() ?? '',
     content: formData.get('content')?.toString() ?? '',
     mintiness: Number(formData.get('mintiness') ?? 0),
+    chocolateId: formData.get('chocolateId')?.toString() ?? '',
   }
 
   // バリデーションチェック
@@ -35,8 +36,8 @@ export async function createReview(
   try {
     // 投稿データをデータベースに保存
     await createReviewInDB({
-      ...parsed.data,        // バリデーション済みの title と content
-      userId: session.user.id // 認証済みユーザーの ID を追加
+      ...parsed.data, // バリデーション済みの title と content
+      userId: session.user.id, // 認証済みユーザーの ID を追加
     })
 
     // 投稿一覧ページのキャッシュを再検証（最新の投稿を表示）

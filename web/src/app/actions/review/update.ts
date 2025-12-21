@@ -2,7 +2,7 @@
 
 import { auth } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
-import { EditReviewInput, reviewSchema } from '@/schemas/review'
+import { EditReviewInput, editReviewSchema } from '@/schemas/review'
 import { ActionResult, ErrorCodes } from '@/types'
 import { updateReviewInDB } from '@/services/update-review'
 
@@ -18,24 +18,22 @@ export async function updateReview(
     reviewId: formData.get('reviewId')?.toString() ?? '',
     title: formData.get('title')?.toString() ?? '',
     content: formData.get('content')?.toString() ?? '',
-     mintiness: Number(formData.get('mintiness') ?? 0),
+    mintiness: Number(formData.get('mintiness') ?? 0),
+    chocolateId: formData.get('chocolateId')?.toString() ?? '',
   }
 
-  const parsed = reviewSchema.safeParse({
-    title: input.title,
-    content: input.content,
-      mintiness: input.mintiness,
-  })
+  const parsed = editReviewSchema.safeParse(input)
 
   if (!parsed.success)
     return { isSuccess: false, errorCode: ErrorCodes.INVALID_INPUT }
 
   try {
     await updateReviewInDB({
-      reviewId: input.reviewId,
+      reviewId: parsed.data.reviewId,
       title: parsed.data.title,
       content: parsed.data.content,
-        mintiness: input.mintiness,
+      mintiness: parsed.data.mintiness,
+      chocolateId: parsed.data.chocolateId,
       userId: session.user.id,
       userRole: session.user.role,
     })

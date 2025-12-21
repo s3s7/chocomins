@@ -18,18 +18,19 @@ export async function createChocolate(
     return { isSuccess: false, errorCode: ErrorCodes.UNAUTHORIZED }
   }
 
+  const rawCategoryId = formData.get('categoryId')
   // フォームデータから投稿情報を取得
   const input: ChocolateInput = {
     name: formData.get('name')?.toString() ?? '',
     description: formData.get('description')?.toString() ?? '',
     cacaoPercent: Number(formData.get('cacaoPercent') ?? 0),
-  status: Number(formData.get('status') ?? 0),
-  price: Number(formData.get('price') ?? 0),
+    status: Number(formData.get('status') ?? 0),
+    price: Number(formData.get('price') ?? 0),
 
-  // boolean に変換（チェックボックスの場合など）
-  hasMint: formData.get('hasMint') === 'true', // or 'on' などフォームの値に合わせて
+    // boolean に変換（チェックボックスの場合など）
+    hasMint: formData.get('hasMint') === 'true', // or 'on' などフォームの値に合わせて
     brandId: formData.get('brandId')?.toString() ?? '',
-    categoryId: formData.get('categoryId')?.toString() ?? '',
+    categoryId: rawCategoryId ? rawCategoryId.toString() : undefined,
   }
 
   // バリデーションチェック
@@ -42,8 +43,7 @@ export async function createChocolate(
   try {
     // 投稿データをデータベースに保存
     await createChocolateInDB({
-      ...parsed.data,        // バリデーション済みの title と content
-   
+      ...parsed.data, 
     })
 
     // 投稿一覧ページのキャッシュを再検証（最新の投稿を表示）

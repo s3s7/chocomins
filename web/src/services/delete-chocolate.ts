@@ -8,7 +8,9 @@ type DeleteChocolateInput = {
 export async function deleteChocolateFromDB({
   chocolateId,
 }: DeleteChocolateInput) {
-  const chocolate = await prisma.chocolate.findUnique({ where: { id: chocolateId } })
+  const chocolate = await prisma.chocolate.findUnique({
+    where: { id: chocolateId },
+  })
 
   if (!chocolate) {
     console.error(`Chocolate not found: chocolateId=${chocolateId}`)
