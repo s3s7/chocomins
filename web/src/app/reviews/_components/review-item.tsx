@@ -8,6 +8,7 @@ import { deleteReview } from '@/app/actions/review/delete'
 import { toast } from 'sonner'
 import { getErrorMessage } from '@/lib/error-messages'
 import { useState, useTransition } from 'react'
+import Link from 'next/link'
 
 type ReviewItemProps = {
   review: ReviewWithUser
@@ -51,12 +52,19 @@ export function ReviewItem({
   return (
     <>
       <li className="space-y-2 rounded border p-4">
-        <h3 className="text-lg font-semibold">{review.title}</h3>
+        	<Link href={`/reviews/${review.id}`} className="block">
+            <h3 className="text-lg font-semibold text-blue-600 hover:underline">
+              {review.title}
+            </h3>
+          </Link>
         <p className="text-sm text-gray-600">
           by {review.user?.name ?? '匿名'} /{' '}
           <span suppressHydrationWarning>
             {new Date(review.createdAt).toLocaleString()}
           </span>
+        </p>
+        <p className="text-sm text-gray-600">
+          チョコレート: {review.chocolate?.name ?? '不明'}
         </p>
         <p className="text-sm text-gray-600">ミント感: {review.mintiness}</p>
         <p>{review.content}</p>
