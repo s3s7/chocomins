@@ -7,8 +7,11 @@ type ReviewListProps = {
   currentUserRole: string
 }
 
-export function ReviewList({ reviews ,currentUserId,
-  currentUserRole,}: ReviewListProps) {
+export function ReviewList({
+  reviews,
+  currentUserId,
+  currentUserRole,
+}: ReviewListProps) {
   if (reviews.length === 0) {
     return <p className="text-gray-500">投稿がまだありません。</p>
   }
