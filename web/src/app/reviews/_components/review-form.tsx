@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 
 import { toast } from 'sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useActionState ,useState } from 'react'
+import { useActionState, useState } from 'react'
 import { createReview } from '@/app/actions/review/create'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -37,9 +37,10 @@ type ChocolateOption = {
 
 export const ReviewForm = () => {
   const [state, dispatch, isPending] = useActionState(createReview, null)
-  const [chocolateOptions, setChocolateOptions] = useState<ChocolateOption[]>([])
+  const [chocolateOptions, setChocolateOptions] = useState<ChocolateOption[]>(
+    [],
+  )
   const [chocolateLoading, setChocolateLoading] = useState(true)
-
 
   const form = useForm<ReviewInput>({
     resolver: zodResolver(reviewSchema),
@@ -109,7 +110,7 @@ export const ReviewForm = () => {
             </FormItem>
           )}
         />
-      <FormField
+        <FormField
           control={form.control}
           name="chocolateId"
           render={({ field }) => (
@@ -119,16 +120,22 @@ export const ReviewForm = () => {
                 name={field.name}
                 onValueChange={field.onChange}
                 value={field.value || undefined}
-                disabled={isPending || chocolateLoading || chocolateOptions.length === 0}
+                disabled={
+                  isPending || chocolateLoading || chocolateOptions.length === 0
+                }
               >
                 <FormControl>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder={chocolateLoading ? '取得中...' : '選択してください'} />
+                    <SelectValue
+                      placeholder={
+                        chocolateLoading ? '取得中...' : '選択してください'
+                      }
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {chocolateOptions.length === 0 ? (
-                    <div className="px-2 py-2 text-sm text-muted-foreground">
+                    <div className="text-muted-foreground px-2 py-2 text-sm">
                       チョコレートが登録されていません
                     </div>
                   ) : (
@@ -140,7 +147,9 @@ export const ReviewForm = () => {
                   )}
                 </SelectContent>
               </Select>
-              <FormDescription>登録済みのチョコレートから選択してください</FormDescription>
+              <FormDescription>
+                登録済みのチョコレートから選択してください
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

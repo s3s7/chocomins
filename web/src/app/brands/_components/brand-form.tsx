@@ -6,7 +6,14 @@ import { toast } from 'sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@/components/ui/form'
 import { BrandInput, brandSchema } from '@/schemas/brand'
 import { createBrand } from '@/app/actions/brand/create'
 import { getErrorMessage } from '@/lib/error-messages'
@@ -44,7 +51,10 @@ export const BrandForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 rounded-md border p-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4 rounded-md border p-4"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -52,7 +62,11 @@ export const BrandForm = () => {
             <FormItem>
               <FormLabel>ブランド名</FormLabel>
               <FormControl>
-                <Input placeholder="ブランド名を入力" autoComplete="organization" {...field} />
+                <Input
+                  placeholder="ブランド名を入力"
+                  autoComplete="organization"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

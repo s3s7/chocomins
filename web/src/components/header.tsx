@@ -11,17 +11,17 @@ export function Header() {
   const router = useRouter()
 
   const handleLogout = async () => {
-  const confirmLogout = window.confirm('本当にログアウトしますか？')
-  if (!confirmLogout) return
+    const confirmLogout = window.confirm('本当にログアウトしますか？')
+    if (!confirmLogout) return
 
-  try {
-    await signOut({ redirect: false })
-    toast.success('ログアウトしました')
-    router.push('/')
-  } catch (err) {
-    console.error(err)
-    toast.error('ログアウトに失敗しました')
-  }
+    try {
+      await signOut({ redirect: false })
+      toast.success('ログアウトしました')
+      router.push('/')
+    } catch (err) {
+      console.error(err)
+      toast.error('ログアウトに失敗しました')
+    }
   }
 
   return (
@@ -33,26 +33,38 @@ export function Header() {
         {session?.user ? (
           <div className="flex items-center space-x-2">
             <span>こんにちは, {session.user.name || session.user.email}</span>
-             <Link
+            <Link
+              href="/brands"
+              className="rounded bg-blue-500 px-3 py-1 text-white"
+            >
+              ブランド一覧
+            </Link>
+            <Link
+              href="/chocolates"
+              className="rounded bg-blue-500 px-3 py-1 text-white"
+            >
+              チョコレート一覧
+            </Link>
+            <Link
               href="/reviews"
               className="rounded bg-blue-500 px-3 py-1 text-white"
             >
               投稿一覧
             </Link>
             {session.user.role === Role.ADMIN && (
-	          <Link
-	            href="/admin"
-	            className="rounded bg-yellow-500 px-3 py-1 text-white"
-	          >
-	            管理者ページ
-	          </Link>
-	        )}
-              <button
-                onClick={handleLogout}
-                className="rounded bg-red-500 px-3 py-1 text-white"
+              <Link
+                href="/admin"
+                className="rounded bg-yellow-500 px-3 py-1 text-white"
               >
-                ログアウト
-              </button>
+                管理者ページ
+              </Link>
+            )}
+            <button
+              onClick={handleLogout}
+              className="rounded bg-red-500 px-3 py-1 text-white"
+            >
+              ログアウト
+            </button>
           </div>
         ) : (
           <div className="flex space-x-2">

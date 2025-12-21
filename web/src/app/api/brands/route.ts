@@ -10,6 +10,9 @@ export async function GET() {
     return NextResponse.json({ brands })
   } catch (error) {
     console.error('Failed to fetch brands', error)
-    return NextResponse.json({ error: 'Failed to fetch brands' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Failed to fetch brands' },
+      { status: 500 },
+    )
   }
 }

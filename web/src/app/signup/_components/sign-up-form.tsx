@@ -73,7 +73,11 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel>ニックネーム</FormLabel>
               <FormControl>
-                <Input placeholder="たろう" {...field} />
+                <Input
+                  placeholder="たろう"
+                  autoComplete="nickname"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -86,7 +90,11 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel>メールアドレス</FormLabel>
               <FormControl>
-                <Input placeholder="your@email.com" {...field} />
+                <Input
+                  placeholder="your@email.com"
+                  autoComplete="email"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -99,7 +107,12 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel>パスワード</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="******" {...field} />
+                <Input
+                  type="password"
+                  placeholder="******"
+                  autoComplete="new-password"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -112,7 +125,12 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel>パスワード（確認用）</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="******" {...field} />
+                <Input
+                  type="password"
+                  placeholder="******"
+                  autoComplete="new-password"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

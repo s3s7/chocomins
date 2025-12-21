@@ -10,7 +10,6 @@ export async function createComment(
   _: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> {
-
   // ユーザー認証チェック
   const session = await auth()
   if (!session?.user) {

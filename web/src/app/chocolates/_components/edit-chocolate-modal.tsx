@@ -51,7 +51,9 @@ type Props = {
 
 export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
   const [state, dispatch, isPending] = useActionState(updateChocolate, null)
-  const [brandOptions, setBrandOptions] = useState<{ id: string; name: string }[]>([])
+  const [brandOptions, setBrandOptions] = useState<
+    { id: string; name: string }[]
+  >([])
   const [brandLoading, setBrandLoading] = useState(true)
 
   const form = useForm<EditChocolateInput>({
@@ -133,14 +135,18 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-              <FormLabel>商品名</FormLabel>
-              <FormControl>
-                <Input placeholder="商品名を入力" autoComplete="off" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                  <FormLabel>商品名</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="商品名を入力"
+                      autoComplete="off"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
@@ -149,7 +155,11 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
                 <FormItem>
                   <FormLabel>商品説明</FormLabel>
                   <FormControl>
-                    <Textarea rows={4} placeholder="商品の説明を入力" {...field} />
+                    <Textarea
+                      rows={4}
+                      placeholder="商品の説明を入力"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -265,18 +275,22 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
                       name={field.name}
                       onValueChange={field.onChange}
                       value={field.value || undefined}
-                      disabled={isPending || brandLoading || options.length === 0}
+                      disabled={
+                        isPending || brandLoading || options.length === 0
+                      }
                     >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue
-                            placeholder={brandLoading ? '取得中...' : '選択してください'}
+                            placeholder={
+                              brandLoading ? '取得中...' : '選択してください'
+                            }
                           />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {options.length === 0 ? (
-                          <div className="px-2 py-2 text-sm text-muted-foreground">
+                          <div className="text-muted-foreground px-2 py-2 text-sm">
                             ブランドが登録されていません
                           </div>
                         ) : (
@@ -288,7 +302,9 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
                         )}
                       </SelectContent>
                     </Select>
-                    <FormDescription>登録済みブランドから選択してください</FormDescription>
+                    <FormDescription>
+                      登録済みブランドから選択してください
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )

@@ -4,14 +4,9 @@ import { auth } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 import { deleteBrandFromDB } from '../../../services/delete-brand'
 import { ActionResult, ErrorCodes } from '@/types'
-import {
-  DeleteBrandInput,
-  deleteBrandSchema,
-} from '@/schemas/brand'
+import { DeleteBrandInput, deleteBrandSchema } from '@/schemas/brand'
 
-export async function deleteBrand(
-  formData: FormData,
-): Promise<ActionResult> {
+export async function deleteBrand(formData: FormData): Promise<ActionResult> {
   const session = await auth()
   if (!session?.user) {
     return { isSuccess: false, errorCode: ErrorCodes.UNAUTHORIZED }

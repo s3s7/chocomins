@@ -1,13 +1,6 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { Chocolate, Role } from '@prisma/client'
 import { EditChocolateModal } from './edit-chocolate-modal'
 import { deleteChocolate } from '@/app/actions/chocolate/delete'
@@ -31,7 +24,6 @@ export function ChocolateItem({
   currentUserRole,
 }: ChocolateItemProps) {
   const [editing, setEditing] = useState(false)
-
 
   const isAdmin = currentUserRole === Role.ADMIN
 
@@ -76,13 +68,13 @@ export function ChocolateItem({
               </span>
             </p>
           </div>
-          <div className="text-right text-sm space-y-2">
+          <div className="space-y-2 text-right text-sm">
             <p>ブランド: {chocolate.brandName ?? '未設定'}</p>
             <p>カテゴリ: {chocolate.categoryName ?? '未設定'}</p>
           </div>
         </div>
 
-        <p className="whitespace-pre-line text-sm text-gray-700">
+        <p className="text-sm whitespace-pre-line text-gray-700">
           {chocolate.description || '説明はありません'}
         </p>
 
@@ -101,7 +93,9 @@ export function ChocolateItem({
           </div>
           <div>
             <dt className="text-gray-500">価格</dt>
-            <dd>{chocolate.price != null ? `${chocolate.price}円` : '未設定'}</dd>
+            <dd>
+              {chocolate.price != null ? `${chocolate.price}円` : '未設定'}
+            </dd>
           </div>
         </dl>
 

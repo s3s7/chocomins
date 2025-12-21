@@ -1,6 +1,6 @@
 'use client'
 
-import { SortValue } from '@/types';
+import { SortValue } from '@/types'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 const sortOptions: { label: string; value: SortValue }[] = [

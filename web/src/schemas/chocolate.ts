@@ -2,12 +2,12 @@ import { z } from 'zod'
 
 export const chocolateSchema = z.object({
   name: z.string().min(1, '商品名は必須です'),
-  description: z.string().min(1,'説明は必須です'),
+  description: z.string().min(1, '説明は必須です'),
   cacaoPercent: z.coerce.number<number>().min(0),
   hasMint: z.boolean(),
   status: z.coerce.number<number>(),
   price: z.coerce.number<number>(),
-  brandId: z.string().min(1,'ブランドIDは必須です'),
+  brandId: z.string().min(1, 'ブランドIDは必須です'),
   categoryId: z.string().min(1).optional(),
 })
 

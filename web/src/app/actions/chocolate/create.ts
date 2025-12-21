@@ -43,7 +43,7 @@ export async function createChocolate(
   try {
     // 投稿データをデータベースに保存
     await createChocolateInDB({
-      ...parsed.data, 
+      ...parsed.data,
     })
 
     // 投稿一覧ページのキャッシュを再検証（最新の投稿を表示）

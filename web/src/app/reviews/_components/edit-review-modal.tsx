@@ -51,7 +51,9 @@ type ChocolateOption = {
 
 export function EditReviewModal({ review, open, onCloseAction }: Props) {
   const [state, dispatch, isPending] = useActionState(updateReview, null)
-  const [chocolateOptions, setChocolateOptions] = useState<ChocolateOption[]>([])
+  const [chocolateOptions, setChocolateOptions] = useState<ChocolateOption[]>(
+    [],
+  )
   const [chocolateLoading, setChocolateLoading] = useState(true)
 
   const form = useForm<EditReviewInput>({
@@ -144,19 +146,23 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
                     onValueChange={field.onChange}
                     value={field.value || undefined}
                     disabled={
-                      isPending || chocolateLoading || chocolateOptions.length === 0
+                      isPending ||
+                      chocolateLoading ||
+                      chocolateOptions.length === 0
                     }
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue
-                          placeholder={chocolateLoading ? '取得中...' : '選択してください'}
+                          placeholder={
+                            chocolateLoading ? '取得中...' : '選択してください'
+                          }
                         />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {chocolateOptions.length === 0 ? (
-                        <div className="px-2 py-2 text-sm text-muted-foreground">
+                        <div className="text-muted-foreground px-2 py-2 text-sm">
                           チョコレートが登録されていません
                         </div>
                       ) : (
@@ -168,7 +174,9 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
                       )}
                     </SelectContent>
                   </Select>
-                  <FormDescription>登録済みのチョコレートから選択してください</FormDescription>
+                  <FormDescription>
+                    登録済みのチョコレートから選択してください
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

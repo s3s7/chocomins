@@ -24,7 +24,7 @@ export default {
 
         // 入力されたemailでユーザーをDBから検索
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string},
+          where: { email: credentials.email as string },
         })
 
         // ユーザーが存在しない、またはパスワードが登録されていない場合は認証失敗

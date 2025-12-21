@@ -52,11 +52,11 @@ export function ReviewItem({
   return (
     <>
       <li className="space-y-2 rounded border p-4">
-        	<Link href={`/reviews/${review.id}`} className="block">
-            <h3 className="text-lg font-semibold text-blue-600 hover:underline">
-              {review.title}
-            </h3>
-          </Link>
+        <Link href={`/reviews/${review.id}`} className="block">
+          <h3 className="text-lg font-semibold text-blue-600 hover:underline">
+            {review.title}
+          </h3>
+        </Link>
         <p className="text-sm text-gray-600">
           by {review.user?.name ?? '匿名'} /{' '}
           <span suppressHydrationWarning>

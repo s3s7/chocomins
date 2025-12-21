@@ -6,8 +6,21 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useActionState } from 'react'
 import { toast } from 'sonner'
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog'
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { updateBrand } from '@/app/actions/brand/update'
@@ -74,7 +87,11 @@ export function EditBrandModal({ brand, open, onCloseAction }: Props) {
                 <FormItem>
                   <FormLabel>ブランド名</FormLabel>
                   <FormControl>
-                    <Input placeholder="ブランド名を入力" autoComplete="organization" {...field} />
+                    <Input
+                      placeholder="ブランド名を入力"
+                      autoComplete="organization"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -93,7 +110,9 @@ export function EditBrandModal({ brand, open, onCloseAction }: Props) {
                       autoComplete="country-name"
                       {...field}
                       value={field.value ?? ''}
-                      onChange={(e) => field.onChange(e.target.value || undefined)}
+                      onChange={(e) =>
+                        field.onChange(e.target.value || undefined)
+                      }
                     />
                   </FormControl>
                   <FormMessage />
