@@ -1,8 +1,14 @@
 import { Chocolate } from '@prisma/client'
 import { ChocolateItem } from './chocolate-item'
 
+type ChocolateForClient = Omit<Chocolate, 'cacaoPercent'> & {
+  cacaoPercent: number | null
+  brandName: string
+  categoryName: string | null
+}
+
 type ChocolateListProps = {
-  chocolates: Chocolate[]
+  chocolates: ChocolateForClient[]
   currentUserRole: string
 }
 

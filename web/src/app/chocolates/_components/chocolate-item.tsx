@@ -15,8 +15,14 @@ import { toast } from 'sonner'
 import { getErrorMessage } from '@/lib/error-messages'
 import { useState, useTransition } from 'react'
 
+type ChocolateForClient = Omit<Chocolate, 'cacaoPercent'> & {
+  cacaoPercent: number | null
+  brandName: string
+  categoryName: string | null
+}
+
 type ChocolateItemProps = {
-  chocolate: Chocolate
+  chocolate: ChocolateForClient
   currentUserRole: string
 }
 
@@ -71,8 +77,8 @@ export function ChocolateItem({
             </p>
           </div>
           <div className="text-right text-sm space-y-2">
-            <p>ブランドID: {chocolate.brandId ?? '未設定'}</p>
-            <p>カテゴリID: {chocolate.categoryId ?? '未設定'}</p>
+            <p>ブランド: {chocolate.brandName ?? '未設定'}</p>
+            <p>カテゴリ: {chocolate.categoryName ?? '未設定'}</p>
           </div>
         </div>
 

@@ -7,6 +7,9 @@ export async function getReviews() {
       user: {
         select: { name: true },
       },
+      chocolate: {
+        select: { name: true },
+      },
     },
   })
 }

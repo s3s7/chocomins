@@ -4,9 +4,14 @@ import { auth } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 import { deleteChocolateFromDB } from '@/services/delete-chocolate'
 import { ActionResult, ErrorCodes } from '@/types'
-import { DeleteChocolateInput, deleteChocolateSchema } from '@/schemas/chocolate'
+import {
+  DeleteChocolateInput,
+  deleteChocolateSchema,
+} from '@/schemas/chocolate'
 
-export async function deleteChocolate(formData: FormData): Promise<ActionResult> {
+export async function deleteChocolate(
+  formData: FormData,
+): Promise<ActionResult> {
   const session = await auth()
   if (!session?.user) {
     return { isSuccess: false, errorCode: ErrorCodes.UNAUTHORIZED }

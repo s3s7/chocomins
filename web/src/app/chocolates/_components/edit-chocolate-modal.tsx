@@ -1,9 +1,8 @@
 'use client'
 
-import { useEffect, useState, startTransition } from 'react'
-import { useForm } from 'react-hook-form'
+import { useActionState, useEffect, useState, startTransition } from 'react'
+import { useForm, type ControllerRenderProps } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useActionState } from 'react'
 import { toast } from 'sonner'
 
 import {
@@ -21,6 +20,7 @@ import {
   FormControl,
   FormMessage,
   FormDescription,
+  useFormField,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -37,8 +37,14 @@ import { Chocolate } from '@prisma/client'
 import { EditChocolateInput, editChocolateSchema } from '@/schemas/chocolate'
 import { getErrorMessage } from '@/lib/error-messages'
 
+type ChocolateForClient = Omit<Chocolate, 'cacaoPercent'> & {
+  cacaoPercent: number | null
+  brandName: string
+  categoryName: string | null
+}
+
 type Props = {
-  chocolate: Chocolate
+  chocolate: ChocolateForClient
   open: boolean
   onCloseAction: () => void
 }
@@ -127,14 +133,14 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>商品名</FormLabel>
-                  <FormControl>
-                    <Input placeholder="商品名を入力" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormLabel>商品名</FormLabel>
+              <FormControl>
+                <Input placeholder="商品名を入力" autoComplete="off" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
             <FormField
               control={form.control}
@@ -183,25 +189,7 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
             <FormField
               control={form.control}
               name="hasMint"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-center justify-between rounded-md border p-3">
-                    <FormLabel className="text-base">ミント入り</FormLabel>
-                    <FormControl>
-                      <input
-                        type="checkbox"
-                        className="h-4 w-4"
-                        checked={field.value}
-                        onChange={(event) => field.onChange(event.target.checked)}
-                        ref={field.ref}
-                        name={field.name}
-                        onBlur={field.onBlur}
-                      />
-                    </FormControl>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => <EditHasMintCheckboxField field={field} />}
             />
 
             <FormField
@@ -274,6 +262,7 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
                   <FormItem>
                     <FormLabel>ブランド</FormLabel>
                     <Select
+                      name={field.name}
                       onValueChange={field.onChange}
                       value={field.value || undefined}
                       disabled={isPending || brandLoading || options.length === 0}
@@ -281,7 +270,7 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue
-                            placeholder={brandLoading ? '取得中...' : 'ブランドを選択'}
+                            placeholder={brandLoading ? '取得中...' : '選択してください'}
                           />
                         </SelectTrigger>
                       </FormControl>
@@ -339,5 +328,42 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
         </Form>
       </DialogContent>
     </Dialog>
+  )
+}
+
+type EditHasMintCheckboxFieldProps = {
+  field: ControllerRenderProps<EditChocolateInput, 'hasMint'>
+}
+
+function EditHasMintCheckboxField({ field }: EditHasMintCheckboxFieldProps) {
+  return (
+    <FormItem>
+      <EditHasMintCheckboxContent field={field} />
+      <FormMessage />
+    </FormItem>
+  )
+}
+
+function EditHasMintCheckboxContent({ field }: EditHasMintCheckboxFieldProps) {
+  const { formItemId } = useFormField()
+
+  return (
+    <div className="flex items-center justify-between rounded-md border p-3">
+      <FormLabel className="text-base" htmlFor={formItemId}>
+        ミント入り
+      </FormLabel>
+      <FormControl>
+        <input
+          id={formItemId}
+          type="checkbox"
+          className="h-4 w-4"
+          checked={field.value}
+          onChange={(event) => field.onChange(event.target.checked)}
+          ref={field.ref}
+          name={field.name}
+          onBlur={field.onBlur}
+        />
+      </FormControl>
+    </div>
   )
 }

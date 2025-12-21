@@ -7,11 +7,20 @@ type UpdateReviewInput = {
   title: string
   content: string
   mintiness: number
+  chocolateId: string
   userId: string
   userRole: string
 }
 
-export async function updateReviewInDB({ reviewId, title, content, mintiness,userId, userRole }: UpdateReviewInput) {
+export async function updateReviewInDB({
+  reviewId,
+  title,
+  content,
+  mintiness,
+  chocolateId,
+  userId,
+  userRole,
+}: UpdateReviewInput) {
   const review = await prisma.review.findUnique({ where: { id: reviewId } })
 
   // 投稿の存在チェック
@@ -33,6 +42,6 @@ export async function updateReviewInDB({ reviewId, title, content, mintiness,use
   // 投稿の更新
   return await prisma.review.update({
     where: { id: reviewId },
-    data: { title, content , mintiness},
+    data: { title, content, mintiness, chocolateId },
   })
 }
