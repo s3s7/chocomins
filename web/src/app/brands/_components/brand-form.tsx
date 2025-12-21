@@ -52,7 +52,7 @@ export const BrandForm = () => {
             <FormItem>
               <FormLabel>ブランド名</FormLabel>
               <FormControl>
-                <Input placeholder="ブランド名を入力" {...field} />
+                <Input placeholder="ブランド名を入力" autoComplete="organization" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -68,6 +68,7 @@ export const BrandForm = () => {
               <FormControl>
                 <Input
                   placeholder="例: Japan, Belgium..."
+                  autoComplete="country-name"
                   {...field}
                   value={field.value ?? ''}
                   onChange={(e) => field.onChange(e.target.value || undefined)}
