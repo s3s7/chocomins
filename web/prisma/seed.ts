@@ -6,15 +6,32 @@ const prisma = new PrismaClient()
 async function main() {
   const hashedPassword = await bcrypt.hash('securepassword', 10)
 
-// 管理者ユーザーを作成
-  await prisma.user.create({
-    data: {
-      name: 'Admin User',
-      email: 'admin1@example.com',
-      password: hashedPassword,
-      role: Role.ADMIN, // ADMINとしてロールを設定
-    },
+  const usersData: {
+    name: string
+    email: string
+    password: string
+    role: Role
+  }[] = Array.from({ length: 10 }).map((_, i) => ({
+    name: `User${i + 1}`,
+    email: `user${i + 1}@example.com`,
+    password: hashedPassword,
+    role: Role.USER,
+  }))
+
+  // 管理者ユーザーも追加したい場合
+  usersData.push({
+    name: 'Admin User',
+    email: 'admin@example.com',
+    password: hashedPassword,
+    role: Role.ADMIN,
   })
+
+  await prisma.user.createMany({
+    data: usersData,
+    skipDuplicates: true, // すでに同じメールがあればスキップ
+  })
+
+  console.log('Seed finished.')
 }
 
 main()
