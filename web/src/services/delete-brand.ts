@@ -15,4 +15,3 @@ export async function deleteBrandFromDB({ brandId }: DeleteBrandInput) {
 
   return await prisma.brand.delete({ where: { id: brandId } })
 }
-

@@ -8,15 +8,15 @@ export async function getChocolates() {
   //     category: { select: { name: true } },
   //   },
   const rows = await prisma.chocolate.findMany({
-  orderBy: { createdAt: 'desc' },
-  select: {
-    id: true,
-    name: true,
-    cacaoPercent: true,
-    createdAt: true,
-    brand: { select: { name: true } },
-    category: { select: { name: true } },
-  },
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true,
+      name: true,
+      cacaoPercent: true,
+      createdAt: true,
+      brand: { select: { name: true } },
+      category: { select: { name: true } },
+    },
   })
 
   return rows.map(({ brand, category, ...chocolate }) => ({

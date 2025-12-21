@@ -13,14 +13,13 @@ export async function getUsers({
   perPage?: number
   sort?: SortValue
 } = {}) {
-
   // 検索条件
   const where: Prisma.UserWhereInput = keyword
     ? {
         OR: [
           { name: { contains: keyword, mode: 'insensitive' } },
-          { email: { contains: keyword, mode: 'insensitive' } }
-        ]
+          { email: { contains: keyword, mode: 'insensitive' } },
+        ],
       }
     : {}
 
@@ -41,7 +40,7 @@ export async function getUsers({
       skip,
       take: perPage,
     }),
-    prisma.user.count({ where })
+    prisma.user.count({ where }),
   ])
 
   return { users, totalCount }

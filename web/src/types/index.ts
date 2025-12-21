@@ -9,7 +9,7 @@ export type ActionResult =
   | { isSuccess: false; errorCode: ErrorCode }
   | { isSuccess: true }
 
-  // 並び替え可能なフィールド
+// 並び替え可能なフィールド
 export type SortField = 'name' | 'createdAt'
 
 // 昇順 or 降順

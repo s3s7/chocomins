@@ -26,7 +26,8 @@ export async function signUp(values: SignUpValues): Promise<ActionResult> {
     // すでに同じメールアドレスが登録されていないか確認
     const existingUser = await prisma.user.findUnique({ where: { email } })
 
-    if (existingUser) return { isSuccess: false, errorCode: ErrorCodes.USER_EXISTS }
+    if (existingUser)
+      return { isSuccess: false, errorCode: ErrorCodes.USER_EXISTS }
 
     const hashedPassword = await bcrypt.hash(password, 12)
 
@@ -46,7 +47,7 @@ export async function signUp(values: SignUpValues): Promise<ActionResult> {
     console.error('SignUp error:', err)
     return {
       isSuccess: false,
-      errorCode: ErrorCodes.SERVER_ERROR
+      errorCode: ErrorCodes.SERVER_ERROR,
     }
   }
 }

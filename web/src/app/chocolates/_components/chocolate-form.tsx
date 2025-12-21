@@ -111,7 +111,11 @@ export const ChocolateForm = () => {
             <FormItem>
               <FormLabel>商品名</FormLabel>
               <FormControl>
-                <Input placeholder="商品名を入力" autoComplete="off" {...field} />
+                <Input
+                  placeholder="商品名を入力"
+                  autoComplete="off"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -235,17 +239,23 @@ export const ChocolateForm = () => {
                 name={field.name}
                 onValueChange={field.onChange}
                 // value={field.value || undefined}
-                value={field.value ?? ""} // 未選択は ""
-                disabled={isPending || brandLoading || brandOptions.length === 0}
+                value={field.value ?? ''} // 未選択は ""
+                disabled={
+                  isPending || brandLoading || brandOptions.length === 0
+                }
               >
                 <FormControl>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder={brandLoading ? '取得中...' : '選択してください'} />
+                    <SelectValue
+                      placeholder={
+                        brandLoading ? '取得中...' : '選択してください'
+                      }
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {brandOptions.length === 0 ? (
-                    <div className="px-2 py-2 text-sm text-muted-foreground">
+                    <div className="text-muted-foreground px-2 py-2 text-sm">
                       ブランドが登録されていません
                     </div>
                   ) : (
@@ -257,7 +267,9 @@ export const ChocolateForm = () => {
                   )}
                 </SelectContent>
               </Select>
-              <FormDescription>登録済みのブランドから選択してください</FormDescription>
+              <FormDescription>
+                登録済みのブランドから選択してください
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

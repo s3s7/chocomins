@@ -1,13 +1,40 @@
-import Link from 'next/link'
+import { SearchForm } from './users/_components/search-form'
+import { getUsers } from '@/services/get-users'
+import { SortForm } from './users/_components/sort-form'
+import { SortValue } from '@/types'
 
-export default async function AdminPage() {
+type Props = {
+  searchParams: Promise<{
+    q?: string
+    sort?: SortValue
+  }>
+}
+
+export default async function AdminUserPage({ searchParams }: Props) {
+  const { q = '', sort = 'createdAt-desc' } = await searchParams
+
+  const keyword = q.trim()
+
+  const { users } = await getUsers({
+    keyword,
+    sort,
+  })
+
   return (
-    <div className="mx-auto max-w-3xl py-10">
-      <h1 className="mb-6 text-2xl font-bold">管理者ダッシュボード</h1>
-      <p className="mb-4">ここは管理者専用のページです。</p>
-      <Link href="/admin/users" className="text-blue-600 hover:underline">
-        ユーザー一覧
-      </Link>
-    </div>
+    <main className="mx-auto max-w-2xl space-y-4 p-6">
+      <h1 className="text-2xl font-bold">ユーザー一覧</h1>
+      <SearchForm defaultValue={keyword} />
+      {/* ソートフォームを追加 */}
+      <SortForm currentSort={sort} />
+      <ul className="space-y-2">
+        {users.map((user) => (
+          <li key={user.id} className="rounded border p-2">
+            <p className="font-medium">{user.name || '（名前なし）'}</p>
+            <p className="text-sm text-gray-500">{user.email}</p>
+            <p className="text-sm text-gray-500">{user.role}</p>
+          </li>
+        ))}
+      </ul>
+    </main>
   )
 }

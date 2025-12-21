@@ -5,4 +5,3 @@ export async function getBrands() {
     orderBy: { name: 'asc' },
   })
 }
-

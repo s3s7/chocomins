@@ -11,7 +11,7 @@ const compat = new FlatCompat({
 })
 
 const eslintConfig = [
-    {
+  {
     // 対象と除外ファイルの指定
     files: ['**/*.{js,jsx,ts,tsx}'],
     ignores: [

@@ -13,5 +13,8 @@
     "typescriptreact": "typescriptreact"
   },
   // 既存設定…
-  "cSpell.words": ["mintiness"],
+  "cSpell.words": [
+    "mintiness"
+  ],
+  "prisma.pinToPrisma6": true,
 }

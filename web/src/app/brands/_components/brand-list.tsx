@@ -14,7 +14,11 @@ export function BrandList({ brands, currentUserRole }: BrandListProps) {
   return (
     <ul className="space-y-4">
       {brands.map((brand) => (
-        <BrandItem key={brand.id} brand={brand} currentUserRole={currentUserRole} />
+        <BrandItem
+          key={brand.id}
+          brand={brand}
+          currentUserRole={currentUserRole}
+        />
       ))}
     </ul>
   )

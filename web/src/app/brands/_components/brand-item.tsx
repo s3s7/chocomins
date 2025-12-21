@@ -6,7 +6,7 @@ import { deleteBrand } from '@/app/actions/brand/delete'
 import { EditBrandModal } from './edit-brand-modal'
 import { toast } from 'sonner'
 import { getErrorMessage } from '@/lib/error-messages'
-import { useState,useTransition } from 'react'
+import { useState, useTransition } from 'react'
 
 type BrandItemProps = {
   brand: Brand
@@ -42,46 +42,44 @@ export function BrandItem({ brand, currentUserRole }: BrandItemProps) {
 
   return (
     <>
-    <li className="space-y-3 rounded border p-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-semibold">{brand.name}</h3>
-          <p className="text-xs text-gray-500">
-            作成日:{' '}
-            <span suppressHydrationWarning>
-              {new Date(brand.createdAt).toLocaleString()}
-            </span>
-          </p>
+      <li className="space-y-3 rounded border p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold">{brand.name}</h3>
+            <p className="text-xs text-gray-500">
+              作成日:{' '}
+              <span suppressHydrationWarning>
+                {new Date(brand.createdAt).toLocaleString()}
+              </span>
+            </p>
+          </div>
+          <div className="space-y-2 text-right text-sm">
+            <p>国名: {brand.country ?? '未設定'}</p>
+          </div>
         </div>
-        <div className="text-right text-sm space-y-2">
-          <p>国名: {brand.country ?? '未設定'}</p>
-        </div>
-      </div>
 
-      {isAdmin && (
-        <div className="mt-3 flex gap-2">
-          <Button size="sm" onClick={() => setEditing(true)}>
+        {isAdmin && (
+          <div className="mt-3 flex gap-2">
+            <Button size="sm" onClick={() => setEditing(true)}>
               編集
             </Button>
-          <Button
-            size="sm"
-            variant="destructive"
-            onClick={handleDelete}
-            disabled={isPending}
-          >
-            {isPending ? '削除中...' : '削除'}
-          </Button>
-        </div>
-      )}
-    </li>
-       <EditBrandModal
-            key={editing ? 'editing' : 'closed'}
-            brand={brand}
-            open={editing}
-            onCloseAction={() => setEditing(false)}
-          />
-        </>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={isPending}
+            >
+              {isPending ? '削除中...' : '削除'}
+            </Button>
+          </div>
+        )}
+      </li>
+      <EditBrandModal
+        key={editing ? 'editing' : 'closed'}
+        brand={brand}
+        open={editing}
+        onCloseAction={() => setEditing(false)}
+      />
+    </>
   )
 }
-
-

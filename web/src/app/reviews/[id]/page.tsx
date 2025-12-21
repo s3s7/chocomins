@@ -4,11 +4,15 @@ import { redirect } from 'next/navigation'
 import { ReviewContent } from './_components/review-content'
 import { CommentForm } from './_components/comment-form'
 import { CommentList } from './_components/comment-list'
-{/* 追加 */}
+{
+  /* 追加 */
+}
 import { CommentSkeleton } from './_components/comment-skeleton'
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
-{/* ここまで追加 */}
+{
+  /* ここまで追加 */
+}
 export default async function ReviewDetailPage({
   params,
 }: {
@@ -20,10 +24,14 @@ export default async function ReviewDetailPage({
     redirect('/')
   }
 
-{/* 以下のコードを修正 */}
+  {
+    /* 以下のコードを修正 */
+  }
   const review = await getReviewById(id)
   if (!review) notFound()
-{/* ここまで修正 */}
+  {
+    /* ここまで修正 */
+  }
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-6">

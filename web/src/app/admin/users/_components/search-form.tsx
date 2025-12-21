@@ -23,14 +23,14 @@ export function SearchForm({ defaultValue }: { defaultValue?: string }) {
   return (
     <form onSubmit={handleSubmit} className="flex gap-2">
       <input
-        className="border rounded px-3 py-1"
+        className="rounded border px-3 py-1"
         placeholder="名前やメールで検索"
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
       <button
         type="submit"
-        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 text-sm"
+        className="rounded bg-blue-600 p-2 text-sm text-white hover:bg-blue-700"
       >
         検索
       </button>
