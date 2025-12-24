@@ -46,10 +46,22 @@ export function Header() {
               チョコレート一覧
             </Link>
             <Link
+              href="/chocolates/new"
+              className="rounded bg-green-500 px-3 py-1 text-white"
+            >
+              チョコレート入力
+            </Link>
+            <Link
               href="/reviews"
               className="rounded bg-blue-500 px-3 py-1 text-white"
             >
               投稿一覧
+            </Link>
+            <Link
+              href="/reviews/new"
+              className="rounded bg-green-500 px-3 py-1 text-white"
+            >
+              レビュー入力
             </Link>
             {session.user.role === Role.ADMIN && (
               <Link
