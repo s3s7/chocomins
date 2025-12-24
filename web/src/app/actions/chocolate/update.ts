@@ -15,13 +15,21 @@ export async function updateChocolate(
     return { isSuccess: false, errorCode: ErrorCodes.UNAUTHORIZED }
 
   const rawCategoryId = formData.get('categoryId')
+  const rawPrice = formData.get('price')
+  const priceValue =
+    typeof rawPrice === 'string' && rawPrice !== ''
+      ? Number(rawPrice)
+      : undefined
   const input: EditChocolateInput = {
     chocolateId: formData.get('chocolateId')?.toString() ?? '',
     name: formData.get('name')?.toString() ?? '',
     description: formData.get('description')?.toString() ?? '',
     cacaoPercent: Number(formData.get('cacaoPercent') ?? 0),
     status: Number(formData.get('status') ?? 0),
-    price: Number(formData.get('price') ?? 0),
+    price:
+      typeof priceValue === 'number' && !Number.isNaN(priceValue)
+        ? priceValue
+        : undefined,
 
     // boolean に変換（チェックボックスの場合など）
     hasMint: formData.get('hasMint') === 'true', // or 'on' などフォームの値に合わせて
@@ -50,7 +58,7 @@ export async function updateChocolate(
       description: parsed.data.description,
       cacaoPercent: parsed.data.cacaoPercent,
       status: parsed.data.status,
-      price: parsed.data.price,
+    price: parsed.data.price,
       hasMint: parsed.data.hasMint,
       brandId: parsed.data.brandId,
       categoryId: parsed.data.categoryId,

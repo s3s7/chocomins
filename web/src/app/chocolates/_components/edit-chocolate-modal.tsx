@@ -65,7 +65,7 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
       cacaoPercent: Number(chocolate.cacaoPercent ?? 0),
       hasMint: chocolate.hasMint,
       status: chocolate.status ?? 0,
-      price: chocolate.price ?? 0,
+      price: chocolate.price ?? undefined,
       brandId: chocolate.brandId,
       categoryId: chocolate.categoryId ?? undefined,
     },
@@ -79,7 +79,9 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
     formData.append('cacaoPercent', String(values.cacaoPercent))
     formData.append('hasMint', String(values.hasMint))
     formData.append('status', String(values.status))
-    formData.append('price', String(values.price))
+    if (typeof values.price === 'number') {
+      formData.append('price', String(values.price))
+    }
     formData.append('brandId', values.brandId)
     if (values.categoryId) {
       formData.append('categoryId', values.categoryId)
@@ -246,9 +248,9 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
                       onChange={(event) =>
                         field.onChange(
                           event.target.value === ''
-                            ? 0
+                            ? undefined
                             : Number.isNaN(event.target.valueAsNumber)
-                              ? 0
+                              ? undefined
                               : event.target.valueAsNumber,
                         )
                       }

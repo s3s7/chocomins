@@ -43,10 +43,10 @@ export const ChocolateForm = () => {
     defaultValues: {
       name: '',
       description: '',
-      cacaoPercent: 0,
+      cacaoPercent: undefined,
       hasMint: false,
-      status: 0,
-      price: 0,
+      status: undefined,
+      price: undefined,
       brandId: '',
       categoryId: undefined,
     },
@@ -59,7 +59,9 @@ export const ChocolateForm = () => {
     formData.append('cacaoPercent', String(values.cacaoPercent))
     formData.append('hasMint', String(values.hasMint))
     formData.append('status', String(values.status))
-    formData.append('price', String(values.price))
+    if (values.price !== undefined) {
+      formData.append('price', String(values.price))
+    }
     formData.append('brandId', values.brandId)
     if (values.categoryId) {
       formData.append('categoryId', values.categoryId)
@@ -152,9 +154,9 @@ export const ChocolateForm = () => {
                   onChange={(event) =>
                     field.onChange(
                       event.target.value === ''
-                        ? 0
+                        ? undefined
                         : Number.isNaN(event.target.valueAsNumber)
-                          ? 0
+                          ? undefined
                           : event.target.valueAsNumber,
                     )
                   }
@@ -172,7 +174,7 @@ export const ChocolateForm = () => {
           render={({ field }) => <HasMintCheckboxField field={field} />}
         />
 
-        <FormField
+        {/* <FormField
           control={form.control}
           name="status"
           render={({ field }) => (
@@ -199,7 +201,7 @@ export const ChocolateForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         <FormField
           control={form.control}
@@ -216,9 +218,9 @@ export const ChocolateForm = () => {
                   onChange={(event) =>
                     field.onChange(
                       event.target.value === ''
-                        ? 0
+                        ? undefined 
                         : Number.isNaN(event.target.valueAsNumber)
-                          ? 0
+                          ? undefined 
                           : event.target.valueAsNumber,
                     )
                   }

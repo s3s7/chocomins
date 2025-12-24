@@ -9,7 +9,7 @@ type UpdateChocolateInput = {
   hasMint: boolean
   status: number
   brandId: string
-  price: number
+  price?: number
   categoryId?: string | null
 }
 
@@ -55,7 +55,7 @@ export async function updateChocolateInDB({
       cacaoPercent,
       hasMint,
       status,
-      price,
+      price: price ?? null,
       brandId,
       categoryId: categoryId ?? null,
     },
