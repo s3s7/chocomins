@@ -4,6 +4,7 @@ import './globals.css'
 import { Toaster } from 'sonner'
 import AuthProvider from '@/components/providers/auth-provider'
 import { Header } from '@/components/header'
+import { Footer } from '@/components/footer'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -31,8 +32,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          <Header />
-          {children}
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
           <Toaster richColors closeButton />
         </AuthProvider>
       </body>
