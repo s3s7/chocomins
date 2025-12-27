@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 type CreateChocolateInput = {
   name: string
   description: string
-  cacaoPercent: number
+  cacaoPercent?: number
   hasMint: boolean
   status: number
   price?: number
@@ -16,7 +16,7 @@ export async function createChocolateInDB(input: CreateChocolateInput) {
     data: {
       name: input.name,
       description: input.description,
-      cacaoPercent: input.cacaoPercent,
+      cacaoPercent: input.cacaoPercent ?? null,
       hasMint: input.hasMint,
       status: input.status,
       price: input.price ?? null,

@@ -19,7 +19,13 @@ export async function createChocolate(
   }
 
   const rawCategoryId = formData.get('categoryId')
+  const rawCacaoPercent = formData.get('cacaoPercent')
+
   const rawPrice = formData.get('price')
+  const cacaoPercentValue =
+    typeof rawCacaoPercent === 'string' && rawCacaoPercent !== ''
+      ? Number(rawCacaoPercent)
+      : undefined
   const priceValue =
     typeof rawPrice === 'string' && rawPrice !== ''
       ? Number(rawPrice)
@@ -28,7 +34,12 @@ export async function createChocolate(
   const input: ChocolateInput = {
     name: formData.get('name')?.toString() ?? '',
     description: formData.get('description')?.toString() ?? '',
-    cacaoPercent: Number(formData.get('cacaoPercent') ?? 0),
+    // cacaoPercent: Number(formData.get('cacaoPercent') ?? 0),
+    cacaoPercent:
+      typeof cacaoPercentValue === 'number' && !Number.isNaN(cacaoPercentValue)
+        ? cacaoPercentValue
+        : undefined,
+
     status: Number(formData.get('status') ?? 0),
     price:
       typeof priceValue === 'number' && !Number.isNaN(priceValue)
