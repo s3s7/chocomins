@@ -26,6 +26,7 @@ export async function createChocolate(
     typeof rawCacaoPercent === 'string' && rawCacaoPercent !== ''
       ? Number(rawCacaoPercent)
       : undefined
+
   const priceValue =
     typeof rawPrice === 'string' && rawPrice !== ''
       ? Number(rawPrice)
