@@ -219,9 +219,9 @@ export const ChocolateForm = () => {
                   onChange={(event) =>
                     field.onChange(
                       event.target.value === ''
-                        ? undefined 
+                        ? undefined
                         : Number.isNaN(event.target.valueAsNumber)
-                          ? undefined 
+                          ? undefined
                           : event.target.valueAsNumber,
                     )
                   }

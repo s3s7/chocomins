@@ -15,7 +15,7 @@ export async function updateChocolate(
     return { isSuccess: false, errorCode: ErrorCodes.UNAUTHORIZED }
 
   const rawCategoryId = formData.get('categoryId')
-   const rawCacaoPercent = formData.get('cacaoPercent')
+  const rawCacaoPercent = formData.get('cacaoPercent')
   const rawPrice = formData.get('price')
   const cacaoPercentValue =
     typeof rawCacaoPercent === 'string' && rawCacaoPercent !== ''
@@ -29,7 +29,7 @@ export async function updateChocolate(
     chocolateId: formData.get('chocolateId')?.toString() ?? '',
     name: formData.get('name')?.toString() ?? '',
     description: formData.get('description')?.toString() ?? '',
-      cacaoPercent:
+    cacaoPercent:
       typeof cacaoPercentValue === 'number' && !Number.isNaN(cacaoPercentValue)
         ? cacaoPercentValue
         : undefined,
