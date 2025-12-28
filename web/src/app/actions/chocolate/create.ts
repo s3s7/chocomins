@@ -19,13 +19,33 @@ export async function createChocolate(
   }
 
   const rawCategoryId = formData.get('categoryId')
+  const rawCacaoPercent = formData.get('cacaoPercent')
+
+  const rawPrice = formData.get('price')
+  const cacaoPercentValue =
+    typeof rawCacaoPercent === 'string' && rawCacaoPercent !== ''
+      ? Number(rawCacaoPercent)
+      : undefined
+
+  const priceValue =
+    typeof rawPrice === 'string' && rawPrice !== ''
+      ? Number(rawPrice)
+      : undefined
   // フォームデータから投稿情報を取得
   const input: ChocolateInput = {
     name: formData.get('name')?.toString() ?? '',
     description: formData.get('description')?.toString() ?? '',
-    cacaoPercent: Number(formData.get('cacaoPercent') ?? 0),
+    // cacaoPercent: Number(formData.get('cacaoPercent') ?? 0),
+    cacaoPercent:
+      typeof cacaoPercentValue === 'number' && !Number.isNaN(cacaoPercentValue)
+        ? cacaoPercentValue
+        : undefined,
+
     status: Number(formData.get('status') ?? 0),
-    price: Number(formData.get('price') ?? 0),
+    price:
+      typeof priceValue === 'number' && !Number.isNaN(priceValue)
+        ? priceValue
+        : undefined,
 
     // boolean に変換（チェックボックスの場合など）
     hasMint: formData.get('hasMint') === 'true', // or 'on' などフォームの値に合わせて

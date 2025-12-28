@@ -1,5 +1,4 @@
 import { ReviewList } from './_components/review-list'
-import { ReviewForm } from './_components/review-form'
 import { getReviews } from '@/services/get-reviews'
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'

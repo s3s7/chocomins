@@ -4,12 +4,12 @@ import { ErrorCodes } from '@/types'
 type UpdateChocolateInput = {
   chocolateId: string
   description: string
-  cacaoPercent: number
+  cacaoPercent?: number
   name: string
   hasMint: boolean
   status: number
   brandId: string
-  price: number
+  price?: number
   categoryId?: string | null
 }
 
@@ -55,7 +55,7 @@ export async function updateChocolateInDB({
       cacaoPercent,
       hasMint,
       status,
-      price,
+      price: price ?? null,
       brandId,
       categoryId: categoryId ?? null,
     },
