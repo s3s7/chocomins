@@ -4,7 +4,7 @@ import { ErrorCodes } from '@/types'
 type UpdateChocolateInput = {
   chocolateId: string
   description: string
-  cacaoPercent: number
+  cacaoPercent?: number
   name: string
   hasMint: boolean
   status: number
