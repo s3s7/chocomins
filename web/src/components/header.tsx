@@ -63,6 +63,12 @@ export function Header() {
             >
               レビュー入力
             </Link>
+            <Link
+              href="/mypage"
+              className="rounded bg-blue-500 px-3 py-1 text-white"
+            >
+              マイページ
+            </Link>
             {session.user.role === Role.ADMIN && (
               <Link
                 href="/admin"
