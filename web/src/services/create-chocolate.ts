@@ -5,7 +5,7 @@ type CreateChocolateInput = {
   description: string
   cacaoPercent?: number
   hasMint: boolean
-  status: number
+  status?: number
   price?: number
   brandId: string
   categoryId?: string | null
@@ -18,7 +18,7 @@ export async function createChocolateInDB(input: CreateChocolateInput) {
       description: input.description,
       cacaoPercent: input.cacaoPercent ?? null,
       hasMint: input.hasMint,
-      status: input.status,
+      status: input.status ?? undefined,
       price: input.price ?? null,
       brandId: input.brandId,
       categoryId: input.categoryId ?? null, // optional

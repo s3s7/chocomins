@@ -7,7 +7,7 @@ type UpdateChocolateInput = {
   cacaoPercent?: number
   name: string
   hasMint: boolean
-  status: number
+  status?: number
   brandId: string
   price?: number
   categoryId?: string | null
@@ -54,7 +54,7 @@ export async function updateChocolateInDB({
       description,
       cacaoPercent,
       hasMint,
-      status,
+      status: status ?? undefined,
       price: price ?? null,
       brandId,
       categoryId: categoryId ?? null,

@@ -59,7 +59,9 @@ export const ChocolateForm = () => {
     formData.append('description', values.description)
     formData.append('cacaoPercent', String(values.cacaoPercent))
     formData.append('hasMint', String(values.hasMint))
-    formData.append('status', String(values.status))
+    if (typeof values.status === 'number') {
+      formData.append('status', String(values.status))
+    }
     if (values.price !== undefined) {
       formData.append('price', String(values.price))
     }

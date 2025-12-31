@@ -5,7 +5,7 @@ export const chocolateSchema = z.object({
   description: z.string().min(1, '説明は必須です'),
   cacaoPercent: z.coerce.number<number>().nonnegative().optional(),
   hasMint: z.boolean(),
-  status: z.coerce.number<number>(),
+  status: z.coerce.number<number>().optional(),
   price: z.coerce.number<number>().nonnegative().optional(),
   brandId: z.string().min(1, 'ブランドIDは必須です'),
   categoryId: z.string().min(1).optional(),
