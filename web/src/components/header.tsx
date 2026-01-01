@@ -40,6 +40,12 @@ export function Header() {
               ブランド一覧
             </Link>
             <Link
+              href="/brands/new"
+              className="rounded bg-green-500 px-3 py-1 text-white"
+            >
+              ブランド入力
+            </Link>
+            <Link
               href="/chocolates"
               className="rounded bg-blue-500 px-3 py-1 text-white"
             >
