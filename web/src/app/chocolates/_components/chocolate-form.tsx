@@ -1,6 +1,7 @@
 'use client'
 
 import { startTransition, useActionState, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useForm, type ControllerRenderProps } from 'react-hook-form'
 import { toast } from 'sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -37,6 +38,7 @@ export const ChocolateForm = () => {
   const [state, dispatch, isPending] = useActionState(createChocolate, null)
   const [brandOptions, setBrandOptions] = useState<BrandOption[]>([])
   const [brandLoading, setBrandLoading] = useState(true)
+  const router = useRouter()
 
   const form = useForm<ChocolateInput>({
     resolver: zodResolver(chocolateSchema),
@@ -59,7 +61,9 @@ export const ChocolateForm = () => {
     formData.append('description', values.description)
     formData.append('cacaoPercent', String(values.cacaoPercent))
     formData.append('hasMint', String(values.hasMint))
-    formData.append('status', String(values.status))
+    if (typeof values.status === 'number') {
+      formData.append('status', String(values.status))
+    }
     if (values.price !== undefined) {
       formData.append('price', String(values.price))
     }
@@ -79,10 +83,11 @@ export const ChocolateForm = () => {
     if (state.isSuccess) {
       form.reset()
       toast.success('投稿が完了しました！')
+      router.push('/chocolates')
     } else {
       toast.error(getErrorMessage(state.errorCode))
     }
-  }, [state, form])
+  }, [state, form, router])
 
   useEffect(() => {
     const fetchBrands = async () => {

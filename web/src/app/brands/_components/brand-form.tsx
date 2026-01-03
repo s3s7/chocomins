@@ -1,6 +1,7 @@
 'use client'
 
 import { startTransition, useActionState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -20,6 +21,7 @@ import { getErrorMessage } from '@/lib/error-messages'
 
 export const BrandForm = () => {
   const [state, dispatch, isPending] = useActionState(createBrand, null)
+  const router = useRouter()
 
   const form = useForm<BrandInput>({
     resolver: zodResolver(brandSchema),
@@ -44,10 +46,11 @@ export const BrandForm = () => {
     if (state.isSuccess) {
       form.reset()
       toast.success('ブランドを追加しました！')
+      router.push('/brands')
     } else {
       toast.error(getErrorMessage(state.errorCode))
     }
-  }, [state, form])
+  }, [state, form, router])
 
   return (
     <Form {...form}>

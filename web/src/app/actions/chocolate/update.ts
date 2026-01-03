@@ -16,6 +16,7 @@ export async function updateChocolate(
 
   const rawCategoryId = formData.get('categoryId')
   const rawCacaoPercent = formData.get('cacaoPercent')
+  const rawStatus = formData.get('status')
   const rawPrice = formData.get('price')
   const cacaoPercentValue =
     typeof rawCacaoPercent === 'string' && rawCacaoPercent !== ''
@@ -25,6 +26,10 @@ export async function updateChocolate(
     typeof rawPrice === 'string' && rawPrice !== ''
       ? Number(rawPrice)
       : undefined
+  const statusValue =
+    typeof rawStatus === 'string' && rawStatus !== ''
+      ? Number(rawStatus)
+      : undefined
   const input: EditChocolateInput = {
     chocolateId: formData.get('chocolateId')?.toString() ?? '',
     name: formData.get('name')?.toString() ?? '',
@@ -33,7 +38,10 @@ export async function updateChocolate(
       typeof cacaoPercentValue === 'number' && !Number.isNaN(cacaoPercentValue)
         ? cacaoPercentValue
         : undefined,
-    status: Number(formData.get('status') ?? 0),
+    status:
+      typeof statusValue === 'number' && !Number.isNaN(statusValue)
+        ? statusValue
+        : undefined,
     price:
       typeof priceValue === 'number' && !Number.isNaN(priceValue)
         ? priceValue

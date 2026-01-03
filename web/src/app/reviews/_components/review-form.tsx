@@ -27,6 +27,7 @@ import {
 } from '@/components/ui/select'
 import { ReviewInput, reviewSchema } from '@/schemas/review'
 import { startTransition, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { getErrorMessage } from '@/lib/error-messages'
 import { Rating, RatingButton } from '@/components/ui/shadcn-io/rating'
 
@@ -41,6 +42,7 @@ export const ReviewForm = () => {
     [],
   )
   const [chocolateLoading, setChocolateLoading] = useState(true)
+  const router = useRouter()
 
   const form = useForm<ReviewInput>({
     resolver: zodResolver(reviewSchema),
@@ -69,10 +71,11 @@ export const ReviewForm = () => {
     if (state.isSuccess) {
       form.reset()
       toast.success('投稿が完了しました！')
+      router.push('/reviews')
     } else {
       toast.error(getErrorMessage(state.errorCode))
     }
-  }, [state, form])
+  }, [state, form, router])
 
   useEffect(() => {
     const fetchChocolates = async () => {

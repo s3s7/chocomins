@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export function Footer() {
   return (
-    <footer className="bg-gray-100 px-4 py-6 text-center text-sm text-gray-600">
+    <footer className="bg-sky-100 px-4 py-6 text-center text-sm text-gray-600">
       <p>&copy; {new Date().getFullYear()} ちょこみんず</p>
       <div className="mt-2 flex flex-wrap justify-center gap-4">
         <Link href="/reviews" className="hover:text-gray-900">

@@ -25,7 +25,7 @@ export function Header() {
   }
 
   return (
-    <header className="flex items-center justify-between bg-gray-100 px-4 py-2">
+    <header className="flex items-center justify-between bg-sky-100 px-4 py-2">
       <Link href="/" className="text-lg font-bold">
         My App
       </Link>
@@ -38,6 +38,12 @@ export function Header() {
               className="rounded bg-blue-500 px-3 py-1 text-white"
             >
               ブランド一覧
+            </Link>
+            <Link
+              href="/brands/new"
+              className="rounded bg-green-500 px-3 py-1 text-white"
+            >
+              ブランド入力
             </Link>
             <Link
               href="/chocolates"

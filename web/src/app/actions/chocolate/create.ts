@@ -20,7 +20,7 @@ export async function createChocolate(
 
   const rawCategoryId = formData.get('categoryId')
   const rawCacaoPercent = formData.get('cacaoPercent')
-
+  const rawStatus = formData.get('status')
   const rawPrice = formData.get('price')
   const cacaoPercentValue =
     typeof rawCacaoPercent === 'string' && rawCacaoPercent !== ''
@@ -30,6 +30,10 @@ export async function createChocolate(
   const priceValue =
     typeof rawPrice === 'string' && rawPrice !== ''
       ? Number(rawPrice)
+      : undefined
+  const statusValue =
+    typeof rawStatus === 'string' && rawStatus !== ''
+      ? Number(rawStatus)
       : undefined
   // フォームデータから投稿情報を取得
   const input: ChocolateInput = {
@@ -41,7 +45,10 @@ export async function createChocolate(
         ? cacaoPercentValue
         : undefined,
 
-    status: Number(formData.get('status') ?? 0),
+    status:
+      typeof statusValue === 'number' && !Number.isNaN(statusValue)
+        ? statusValue
+        : undefined,
     price:
       typeof priceValue === 'number' && !Number.isNaN(priceValue)
         ? priceValue
