@@ -25,7 +25,7 @@ export function Header() {
   }
 
   return (
-    <header className="flex items-center justify-between bg-gray-100 px-4 py-2">
+    <header className="flex items-center justify-between bg-sky-100 px-4 py-2">
       <Link href="/" className="text-lg font-bold">
         My App
       </Link>
