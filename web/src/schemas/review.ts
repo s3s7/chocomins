@@ -6,7 +6,7 @@ export const reviewSchema = z.object({
   mintiness: z.coerce
     .number<number>()
     .min(0, 'ミント感は0以上である必要があります'),
-  chocolateId: z.string().min(1, 'チョコレートIDは必須です'),
+  chocolateId: z.string().min(1, 'チョコレートは必須です'),
 })
 
 export type ReviewInput = z.infer<typeof reviewSchema>

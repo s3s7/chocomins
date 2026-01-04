@@ -5,6 +5,8 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "types": ["node", "jest", "@testing-library/jest-dom"],
+    // "types": ["...", "jest"],
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",

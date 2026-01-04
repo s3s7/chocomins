@@ -15,6 +15,10 @@ const config = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
   // ここに必要なら moduleNameMapper などを追加していく
+  moduleNameMapper: {
+    // tsconfig.json の "paths": { "@/*": ["./src/*"] } に対応
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
 }
 
 export default createJestConfig(config)
