@@ -15,18 +15,18 @@ export default async function MyPage() {
     <div className="mx-auto flex max-w-2xl flex-col gap-6 p-6">
       <div>
         <h1 className="text-3xl font-bold">マイページ</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           あなたの登録情報を確認できます。
         </p>
       </div>
 
-      <div className="space-y-4 rounded-lg border bg-card p-6">
+      <div className="bg-card space-y-4 rounded-lg border p-6">
         <div>
-          <p className="text-sm text-muted-foreground">名前</p>
+          <p className="text-muted-foreground text-sm">名前</p>
           <p className="text-lg font-semibold">{name}</p>
         </div>
         <div>
-          <p className="text-sm text-muted-foreground">メールアドレス</p>
+          <p className="text-muted-foreground text-sm">メールアドレス</p>
           <p className="text-lg font-semibold">{email}</p>
         </div>
       </div>

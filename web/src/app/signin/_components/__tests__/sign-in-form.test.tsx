@@ -13,13 +13,13 @@ jest.mock('next/navigation', () => ({
 }))
 
 jest.mock('next-auth/react', () => ({
-  signIn: (...args: any[]) => signInMock(...args),
+  signIn: (...args: unknown[]) => signInMock(...args),
 }))
 
 jest.mock('sonner', () => ({
   toast: {
-    success: (...args: any[]) => toastSuccessMock(...args),
-    error: (...args: any[]) => toastErrorMock(...args),
+    success: (...args: unknown[]) => toastSuccessMock(...args),
+    error: (...args: unknown[]) => toastErrorMock(...args),
   },
 }))
 
@@ -60,11 +60,18 @@ describe('SignInForm', () => {
   })
 
   it('ログイン失敗時にエラートーストが表示され、リダイレクトされない', async () => {
-    signInMock.mockResolvedValue({ ok: false, status: 401, error: 'CredentialsSignin' })
+    signInMock.mockResolvedValue({
+      ok: false,
+      status: 401,
+      error: 'CredentialsSignin',
+    })
 
     render(<SignInForm />)
 
-    await userEvent.type(screen.getByLabelText('メールアドレス'), 'user@example.com')
+    await userEvent.type(
+      screen.getByLabelText('メールアドレス'),
+      'user@example.com',
+    )
     await userEvent.type(screen.getByLabelText('パスワード'), 'password123')
 
     await userEvent.click(screen.getByRole('button', { name: 'ログイン' }))

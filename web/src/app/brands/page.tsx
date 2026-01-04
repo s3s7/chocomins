@@ -1,5 +1,4 @@
 import { BrandList } from './_components/brand-list'
-import { BrandForm } from './_components/brand-form'
 import { getBrands } from '@/services/get-brand'
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'

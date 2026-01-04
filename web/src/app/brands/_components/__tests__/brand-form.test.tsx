@@ -1,5 +1,3 @@
-
-
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { act } from 'react'
@@ -34,10 +32,10 @@ jest.mock('@/app/actions/brand/create', () => ({
 }))
 
 const toastMock = toast as jest.Mocked<typeof toast>
-const getErrorMessageMock =
-  getErrorMessage as jest.MockedFunction<typeof getErrorMessage>
-const createBrandMock =
-  createBrand as jest.MockedFunction<typeof createBrand>
+const getErrorMessageMock = getErrorMessage as jest.MockedFunction<
+  typeof getErrorMessage
+>
+const createBrandMock = createBrand as jest.MockedFunction<typeof createBrand>
 
 type Deferred<T> = {
   promise: Promise<T>
@@ -122,7 +120,9 @@ describe('ブランドフォーム', () => {
     await user.type(screen.getByLabelText('ブランド名'), 'Nestle')
     await user.click(screen.getByRole('button', { name: '追加' }))
 
-    const pendingButton = await screen.findByRole('button', { name: '追加中...' })
+    const pendingButton = await screen.findByRole('button', {
+      name: '追加中...',
+    })
     expect(pendingButton).toBeDisabled()
 
     await act(async () => {
@@ -140,7 +140,9 @@ describe('ブランドフォーム', () => {
     await user.click(screen.getByRole('button', { name: '追加' }))
 
     await waitFor(() =>
-      expect(toastMock.success).toHaveBeenCalledWith('ブランドを追加しました！'),
+      expect(toastMock.success).toHaveBeenCalledWith(
+        'ブランドを追加しました！',
+      ),
     )
   })
 

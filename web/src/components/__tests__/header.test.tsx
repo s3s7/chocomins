@@ -14,14 +14,14 @@ jest.mock('next/navigation', () => ({
 
 const useSessionMock = jest.fn()
 jest.mock('next-auth/react', () => ({
-  useSession: (...args: any[]) => useSessionMock(...args),
-  signOut: (...args: any[]) => signOutMock(...args),
+  useSession: (...args: unknown[]) => useSessionMock(...args),
+  signOut: (...args: unknown[]) => signOutMock(...args),
 }))
 
 jest.mock('sonner', () => ({
   toast: {
-    success: (...args: any[]) => toastSuccessMock(...args),
-    error: (...args: any[]) => toastErrorMock(...args),
+    success: (...args: unknown[]) => toastSuccessMock(...args),
+    error: (...args: unknown[]) => toastErrorMock(...args),
   },
 }))
 
@@ -79,7 +79,10 @@ describe('Header - Logout', () => {
   })
 
   it('未ログイン時はログアウトボタンが表示されない', () => {
-    useSessionMock.mockReturnValueOnce({ data: null, status: 'unauthenticated' })
+    useSessionMock.mockReturnValueOnce({
+      data: null,
+      status: 'unauthenticated',
+    })
 
     render(<Header />)
 
