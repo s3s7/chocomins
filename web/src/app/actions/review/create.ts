@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { ReviewInput, reviewSchema } from '@/schemas/review'
 import { ActionResult, ErrorCodes } from '@/types'
 import { createReviewInDB } from '@/services/create-review'
+import { upsertPlace } from '@/services/upsert-place'
 
 export async function createReview(
   _: ActionResult | null,
@@ -26,6 +27,13 @@ export async function createReview(
     chocolateId: formData.get('chocolateId')?.toString() ?? '',
   }
 
+  // Google Places 由来の拡張データ（任意）
+  const googlePlaceId = formData.get('googlePlaceId')?.toString()
+  const placeName = formData.get('placeName')?.toString()
+  const address = formData.get('address')?.toString()
+  const lat = formData.get('lat') ? Number(formData.get('lat')) : undefined
+  const lng = formData.get('lng') ? Number(formData.get('lng')) : undefined
+
   // バリデーションチェック
   const parsed = reviewSchema.safeParse(input)
   if (!parsed.success) {
@@ -35,9 +43,25 @@ export async function createReview(
 
   try {
     // 投稿データをデータベースに保存
+    let placeId: string | undefined
+    if (googlePlaceId && placeName) {
+      const place = await upsertPlace({
+        googlePlaceId,
+        name: placeName,
+        address,
+        lat,
+        lng,
+      })
+      placeId = place.id
+    }
+
     await createReviewInDB({
-      ...parsed.data, // バリデーション済みの title と content
-      userId: session.user.id, // 認証済みユーザーの ID を追加
+      title: parsed.data.title,
+      content: parsed.data.content,
+      mintiness: parsed.data.mintiness,
+      chocolateId: parsed.data.chocolateId,
+      userId: session.user.id,
+      placeId,
     })
 
     // 投稿一覧ページのキャッシュを再検証（最新の投稿を表示）

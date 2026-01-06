@@ -6,6 +6,7 @@ type CreateReviewInput = {
   mintiness: number
   userId: string
   chocolateId: string
+  placeId?: string
 }
 
 export async function createReviewInDB(input: CreateReviewInput) {
@@ -16,6 +17,7 @@ export async function createReviewInDB(input: CreateReviewInput) {
       mintiness: input.mintiness,
       userId: input.userId,
       chocolateId: input.chocolateId,
+      placeId: input.placeId,
     },
   })
 }
