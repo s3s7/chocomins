@@ -1,8 +1,4 @@
-declare global {
-  interface Window {
-    google?: any
-  }
-}
+import type { GoogleMapsNamespace } from '@/types/google-maps'
 
 let loaderPromise: Promise<void> | null = null
 
@@ -31,7 +27,7 @@ export function loadGoogleMapsPlaces(apiKey: string) {
     script.dataset.googleMapsLoader = 'true'
     script.onload = () => {
       try {
-        const maps = (window as any).google?.maps
+        const maps: GoogleMapsNamespace | undefined = window.google?.maps
         // importLibraryでplacesを明示ロード（対応ブラウザ/バージョンで有効）
         if (maps?.importLibrary) {
           let resolved = false
@@ -75,13 +71,17 @@ export function loadGoogleMapsPlaces(apiKey: string) {
       const finish = () => {
         const start = Date.now()
         const tick = () => {
-          if ((window as any).google?.maps?.places) {
+          if (window.google?.maps?.places) {
             resolve()
             return
           }
           if (Date.now() - start > 4000) {
             // タイムアウトでもresolve（ECL側や新APIが拾える場合あり）
-            try { console.warn('[GMAPS] places namespace not detected within timeout') } catch {}
+            try {
+              console.warn(
+                '[GMAPS] places namespace not detected within timeout',
+              )
+            } catch {}
             resolve()
             return
           }
@@ -95,7 +95,8 @@ export function loadGoogleMapsPlaces(apiKey: string) {
       }
       const ecl = document.createElement('script')
       ecl.type = 'module'
-      ecl.src = 'https://unpkg.com/@googlemaps/extended-component-library@latest'
+      ecl.src =
+        'https://unpkg.com/@googlemaps/extended-component-library@latest'
       ecl.dataset.googleMapsEcl = 'true'
       ecl.onload = finish
       ecl.onerror = finish

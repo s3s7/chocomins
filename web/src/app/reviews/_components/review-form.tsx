@@ -31,6 +31,11 @@ import { useRouter } from 'next/navigation'
 import { getErrorMessage } from '@/lib/error-messages'
 import { Rating, RatingButton } from '@/components/ui/shadcn-io/rating'
 import { loadGoogleMapsPlaces } from '@/lib/google-maps'
+import type {
+  GooglePlaceResult,
+  PlaceAutocompleteElement,
+  PlaceSelectEvent,
+} from '@/types/google-maps'
 
 type ChocolateOption = {
   id: string
@@ -52,9 +57,8 @@ export const ReviewForm = () => {
     lat?: string
     lng?: string
   }>({})
-  const addressInputRef = useRef<HTMLInputElement | null>(null)
   const placeElementContainerRef = useRef<HTMLDivElement | null>(null)
-  const placeElementInstanceRef = useRef<any | null>(null)
+  const placeElementInstanceRef = useRef<PlaceAutocompleteElement | null>(null)
   const router = useRouter()
 
   const form = useForm<ReviewInput>({
@@ -124,14 +128,15 @@ export const ReviewForm = () => {
   useEffect(() => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
     if (!apiKey) return
-    let autocomplete: any | null = null
 
     // 新コンポーネントのshadow DOM内inputにid/name/aria-labelledbyを付与（監査対応）
     const patchInnerInput = (host: HTMLElement) => {
       try {
-        const root = (host as any).shadowRoot as ShadowRoot | null
+        const root = host.shadowRoot
         if (!root) return false
-        const inp = root.querySelector('input[role="combobox"]') as HTMLInputElement | null
+        const inp = root.querySelector(
+          'input[role="combobox"]',
+        ) as HTMLInputElement | null
         if (!inp) return false
         if (!inp.id) inp.id = 'place-search'
         if (!inp.name) inp.name = 'place'
@@ -148,7 +153,7 @@ export const ReviewForm = () => {
     const observeInnerInput = (host: HTMLElement) => {
       // 初回試行
       if (patchInnerInput(host)) return
-      const root = (host as any).shadowRoot as ShadowRoot | null
+      const root = host.shadowRoot
       if (!root) return
       const mo = new MutationObserver(() => {
         if (patchInnerInput(host)) mo.disconnect()
@@ -160,18 +165,78 @@ export const ReviewForm = () => {
     loadGoogleMapsPlaces(apiKey)
       .then(() => {
         setGmapsReady(true)
+        const toNonEmptyString = (value?: string | null) => {
+          if (typeof value === 'string' && value.length > 0) return value
+          return undefined
+        }
+        const normalizeCoordinate = (
+          candidate?: number | null | (() => number | null | undefined),
+        ) => {
+          if (typeof candidate === 'function') {
+            try {
+              const result = candidate()
+              return typeof result === 'number' ? result : undefined
+            } catch {
+              return undefined
+            }
+          }
+          return typeof candidate === 'number' ? candidate : undefined
+        }
+        const derivePlaceName = (place?: GooglePlaceResult | null) => {
+          if (!place) return undefined
+          const displayName = place.displayName
+          if (typeof displayName === 'string' && displayName.length > 0) {
+            return displayName
+          }
+          if (
+            displayName &&
+            typeof displayName === 'object' &&
+            'text' in displayName &&
+            typeof displayName.text === 'string'
+          ) {
+            return displayName.text
+          }
+          return toNonEmptyString(place.name ?? undefined)
+        }
+        const applyPlaceResult = (place?: GooglePlaceResult | null) => {
+          if (!place) return
+          const formatted =
+            toNonEmptyString(place.formattedAddress ?? undefined) ??
+            toNonEmptyString(place.formatted_address ?? undefined)
+          const locationSource = place.location ?? place.geometry?.location
+          const lat = normalizeCoordinate(locationSource?.lat)
+          const lng = normalizeCoordinate(locationSource?.lng)
+          if (formatted) {
+            form.setValue('address', formatted)
+          }
+          setPlaceSelection({
+            googlePlaceId:
+              toNonEmptyString(place.id ?? undefined) ??
+              toNonEmptyString(place.place_id ?? undefined),
+            placeName: derivePlaceName(place),
+            address: formatted,
+            lat: typeof lat === 'number' ? String(lat) : undefined,
+            lng: typeof lng === 'number' ? String(lng) : undefined,
+          })
+        }
         // placesが未定義でも、新API/ECLが利用可能な場合は続行
 
         // 1) 推奨: PlaceAutocompleteElement（ネイティブ要素）
-        if (placeElementContainerRef.current && !placeElementInstanceRef.current) {
-          const NativePlaceEl = (window as any).google?.maps?.places?.PlaceAutocompleteElement
+        if (
+          placeElementContainerRef.current &&
+          !placeElementInstanceRef.current
+        ) {
+          const NativePlaceEl =
+            window.google?.maps?.places?.PlaceAutocompleteElement
           if (NativePlaceEl) {
             try {
               const el = new NativePlaceEl()
               el.placeholder = '場所を検索'
               el.setAttribute('aria-label', '場所を検索')
               // name属性を付与（フォーム項目として送信可能に）
-              try { el.setAttribute('name', 'address') } catch {}
+              try {
+                el.setAttribute('name', 'address')
+              } catch {}
               try {
                 el.id = 'place-search-element'
                 el.setAttribute('aria-labelledby', 'place-search-label')
@@ -180,36 +245,22 @@ export const ReviewForm = () => {
               // 既存値反映
               const current = form.getValues('address')
               if (current) {
-                try { ;(el as any).value = current } catch {}
+                try {
+                  el.value = current
+                } catch {}
               }
-              const handler = (ev: any) => {
-                const target: any = ev?.target || el
-                const place = target?.getPlace?.() || ev?.detail?.place || null
-                const gpId = place?.id || place?.place_id
-                const name = place?.displayName || place?.name
-                const formatted = place?.formattedAddress || place?.formatted_address
-                const loc = place?.location || place?.geometry?.location
-                let lat: number | undefined
-                let lng: number | undefined
-                if (loc) {
-                  try {
-                    lat = typeof loc.lat === 'function' ? loc.lat() : loc.lat
-                    lng = typeof loc.lng === 'function' ? loc.lng() : loc.lng
-                  } catch {}
-                }
-                if (formatted) form.setValue('address', formatted)
-                setPlaceSelection({
-                  googlePlaceId: gpId,
-                  placeName: name ?? undefined,
-                  address: formatted ?? undefined,
-                  lat: typeof lat === 'number' ? String(lat) : undefined,
-                  lng: typeof lng === 'number' ? String(lng) : undefined,
-                })
+              const handler: EventListener = (event) => {
+                const detailEvent = event as PlaceSelectEvent
+                const target =
+                  (detailEvent.target as PlaceAutocompleteElement | null) ?? el
+                const placeFromTarget = target.getPlace?.() ?? null
+                const placeFromDetail = detailEvent.detail?.place ?? null
+                applyPlaceResult(placeFromTarget ?? placeFromDetail)
               }
-              el.addEventListener('gmp-select', handler as any)
+              el.addEventListener('gmp-select', handler)
               el.addEventListener('gmpx-placechange', handler)
-              el.addEventListener('placechange', handler as any)
-              el.addEventListener('place_changed', handler as any)
+              el.addEventListener('placechange', handler)
+              el.addEventListener('place_changed', handler)
               placeElementContainerRef.current.appendChild(el)
               // 内部の実inputにid/name/aria-labelledbyを設定（可能な場合）
               observeInnerInput(el)
@@ -217,15 +268,23 @@ export const ReviewForm = () => {
               setPlaceElementReady(true)
               return
             } catch (e) {
-              console.warn('PlaceAutocompleteElement 初期化失敗、ECLにフォールバックします', e)
+              console.warn(
+                'PlaceAutocompleteElement 初期化失敗、ECLにフォールバックします',
+                e,
+              )
             }
           }
         }
 
         // 2) 公式Webコンポーネント: gmp-place-autocomplete
-        if (placeElementContainerRef.current && !placeElementInstanceRef.current) {
+        if (
+          placeElementContainerRef.current &&
+          !placeElementInstanceRef.current
+        ) {
           try {
-            const el = document.createElement('gmp-place-autocomplete') as any
+            const el = document.createElement(
+              'gmp-place-autocomplete',
+            ) as PlaceAutocompleteElement
             el.placeholder = '住所を入力して候補から選択'
             el.setAttribute('aria-label', '場所を検索')
             try {
@@ -235,33 +294,31 @@ export const ReviewForm = () => {
             } catch {}
             const current = form.getValues('address')
             if (current) {
-              try { el.value = current } catch {}
-            }
-            const handlerSelect = async (ev: any) => {
               try {
-                const prediction = ev?.detail?.placePrediction
-                if (!prediction || !prediction.toPlace) return
-                const place = prediction.toPlace()
-                await place.fetchFields?.({
-                  fields: ['id', 'displayName', 'formattedAddress', 'location'],
-                })
-                const gpId = place?.id
-                const name = place?.displayName
-                const formatted = place?.formattedAddress
-                const loc = place?.location
-                const lat = loc?.lat ? (typeof loc.lat === 'function' ? loc.lat() : loc.lat) : undefined
-                const lng = loc?.lng ? (typeof loc.lng === 'function' ? loc.lng() : loc.lng) : undefined
-                if (formatted) form.setValue('address', formatted)
-                setPlaceSelection({
-                  googlePlaceId: gpId,
-                  placeName: name ?? undefined,
-                  address: formatted ?? undefined,
-                  lat: typeof lat === 'number' ? String(lat) : undefined,
-                  lng: typeof lng === 'number' ? String(lng) : undefined,
-                })
+                el.value = current
               } catch {}
             }
-            el.addEventListener('gmp-select', handlerSelect as any)
+            const handlerSelect = (event: Event) => {
+              void (async () => {
+                try {
+                  const detailEvent = event as PlaceSelectEvent
+                  const prediction = detailEvent.detail?.placePrediction
+                  if (!prediction?.toPlace) return
+                  const place = prediction.toPlace()
+                  if (!place) return
+                  await place.fetchFields?.({
+                    fields: [
+                      'id',
+                      'displayName',
+                      'formattedAddress',
+                      'location',
+                    ],
+                  })
+                  applyPlaceResult(place)
+                } catch {}
+              })()
+            }
+            el.addEventListener('gmp-select', handlerSelect)
             placeElementContainerRef.current.appendChild(el)
             // 内部の実inputにid/name/aria-labelledbyを設定（可能な場合）
             observeInnerInput(el)
@@ -269,7 +326,10 @@ export const ReviewForm = () => {
             setPlaceElementReady(true)
             return
           } catch (e) {
-            console.warn('gmp-place-autocomplete 初期化失敗、レガシーにフォールバックします', e)
+            console.warn(
+              'gmp-place-autocomplete 初期化失敗、通常入力のみで継続します',
+              e,
+            )
           }
         }
 
@@ -278,10 +338,6 @@ export const ReviewForm = () => {
       .catch((e) => {
         console.warn('Google Mapsの読み込みに失敗しました', e)
       })
-
-    return () => {
-      autocomplete = null
-    }
   }, [form])
 
   return (
@@ -309,36 +365,38 @@ export const ReviewForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel id="place-search-label" htmlFor="place-search-field">
-  場所を検索（任意）
-</FormLabel>
+                場所を検索（任意）
+              </FormLabel>
 
-<FormControl>
-  {!placeElementReady ? (
-    <Input
-      id="place-search-field"
-      type="search"
-      aria-label="場所を検索"
-      placeholder={gmapsReady ? '住所を入力（候補表示）' : '住所を入力'}
-      {...field}
-      autoComplete="off"
-    />
-  ) : (
-    <Input
-      id="place-search-field"
-      className="sr-only"
-      // ❌ aria-hidden は付けない（監査で「ラベル先が存在しない/無効」扱いになりやすい）
-      tabIndex={-1}
-      {...field}
-      readOnly
-      autoComplete="street-address"
-    />
-  )}
-</FormControl>
+              <FormControl>
+                {!placeElementReady ? (
+                  <Input
+                    id="place-search-field"
+                    type="search"
+                    aria-label="場所を検索"
+                    placeholder={
+                      gmapsReady ? '住所を入力（候補表示）' : '住所を入力'
+                    }
+                    {...field}
+                    autoComplete="off"
+                  />
+                ) : (
+                  <Input
+                    id="place-search-field"
+                    className="sr-only"
+                    // ❌ aria-hidden は付けない（監査で「ラベル先が存在しない/無効」扱いになりやすい）
+                    tabIndex={-1}
+                    {...field}
+                    readOnly
+                    autoComplete="street-address"
+                  />
+                )}
+              </FormControl>
 
-<div
-  ref={placeElementContainerRef}
-  style={{ display: placeElementReady ? 'block' : 'none' }}
-/>
+              <div
+                ref={placeElementContainerRef}
+                style={{ display: placeElementReady ? 'block' : 'none' }}
+              />
 
               <FormDescription>
                 Googleマップの自動補完に対応（APIキーが必要）
