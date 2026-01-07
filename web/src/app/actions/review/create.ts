@@ -54,7 +54,6 @@ export async function createReview(
       })
       placeId = place.id
     }
-
     await createReviewInDB({
       title: parsed.data.title,
       content: parsed.data.content,
