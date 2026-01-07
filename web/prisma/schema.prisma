@@ -163,6 +163,7 @@ model Place {
   address       String?
   lat           Decimal? @db.Decimal(10, 6)
   lng           Decimal? @db.Decimal(10, 6)
+  reviews       Review[]
 
   brandId   String?
   brand     Brand?   @relation(fields: [brandId], references: [id])
