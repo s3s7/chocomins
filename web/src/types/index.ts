@@ -3,6 +3,7 @@ import { Chocolate, Comment, Review, User } from '@prisma/client'
 export type ReviewWithUser = Review & {
   user: Pick<User, 'name'> | null
   chocolate: Pick<Chocolate, 'name'>
+  place: Pick<Place, 'lat' | 'lng'> | null
 }
 
 export type ActionResult =
