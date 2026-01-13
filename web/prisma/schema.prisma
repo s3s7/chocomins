@@ -161,8 +161,8 @@ model Place {
   googlePlaceId String   @unique
   name          String
   address       String?
-  lat           Decimal? @db.Decimal(10, 6)
-  lng           Decimal? @db.Decimal(10, 6)
+  lat           Float?   @db.DoublePrecision
+  lng           Float?   @db.DoublePrecision
   reviews       Review[]
 
   brandId   String?
