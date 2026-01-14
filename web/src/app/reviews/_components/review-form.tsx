@@ -42,6 +42,24 @@ type ChocolateOption = {
   name: string
 }
 
+type FetchFieldsArgs = { fields: string[] }
+
+type PlaceLike = {
+  fetchFields?: (args: FetchFieldsArgs) => Promise<void>
+}
+
+type PlacePredictionLike = {
+  toPlace: () => PlaceLike
+}
+
+// gmp-select の event は実装によって placePrediction が直 or detail に入る
+type GmpSelectEventLike = Event & {
+  placePrediction?: PlacePredictionLike
+  detail?: {
+    placePrediction?: PlacePredictionLike
+  }
+}
+
 export const ReviewForm = () => {
   const [state, dispatch, isPending] = useActionState(createReview, null)
   const [chocolateOptions, setChocolateOptions] = useState<ChocolateOption[]>(
@@ -67,7 +85,7 @@ export const ReviewForm = () => {
       title: '',
       content: '',
       mintiness: 0,
-      chocolateId: '',
+      chocolateId: "",
       address: '',
     },
   })
@@ -90,6 +108,7 @@ export const ReviewForm = () => {
     }
     if (placeSelection.lat) formData.append('lat', placeSelection.lat as string)
     if (placeSelection.lng) formData.append('lng', placeSelection.lng as string)
+
     startTransition(() => {
       dispatch(formData)
     })
@@ -129,7 +148,7 @@ export const ReviewForm = () => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
     if (!apiKey) return
 
-    // 新コンポーネントのshadow DOM内inputにid/name/aria-labelledbyを付与（監査対応）
+    // 新コンポーネントのshadow DOM内inputにid/name/aria-labelledbyを付与
     const patchInnerInput = (host: HTMLElement) => {
       try {
         const root = host.shadowRoot
@@ -249,18 +268,25 @@ export const ReviewForm = () => {
                   el.value = current
                 } catch {}
               }
-              const handler: EventListener = (event) => {
-                const detailEvent = event as PlaceSelectEvent
-                const target =
-                  (detailEvent.target as PlaceAutocompleteElement | null) ?? el
-                const placeFromTarget = target.getPlace?.() ?? null
-                const placeFromDetail = detailEvent.detail?.place ?? null
-                applyPlaceResult(placeFromTarget ?? placeFromDetail)
+              const handlerSelect = (event: Event) => {
+                void (async () => {
+                  const e = event as GmpSelectEventLike
+                  const prediction = e.placePrediction ?? e.detail?.placePrediction
+                  if (!prediction) return
+
+                  const place = prediction.toPlace()
+                  if (!place) return
+
+                  await place.fetchFields?.({
+                    fields: ['id', 'displayName', 'formattedAddress', 'location'],
+                  })
+
+                  // applyPlaceResult は既存の GooglePlaceResult 期待なので最後に1回だけキャスト
+                  applyPlaceResult(place as unknown as GooglePlaceResult)
+                })()
               }
-              el.addEventListener('gmp-select', handler)
-              el.addEventListener('gmpx-placechange', handler)
-              el.addEventListener('placechange', handler)
-              el.addEventListener('place_changed', handler)
+
+              el.addEventListener('gmp-select', handlerSelect)
               placeElementContainerRef.current.appendChild(el)
               // 内部の実inputにid/name/aria-labelledbyを設定（可能な場合）
               observeInnerInput(el)
@@ -333,7 +359,6 @@ export const ReviewForm = () => {
           }
         }
 
-        // 3) レガシーAutocompleteは使用しない（新APIが使えない場合は通常入力のみ）
       })
       .catch((e) => {
         console.warn('Google Mapsの読み込みに失敗しました', e)
@@ -377,6 +402,7 @@ export const ReviewForm = () => {
                     placeholder={
                       gmapsReady ? '住所を入力（候補表示）' : '住所を入力'
                     }
+                    className="text-foreground bg-white"
                     {...field}
                     autoComplete="off"
                   />
@@ -384,7 +410,7 @@ export const ReviewForm = () => {
                   <Input
                     id="place-search-field"
                     className="sr-only"
-                    // ❌ aria-hidden は付けない（監査で「ラベル先が存在しない/無効」扱いになりやすい）
+
                     tabIndex={-1}
                     {...field}
                     readOnly
@@ -395,12 +421,9 @@ export const ReviewForm = () => {
 
               <div
                 ref={placeElementContainerRef}
-                style={{ display: placeElementReady ? 'block' : 'none' }}
+                className={`rounded-md border bg-white ${placeElementReady ? 'block' : 'hidden'}`}
               />
 
-              <FormDescription>
-                Googleマップの自動補完に対応（APIキーが必要）
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -414,7 +437,7 @@ export const ReviewForm = () => {
               <Select
                 name={field.name}
                 onValueChange={field.onChange}
-                value={field.value || undefined}
+                value={field.value}
                 disabled={
                   isPending || chocolateLoading || chocolateOptions.length === 0
                 }

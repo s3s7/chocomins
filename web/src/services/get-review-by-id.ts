@@ -21,8 +21,8 @@ export async function getReviewById(reviewId: string) {
     place: review.place
       ? {
           ...review.place,
-          lat: review.place.lat?.toNumber() ?? null,
-          lng: review.place.lng?.toNumber() ?? null,
+          lat: review.place.lat ?? null,
+          lng: review.place.lng ?? null,
         }
       : null,
   }
