@@ -1,8 +1,14 @@
-import { Chocolate, Comment, Review, User } from '@prisma/client'
+import { Chocolate, Comment, Review, User, Place } from '@prisma/client'
 
 export type ReviewWithUser = Review & {
   user: Pick<User, 'name'> | null
   chocolate: Pick<Chocolate, 'name'>
+  place: 
+    | (Pick<Place, 'lat' | 'lng'> & {
+        lat: number | null
+        lng: number | null
+      })
+    | null
 }
 
 export type ActionResult =

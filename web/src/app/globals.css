@@ -84,3 +84,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+gmp-place-autocomplete {
+  color-scheme: light;
+  background-color: white;
+  border: 1px solid hsl(var(--border));
+  border-radius: calc(var(--radius));
+  width: 100%;
+}

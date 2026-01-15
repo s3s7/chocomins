@@ -10,6 +10,9 @@ export async function getReviews() {
       chocolate: {
         select: { name: true },
       },
+      place: {
+        select: { lat: true, lng: true },
+      },
     },
   })
 }

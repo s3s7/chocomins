@@ -56,7 +56,6 @@ export const ChocolateForm = () => {
 
   const onSubmit = (values: ChocolateInput) => {
     const formData = new FormData()
-    console.log('Submitting values:', values)
     formData.append('name', values.name)
     formData.append('description', values.description)
     formData.append('cacaoPercent', String(values.cacaoPercent))
