@@ -1,5 +1,7 @@
 import { ReviewWithUser } from '@/types'
 import { ReviewItem } from './review-item'
+import { ReviewCard } from './review-card'
+
 
 type ReviewListProps = {
   reviews: ReviewWithUser[]
@@ -18,14 +20,18 @@ export function ReviewList({
 
   return (
     <ul className="space-y-4">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5
+      ">
       {reviews.map((review) => (
-        <ReviewItem
+        // <ReviewItem
+        <ReviewCard
           key={review.id}
           review={review}
           currentUserId={currentUserId}
           currentUserRole={currentUserRole}
         />
       ))}
+      </div>
     </ul>
   )
 }

@@ -44,11 +44,12 @@ function StarRating({ rating }: { rating: number }) {
   const stars = useMemo(() => [1, 2, 3, 4, 5], [])
   return (
     <div className="flex items-center gap-0.5 text-base leading-none" aria-label={`評価 ${rating} / 5`}>
+       <span className="text-xs text-gray-500">ミント</span>
       {stars.map((value) => (
         <Star
           key={value}
           className={cn(
-            'h-4 w-4',
+            'h-3 w-3',
             value <= rating ? 'fill-emerald-500 text-emerald-500' : 'text-emerald-100',
           )}
         />
@@ -66,47 +67,33 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
   const rating = clampRating(review.mintiness)
   const chocolateName = review.chocolate?.name ?? 'チョコレート未登録'
   const chocolateCategory = review.chocolate?.category?.name ?? 'カテゴリ未設定'
-  const chocolateBrand = review.chocolate?.brand?.name ?? 'ブランド未設定'
+  const chocolateBrand = review.chocolate?.brand?.name ?? 'メーカー・店舗未設定'
 
   const cardInner = (
     <>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex items-center gap-3">
-          <Avatar className="h-10 w-10">
-            <AvatarFallback
-              className="text-sm font-semibold text-white"
-              style={{ backgroundColor: avatarColor }}
-            >
-              {getInitial(review.user?.name)}
-            </AvatarFallback>
-          </Avatar>
+      <span>{chocolateName}</span>
+      <div className="mt-5 flex flex-wrap items-center gap-2 text-xs text-gray-500">
+        {/* <Badge
+          variant="secondary"
+          className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-700 hover:bg-emerald-100"
+        >
+          {chocolateCategory}
+        </Badge> */}
+        <span>メーカー・店舗名：{chocolateBrand}</span>
 
-          <div>
-            <p className="text-sm font-semibold text-gray-800">{userName}</p>
-            <p className="text-xs text-gray-500">{formatDate(review.createdAt)} に投稿</p>
-          </div>
-        </div>
+      </div>
+
+      <h3 className="mt-4 text-lg font-semibold text-gray-900">{review.title}</h3>
+      {/* <p className="mt-1 text-xs font-medium text-emerald-600">{chocolateName}</p> */}
+      {/* <p className="mt-3 text-sm leading-relaxed text-gray-700">{review.content}</p> */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    
 
         <div className="flex items-center gap-2">
           <StarRating rating={rating} />
           <span className="text-sm font-semibold text-emerald-600">{rating} / 5</span>
         </div>
       </div>
-
-      <div className="mt-5 flex flex-wrap items-center gap-2 text-xs text-gray-500">
-        <Badge
-          variant="secondary"
-          className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-700 hover:bg-emerald-100"
-        >
-          {chocolateCategory}
-        </Badge>
-        <span>{chocolateBrand}</span>
-        <span>#{chocolateName}</span>
-      </div>
-
-      <h3 className="mt-4 text-lg font-semibold text-gray-900">{review.title}</h3>
-      <p className="mt-1 text-xs font-medium text-emerald-600">{chocolateName}</p>
-      <p className="mt-3 text-sm leading-relaxed text-gray-700">{review.content}</p>
     </>
   )
 
@@ -122,16 +109,45 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
         <Link href={linkHref} className="flex h-full flex-col" aria-label={`${review.title} のレビュー詳細へ`}>
           <CardContent className="p-6">{cardInner}</CardContent>
 
-          <CardFooter className="mt-auto flex items-center justify-between px-6 pb-6 pt-0 text-xs text-gray-400">
-            <span>更新日: {formatDate(review.updatedAt)}</span>
-          </CardFooter>
+        <CardFooter className="mt-auto flex flex-col items-start gap-2 px-6 pb-6 pt-0 text-xs text-gray-400">
+  <div className="flex items-center gap-3">
+    <Avatar className="h-8 w-8">
+      <AvatarFallback
+        className="text-sm font-semibold text-white"
+        style={{ backgroundColor: avatarColor }}
+      >
+        {getInitial(review.user?.name)}
+      </AvatarFallback>
+    </Avatar>
+
+    <p className="text-sm font-semibold text-gray-800">{userName}</p>
+  </div>
+
+  <p className="text-xs text-gray-500">{formatDate(review.createdAt)} </p>
+</CardFooter>
         </Link>
       ) : (
         <>
           <CardContent className="p-6">{cardInner}</CardContent>
 
           <CardFooter className="flex items-center justify-between px-6 pb-6 pt-0 text-xs text-gray-400">
-            <span>更新日: {formatDate(review.updatedAt)}</span>
+            <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10">
+              <AvatarFallback
+                className="text-sm font-semibold text-white"
+                style={{ backgroundColor: avatarColor }}
+              >
+                {getInitial(review.user?.name)}
+              </AvatarFallback>
+            </Avatar>
+
+            <div>
+            <p className="text-sm font-semibold text-gray-800">{userName}</p>
+          
+            </div>
+          </div>
+            <p className="text-xs text-gray-500">{formatDate(review.createdAt)} に投稿</p>
+            {/* <span>更新日: {formatDate(review.updatedAt)}</span> */}
           </CardFooter>
         </>
       )}
