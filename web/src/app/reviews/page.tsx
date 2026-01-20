@@ -12,8 +12,8 @@ export default async function ReviewListPage() {
   const reviews = await getReviews()
 
   return (
-    <main className="mx-auto max-w-2xl space-y-6 p-6">
-      <h1 className="text-2xl font-bold">レビュー一覧</h1>
+    <main className="mx-auto max-w-6xl space-y-6 p-6">
+      <h1 className="text-2xl font-bold text-center">レビュー一覧</h1>
       <ReviewList
         reviews={reviews}
         currentUserId={session.user.id}
