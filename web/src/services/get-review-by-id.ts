@@ -6,7 +6,15 @@ export async function getReviewById(reviewId: string) {
     include: {
       user: true,
       chocolate: {
-        select: { name: true },
+        select: {
+          name: true,
+          brand: {
+            select: { name: true },
+          },
+          category: {
+            select: { name: true },
+          },
+        },
       },
       place: {
         select: { lat: true, lng: true },
