@@ -153,7 +153,7 @@ model Chocolate {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([brandId, name]) // 同ブランド内で同名を禁止
+  @@unique([brandId, name]) // 同メーカー・店舗内で同名を禁止
 }
 
 model Place {
