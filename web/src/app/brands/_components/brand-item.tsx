@@ -19,7 +19,9 @@ export function BrandItem({ brand, currentUserRole }: BrandItemProps) {
   const [editing, setEditing] = useState(false)
 
   const handleDelete = () => {
-    const confirmDelete = window.confirm('本当にこのブランドを削除しますか？')
+    const confirmDelete = window.confirm(
+      '本当にこのメーカー・店舗を削除しますか？',
+    )
     if (!confirmDelete) return
 
     const formData = new FormData()
@@ -29,7 +31,7 @@ export function BrandItem({ brand, currentUserRole }: BrandItemProps) {
       try {
         const result = await deleteBrand(formData)
         if (result.isSuccess) {
-          toast.success('ブランドを削除しました！')
+          toast.success('メーカー・店舗を削除しました！')
         } else if (result.errorCode) {
           toast.error(getErrorMessage(result.errorCode))
         }
@@ -53,9 +55,9 @@ export function BrandItem({ brand, currentUserRole }: BrandItemProps) {
               </span>
             </p>
           </div>
-          <div className="space-y-2 text-right text-sm">
+          {/* <div className="space-y-2 text-right text-sm">
             <p>国名: {brand.country ?? '未設定'}</p>
-          </div>
+          </div> */}
         </div>
 
         {isAdmin && (

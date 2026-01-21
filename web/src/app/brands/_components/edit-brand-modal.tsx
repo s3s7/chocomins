@@ -60,7 +60,7 @@ export function EditBrandModal({ brand, open, onCloseAction }: Props) {
     if (!state) return
 
     if (state.isSuccess) {
-      toast.success('ブランドが更新されました！')
+      toast.success('メーカー・店舗が更新されました！')
       form.reset()
       onCloseAction()
     } else if (state.errorCode) {
@@ -72,7 +72,7 @@ export function EditBrandModal({ brand, open, onCloseAction }: Props) {
     <Dialog open={open} onOpenChange={onCloseAction}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>ブランドの編集</DialogTitle>
+          <DialogTitle>メーカー・店舗の編集</DialogTitle>
         </DialogHeader>
         <DialogDescription></DialogDescription>
 
@@ -85,10 +85,10 @@ export function EditBrandModal({ brand, open, onCloseAction }: Props) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>ブランド名</FormLabel>
+                  <FormLabel>メーカー・店舗名</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="ブランド名を入力"
+                      placeholder="メーカー・店舗名を入力"
                       autoComplete="organization"
                       {...field}
                     />

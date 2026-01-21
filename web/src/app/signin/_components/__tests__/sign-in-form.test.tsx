@@ -5,8 +5,8 @@ import { SignInForm } from '../sign-in-form'
 // Mocks
 const pushMock = jest.fn()
 const signInMock = jest.fn()
-const toastSuccessMock = jest.fn<(message: string) => void>()
-const toastErrorMock = jest.fn<(message: string) => void>()
+const toastSuccessMock = jest.fn<void, [string]>()
+const toastErrorMock = jest.fn<void, [string]>()
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({ push: pushMock }),
@@ -18,8 +18,8 @@ jest.mock('next-auth/react', () => ({
 
 jest.mock('sonner', () => ({
   toast: {
-    success: (...args: unknown[]) => toastSuccessMock(...args),
-    error: (...args: unknown[]) => toastErrorMock(...args),
+    success: (...args: [string]) => toastSuccessMock(...args),
+    error: (...args: [string]) => toastErrorMock(...args),
   },
 }))
 

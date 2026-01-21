@@ -85,7 +85,7 @@ export const ReviewForm = () => {
       title: '',
       content: '',
       mintiness: 0,
-      chocolateId: "",
+      chocolateId: '',
       address: '',
     },
   })
@@ -271,14 +271,20 @@ export const ReviewForm = () => {
               const handlerSelect = (event: Event) => {
                 void (async () => {
                   const e = event as GmpSelectEventLike
-                  const prediction = e.placePrediction ?? e.detail?.placePrediction
+                  const prediction =
+                    e.placePrediction ?? e.detail?.placePrediction
                   if (!prediction) return
 
                   const place = prediction.toPlace()
                   if (!place) return
 
                   await place.fetchFields?.({
-                    fields: ['id', 'displayName', 'formattedAddress', 'location'],
+                    fields: [
+                      'id',
+                      'displayName',
+                      'formattedAddress',
+                      'location',
+                    ],
                   })
 
                   // applyPlaceResult は既存の GooglePlaceResult 期待なので最後に1回だけキャスト
@@ -358,7 +364,6 @@ export const ReviewForm = () => {
             )
           }
         }
-
       })
       .catch((e) => {
         console.warn('Google Mapsの読み込みに失敗しました', e)
@@ -410,7 +415,6 @@ export const ReviewForm = () => {
                   <Input
                     id="place-search-field"
                     className="sr-only"
-
                     tabIndex={-1}
                     {...field}
                     readOnly

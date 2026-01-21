@@ -19,12 +19,30 @@ async function main() {
   }))
 
   // 管理者ユーザーも追加したい場合
+  const adminName = process.env.ADMIN_NAME ?? 'Admin User'
+  const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@example.com'
+  const adminPassword = process.env.ADMIN_PASSWORD
+
+  // ADMIN_PASSWORD が未設定なら落とす（事故防止）
+  if (!adminPassword) {
+    throw new Error(
+      'ADMIN_PASSWORD is not set. Please set it in environment variables.',
+    )
+  }
+
+  const hashedAdminPassword = await bcrypt.hash(adminPassword, 10)
   usersData.push({
-    name: 'Admin User',
-    email: 'admin@example.com',
-    password: hashedPassword,
+    name: adminName,
+    email: adminEmail.toLowerCase(),
+    password: hashedAdminPassword,
     role: Role.ADMIN,
   })
+  // usersData.push({
+  //   name: 'Admin User',
+  //   email: 'admin@example.com',
+  //   password: hashedPassword,
+  //   role: Role.ADMIN,
+  // })
 
   await prisma.user.createMany({
     data: usersData,

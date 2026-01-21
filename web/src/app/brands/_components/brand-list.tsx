@@ -8,7 +8,7 @@ type BrandListProps = {
 
 export function BrandList({ brands, currentUserRole }: BrandListProps) {
   if (brands.length === 0) {
-    return <p className="text-gray-500">ブランドはまだありません。</p>
+    return <p className="text-gray-500">メーカー・店舗はまだありません。</p>
   }
 
   return (

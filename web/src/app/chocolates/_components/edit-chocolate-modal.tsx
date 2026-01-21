@@ -112,7 +112,7 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
         setBrandOptions(data.brands ?? [])
       } catch (error) {
         console.error('Failed to load brands', error)
-        toast.error('ブランド一覧の取得に失敗しました')
+        toast.error('メーカー・店舗一覧の取得に失敗しました')
       } finally {
         setBrandLoading(false)
       }
@@ -272,7 +272,7 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
                     : brandOptions
                 return (
                   <FormItem>
-                    <FormLabel>ブランド</FormLabel>
+                    <FormLabel>メーカー・店舗</FormLabel>
                     <Select
                       name={field.name}
                       onValueChange={field.onChange}
@@ -293,7 +293,7 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
                       <SelectContent>
                         {options.length === 0 ? (
                           <div className="text-muted-foreground px-2 py-2 text-sm">
-                            ブランドが登録されていません
+                            メーカー・店舗が登録されていません
                           </div>
                         ) : (
                           options.map((brand) => (
@@ -305,7 +305,7 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
                       </SelectContent>
                     </Select>
                     <FormDescription>
-                      登録済みブランドから選択してください
+                      登録済みメーカー・店舗から選択してください
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

@@ -13,7 +13,7 @@ export default async function BrandListPage() {
 
   return (
     <main className="mx-auto max-w-2xl space-y-6 p-6">
-      <h1 className="text-2xl font-bold">ブランド一覧</h1>
+      <h1 className="text-2xl font-bold">メーカー・店舗一覧</h1>
       <BrandList brands={brands} currentUserRole={session.user.role} />
     </main>
   )

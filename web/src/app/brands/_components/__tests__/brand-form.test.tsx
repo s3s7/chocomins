@@ -54,28 +54,28 @@ const createDeferred = <T,>(): Deferred<T> => {
   }
 }
 
-describe('ブランドフォーム', () => {
+describe('メーカー・店舗フォーム', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     createBrandMock.mockResolvedValue({ isSuccess: true })
     getErrorMessageMock.mockReturnValue('mock error')
   })
 
-  it('ブランド名と国名のフィールドが表示される', () => {
+  it('メーカー・店舗名と国名のフィールドが表示される', () => {
     render(<BrandForm />)
 
-    expect(screen.getByLabelText('ブランド名')).toBeInTheDocument()
-    expect(screen.getByLabelText('国名（任意）')).toBeInTheDocument()
+    expect(screen.getByLabelText('メーカー・店舗名')).toBeInTheDocument()
+    // expect(screen.getByLabelText('国名（任意）')).toBeInTheDocument()
   })
 
-  it('ブランド名が空の場合はエラーを表示する', async () => {
+  it('メーカー・店舗名が空の場合はエラーを表示する', async () => {
     render(<BrandForm />)
 
     const user = userEvent.setup()
     await user.click(screen.getByRole('button', { name: '追加' }))
 
     await waitFor(() =>
-      expect(screen.getByText('ブランド名は必須です')).toBeVisible(),
+      expect(screen.getByText('メーカー・店舗名は必須です')).toBeVisible(),
     )
     expect(createBrandMock).not.toHaveBeenCalled()
   })
@@ -84,31 +84,31 @@ describe('ブランドフォーム', () => {
     render(<BrandForm />)
 
     const user = userEvent.setup()
-    await user.type(screen.getByLabelText('ブランド名'), 'Meiji')
-    await user.type(screen.getByLabelText('国名（任意）'), 'Japan')
+    await user.type(screen.getByLabelText('メーカー・店舗名'), 'Meiji')
+    // await user.type(screen.getByLabelText('国名（任意）'), 'Japan')
     await user.click(screen.getByRole('button', { name: '追加' }))
 
     await waitFor(() => expect(createBrandMock).toHaveBeenCalledTimes(1))
     const [, formData] = createBrandMock.mock.calls[0]
     expect((formData as FormData).get('name')).toBe('Meiji')
-    expect((formData as FormData).get('country')).toBe('Japan')
+    // expect((formData as FormData).get('country')).toBe('Japan')
   })
 
-  it('任意の国名はクリア時に送信しない', async () => {
-    render(<BrandForm />)
+  // it('任意の国名はクリア時に送信しない', async () => {
+  //   render(<BrandForm />)
 
-    const user = userEvent.setup()
-    await user.type(screen.getByLabelText('ブランド名'), 'Godiva')
-    const countryInput = screen.getByLabelText('国名（任意）')
-    await user.type(countryInput, 'Belgium')
-    await user.clear(countryInput)
-    await user.click(screen.getByRole('button', { name: '追加' }))
+  //   const user = userEvent.setup()
+  //   await user.type(screen.getByLabelText('メーカー・店舗名'), 'Godiva')
+  //   const countryInput = screen.getByLabelText('国名（任意）')
+  //   await user.type(countryInput, 'Belgium')
+  //   await user.clear(countryInput)
+  //   await user.click(screen.getByRole('button', { name: '追加' }))
 
-    await waitFor(() => expect(createBrandMock).toHaveBeenCalledTimes(1))
-    const [, formData] = createBrandMock.mock.calls[0]
-    expect((formData as FormData).get('name')).toBe('Godiva')
-    expect((formData as FormData).get('country')).toBeNull()
-  })
+  //   await waitFor(() => expect(createBrandMock).toHaveBeenCalledTimes(1))
+  //   const [, formData] = createBrandMock.mock.calls[0]
+  //   expect((formData as FormData).get('name')).toBe('Godiva')
+  //   expect((formData as FormData).get('country')).toBeNull()
+  // })
 
   it('送信中は送信ボタンを無効化する', async () => {
     const deferred = createDeferred<ActionResult>()
@@ -117,7 +117,7 @@ describe('ブランドフォーム', () => {
     render(<BrandForm />)
 
     const user = userEvent.setup()
-    await user.type(screen.getByLabelText('ブランド名'), 'Nestle')
+    await user.type(screen.getByLabelText('メーカー・店舗名'), 'Nestle')
     await user.click(screen.getByRole('button', { name: '追加' }))
 
     const pendingButton = await screen.findByRole('button', {
@@ -136,12 +136,12 @@ describe('ブランドフォーム', () => {
     render(<BrandForm />)
 
     const user = userEvent.setup()
-    await user.type(screen.getByLabelText('ブランド名'), 'Lindt')
+    await user.type(screen.getByLabelText('メーカー・店舗名'), 'Lindt')
     await user.click(screen.getByRole('button', { name: '追加' }))
 
     await waitFor(() =>
       expect(toastMock.success).toHaveBeenCalledWith(
-        'ブランドを追加しました！',
+        'メーカー・店舗を追加しました！',
       ),
     )
   })
@@ -156,7 +156,7 @@ describe('ブランドフォーム', () => {
     render(<BrandForm />)
 
     const user = userEvent.setup()
-    await user.type(screen.getByLabelText('ブランド名'), 'Bonnat')
+    await user.type(screen.getByLabelText('メーカー・店舗名'), 'Bonnat')
     await user.click(screen.getByRole('button', { name: '追加' }))
 
     await waitFor(() =>

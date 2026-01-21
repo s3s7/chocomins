@@ -27,7 +27,7 @@ export function Header() {
   return (
     <header className="flex items-center justify-between bg-sky-100 px-4 py-2">
       <Link href="/" className="text-lg font-bold">
-        My App
+        ちょこみんず
       </Link>
       <div className="flex items-center space-x-4">
         {session?.user ? (
@@ -37,13 +37,13 @@ export function Header() {
               href="/brands"
               className="rounded bg-blue-500 px-3 py-1 text-white"
             >
-              ブランド一覧
+              メーカー・店舗一覧
             </Link>
             <Link
               href="/brands/new"
               className="rounded bg-green-500 px-3 py-1 text-white"
             >
-              ブランド入力
+              メーカー・店舗入力
             </Link>
             <Link
               href="/chocolates"
