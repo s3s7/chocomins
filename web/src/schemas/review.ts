@@ -1,8 +1,14 @@
 import { z } from 'zod'
 
 export const reviewSchema = z.object({
-  title: z.string().min(1, 'タイトルは必須です').max(30, 'タイトルは30文字以内で入力してください'),
-  content: z.string().min(1, '本文は必須です').max(1000, '本文は1000文字以内で入力してください'),
+  title: z
+    .string()
+    .min(1, 'タイトルは必須です')
+    .max(30, 'タイトルは30文字以内で入力してください'),
+  content: z
+    .string()
+    .min(1, '本文は必須です')
+    .max(1000, '本文は1000文字以内で入力してください'),
   mintiness: z.coerce
     .number<number>()
     .min(0, 'ミント感は0以上である必要があります'),

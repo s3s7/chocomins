@@ -19,7 +19,9 @@ export function BrandItem({ brand, currentUserRole }: BrandItemProps) {
   const [editing, setEditing] = useState(false)
 
   const handleDelete = () => {
-    const confirmDelete = window.confirm('本当にこのメーカー・店舗を削除しますか？')
+    const confirmDelete = window.confirm(
+      '本当にこのメーカー・店舗を削除しますか？',
+    )
     if (!confirmDelete) return
 
     const formData = new FormData()

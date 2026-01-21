@@ -19,7 +19,9 @@ export default function Map({ lat, lng, zoom = 15, height = 320 }: MapProps) {
   const [isLoaded, setIsLoaded] = useState(false)
   const [loadError, setLoadError] = useState<unknown>(null)
 
-  const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null)
+  const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(
+    null,
+  )
   const mapRef = useRef<google.maps.Map | null>(null)
 
   const mapId = process.env.NEXT_PUBLIC_GOOGLE_MAP_ID
