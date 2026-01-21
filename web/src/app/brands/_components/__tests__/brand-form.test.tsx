@@ -54,28 +54,28 @@ const createDeferred = <T,>(): Deferred<T> => {
   }
 }
 
-describe('ブランドフォーム', () => {
+describe('メーカー・店舗フォーム', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     createBrandMock.mockResolvedValue({ isSuccess: true })
     getErrorMessageMock.mockReturnValue('mock error')
   })
 
-  it('ブランド名と国名のフィールドが表示される', () => {
+  it('メーカー・店舗名と国名のフィールドが表示される', () => {
     render(<BrandForm />)
 
-    expect(screen.getByLabelText('ブランド名')).toBeInTheDocument()
+    expect(screen.getByLabelText('メーカー・店舗名')).toBeInTheDocument()
     expect(screen.getByLabelText('国名（任意）')).toBeInTheDocument()
   })
 
-  it('ブランド名が空の場合はエラーを表示する', async () => {
+  it('メーカー・店舗名が空の場合はエラーを表示する', async () => {
     render(<BrandForm />)
 
     const user = userEvent.setup()
     await user.click(screen.getByRole('button', { name: '追加' }))
 
     await waitFor(() =>
-      expect(screen.getByText('ブランド名は必須です')).toBeVisible(),
+      expect(screen.getByText('メーカー・店舗名は必須です')).toBeVisible(),
     )
     expect(createBrandMock).not.toHaveBeenCalled()
   })
@@ -84,7 +84,7 @@ describe('ブランドフォーム', () => {
     render(<BrandForm />)
 
     const user = userEvent.setup()
-    await user.type(screen.getByLabelText('ブランド名'), 'Meiji')
+    await user.type(screen.getByLabelText('メーカー・店舗名'), 'Meiji')
     await user.type(screen.getByLabelText('国名（任意）'), 'Japan')
     await user.click(screen.getByRole('button', { name: '追加' }))
 
@@ -98,7 +98,7 @@ describe('ブランドフォーム', () => {
     render(<BrandForm />)
 
     const user = userEvent.setup()
-    await user.type(screen.getByLabelText('ブランド名'), 'Godiva')
+    await user.type(screen.getByLabelText('メーカー・店舗名'), 'Godiva')
     const countryInput = screen.getByLabelText('国名（任意）')
     await user.type(countryInput, 'Belgium')
     await user.clear(countryInput)
@@ -117,7 +117,7 @@ describe('ブランドフォーム', () => {
     render(<BrandForm />)
 
     const user = userEvent.setup()
-    await user.type(screen.getByLabelText('ブランド名'), 'Nestle')
+    await user.type(screen.getByLabelText('メーカー・店舗名'), 'Nestle')
     await user.click(screen.getByRole('button', { name: '追加' }))
 
     const pendingButton = await screen.findByRole('button', {
@@ -136,12 +136,12 @@ describe('ブランドフォーム', () => {
     render(<BrandForm />)
 
     const user = userEvent.setup()
-    await user.type(screen.getByLabelText('ブランド名'), 'Lindt')
+    await user.type(screen.getByLabelText('メーカー・店舗名'), 'Lindt')
     await user.click(screen.getByRole('button', { name: '追加' }))
 
     await waitFor(() =>
       expect(toastMock.success).toHaveBeenCalledWith(
-        'ブランドを追加しました！',
+        'メーカー・店舗を追加しました！',
       ),
     )
   })
@@ -156,7 +156,7 @@ describe('ブランドフォーム', () => {
     render(<BrandForm />)
 
     const user = userEvent.setup()
-    await user.type(screen.getByLabelText('ブランド名'), 'Bonnat')
+    await user.type(screen.getByLabelText('メーカー・店舗名'), 'Bonnat')
     await user.click(screen.getByRole('button', { name: '追加' }))
 
     await waitFor(() =>

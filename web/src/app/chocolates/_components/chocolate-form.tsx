@@ -97,7 +97,7 @@ export const ChocolateForm = () => {
         setBrandOptions(data.brands ?? [])
       } catch (error) {
         console.error('Failed to load brands', error)
-        toast.error('ブランド一覧の取得に失敗しました')
+        toast.error('メーカー・店舗一覧の取得に失敗しました')
       } finally {
         setBrandLoading(false)
       }
@@ -241,7 +241,7 @@ export const ChocolateForm = () => {
           name="brandId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>ブランド</FormLabel>
+              <FormLabel>メーカー・店舗</FormLabel>
               <Select
                 name={field.name}
                 onValueChange={field.onChange}
@@ -263,7 +263,7 @@ export const ChocolateForm = () => {
                 <SelectContent>
                   {brandOptions.length === 0 ? (
                     <div className="text-muted-foreground px-2 py-2 text-sm">
-                      ブランドが登録されていません
+                      メーカー・店舗が登録されていません
                     </div>
                   ) : (
                     brandOptions.map((brand) => (
@@ -275,14 +275,14 @@ export const ChocolateForm = () => {
                 </SelectContent>
               </Select>
               <FormDescription>
-                登録済みのブランドから選択してください
+                登録済みのメーカー・店舗から選択してください
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <FormField
+        {/* <FormField
           control={form.control}
           name="categoryId"
           render={({ field }) => (
@@ -301,7 +301,7 @@ export const ChocolateForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         <Button type="submit" disabled={isPending}>
           {isPending ? '投稿中...' : '投稿'}

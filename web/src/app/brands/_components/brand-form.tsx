@@ -45,7 +45,7 @@ export const BrandForm = () => {
     if (!state) return
     if (state.isSuccess) {
       form.reset()
-      toast.success('ブランドを追加しました！')
+      toast.success('メーカー・店舗を追加しました！')
       router.push('/brands')
     } else {
       toast.error(getErrorMessage(state.errorCode))
@@ -63,10 +63,10 @@ export const BrandForm = () => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>ブランド名</FormLabel>
+              <FormLabel>メーカー・店舗名</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="ブランド名を入力"
+                  placeholder="メーカー・店舗名を入力"
                   autoComplete="organization"
                   {...field}
                 />
@@ -76,7 +76,7 @@ export const BrandForm = () => {
           )}
         />
 
-        <FormField
+        {/* <FormField
           control={form.control}
           name="country"
           render={({ field }) => (
@@ -94,7 +94,7 @@ export const BrandForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         <Button type="submit" disabled={isPending}>
           {isPending ? '追加中...' : '追加'}

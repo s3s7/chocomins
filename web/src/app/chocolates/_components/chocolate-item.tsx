@@ -69,7 +69,7 @@ export function ChocolateItem({
             </p>
           </div>
           <div className="space-y-2 text-right text-sm">
-            <p>ブランド: {chocolate.brandName ?? '未設定'}</p>
+            <p>メーカー・店舗: {chocolate.brandName ?? '未設定'}</p>
             <p>カテゴリ: {chocolate.categoryName ?? '未設定'}</p>
           </div>
         </div>

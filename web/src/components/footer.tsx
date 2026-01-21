@@ -11,7 +11,7 @@ export function Footer() {
           投稿一覧
         </Link>
         <Link href="/brands" className="hover:text-gray-900">
-          ブランド一覧
+          メーカー・店舗一覧
         </Link>
         {/* <Link href="/contact" className="hover:text-gray-900">
           お問い合わせ
