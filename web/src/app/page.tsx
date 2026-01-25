@@ -132,7 +132,7 @@ export default async function Home() {
     <main className="space-y-12 px-0 py-0">
       <div className="mb-0 flex justify-center">
         <Image
-          src="/top.png"
+          src="/t.png"
           alt="ちょこみんずのキービジュアル"
           width={2040}
           height={1027}

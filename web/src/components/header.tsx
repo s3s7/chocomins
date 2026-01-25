@@ -32,7 +32,7 @@ export function Header() {
   }
 
   return (
-    <header className="flex items-center justify-between bg-[#563406] px-4 py-3 text-white">
+    <header className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between bg-[#563406] px-4 text-white">
       <Link href="/" className={`${zenMaruGothic.className} text-lg font-bold`}>
         ちょこみんず
       </Link>
