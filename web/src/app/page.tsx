@@ -159,25 +159,6 @@ export default async function Home() {
             ちょこみんずは、メーカー・店舗登録から商品登録、商品のレビュー投稿まで、チョコミント好きの情報管理や共有をサポートするサービスです。
           </p>
         </div>
-        <div className="mt-10 grid gap-8 md:grid-cols-[1fr_auto_1fr] md:items-center">
-          <div className="flex justify-center">
-            <div className="relative flex h-36 w-36 items-center justify-center rounded-2xl bg-white/70 shadow-inner">
-              <Gift className="h-14 w-14 text-orange-500" />
-            </div>
-          </div>
-          <div className="text-center text-lg leading-relaxed text-slate-900">
-            {heroMessages.map((line) => (
-              <p key={line} className="mb-4">
-                {line}
-              </p>
-            ))}
-          </div>
-          <div className="flex justify-center">
-            <div className="relative flex h-36 w-36 items-center justify-center rounded-2xl bg-white/70 shadow-inner">
-              <Users className="h-14 w-14 text-slate-600" />
-            </div>
-          </div>
-        </div>
         <div className="mt-10 flex flex-col items-center gap-4 md:flex-row md:justify-center">
           <Button
             asChild
