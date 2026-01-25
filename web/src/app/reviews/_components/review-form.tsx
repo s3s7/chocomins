@@ -126,7 +126,7 @@ export const ReviewForm = () => {
             <FormItem>
               <FormLabel>タイトル</FormLabel>
               <FormControl>
-                <Input placeholder="タイトルを入力" {...field} />
+                <Input placeholder="タイトルを入力"  className='!bg-white'{...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -187,7 +187,12 @@ export const ReviewForm = () => {
             <FormItem>
               <FormLabel>本文</FormLabel>
               <FormControl>
-                <Textarea rows={4} placeholder="本文を入力" {...field} />
+                <Textarea
+                  rows={4}
+                  placeholder="本文を入力"
+                  className="bg-white"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

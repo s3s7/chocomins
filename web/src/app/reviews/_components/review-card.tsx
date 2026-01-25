@@ -103,7 +103,7 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
   )
 
   return (
-    <Card className="relative h-full rounded-3xl border-emerald-100 bg-gradient-to-br from-white shadow-sm transition-shadow hover:shadow-md">
+    <Card className="relative h-full min-h-[560px] rounded-3xl border-emerald-100 from-white shadow-sm transition-shadow hover:shadow-md">
       {!review.published && (
         <span className="absolute top-6 right-6 inline-flex items-center rounded-full border border-pink-200 bg-pink-50 px-3 py-1 text-xs font-semibold text-pink-500">
           非公開

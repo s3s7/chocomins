@@ -293,7 +293,6 @@ export function PlaceAutocompleteField({
                 placeholder={
                   gmapsReady ? '住所を入力（候補表示）' : '住所を入力'
                 }
-                className="text-foreground bg-white"
                 {...field}
                 autoComplete="off"
               />

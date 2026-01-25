@@ -11,7 +11,7 @@ export default async function ChocolateListPage() {
   }
 
   return (
-    <FormPageLayout title="チョコレート登録">
+    <FormPageLayout title="商品登録">
       <ChocolateForm />
     </FormPageLayout>
   )

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-// import Image from 'next/image'
+import Image from 'next/image'
 // import type { Metadata } from 'next'
 import {
   Calendar,
@@ -63,7 +63,7 @@ export default async function Home() {
         'メールアドレスだけで簡単にスタート。ログインするとブランド登録やレビュー投稿などすべての機能を利用できます。',
       highlight: 'Sign in',
       icon: Users,
-      accent: 'from-sky-100 via-blue-50 to-white',
+      accent: 'from-[#c9f1e3] via-[#8fcbab] to-white',
       ctaLabel: isSignedIn ? 'マイページへ' : 'ログインする',
       ctaHref: isSignedIn ? '/mypage' : '/signin',
     },
@@ -73,7 +73,7 @@ export default async function Home() {
         '地元のショコラトリーや旅先で出会ったお店を記録。ブランドごとに特徴をまとめておけば、レビュー作成時にすぐ呼び出せます。',
       highlight: 'Brand Library',
       icon: Gift,
-      accent: 'from-emerald-100 via-emerald-50 to-white',
+      accent: 'from-[#d4f5ea] via-[#97d2b5] to-white',
       ctaLabel: isSignedIn ? 'ブランドを登録' : 'ログインして登録',
       ctaHref: isSignedIn ? '/brands/new' : '/signin',
     },
@@ -83,7 +83,7 @@ export default async function Home() {
         'カカオ含有率やテイスト、価格帯をチョコ単位で整理。メモやおすすめシーンを書き添えられ、写真投稿は近日公開予定です。',
       highlight: 'Chocolate Notes',
       icon: Inbox,
-      accent: 'from-amber-100 via-orange-50 to-white',
+      accent: 'from-[#d9f8ee] via-[#9fd8c0] to-white',
       ctaLabel: isSignedIn ? 'チョコを登録' : 'ログインして登録',
       ctaHref: isSignedIn ? '/chocolates/new' : '/signin',
       note: '写真投稿機能は現在開発中です。',
@@ -94,7 +94,7 @@ export default async function Home() {
         '味や香り、ペアリングした飲み物の感想を残しましょう。リンク共有すれば推しチョコを仲間にも紹介できます。',
       highlight: 'Review Share',
       icon: Eye,
-      accent: 'from-purple-100 via-violet-50 to-white',
+      accent: 'from-[#c3ebde] via-[#89c5a0] to-white',
       ctaLabel: isSignedIn ? 'レビューを書く' : 'ログインして投稿',
       ctaHref: isSignedIn ? '/reviews/new' : '/signin',
       note: '写真投稿は順次アップデート予定。',
@@ -105,7 +105,7 @@ export default async function Home() {
         '気になるレビューにコメントしたり、お気に入りに登録して再購入を逃さないように。非公開設定も柔軟に選べます。',
       highlight: 'Community',
       icon: Users,
-      accent: 'from-rose-100 via-pink-50 to-white',
+      accent: 'from-[#def7ed] via-[#a3d9c0] to-white',
       ctaLabel: isSignedIn ? 'レビュー一覧へ' : 'ログインして参加',
       ctaHref: isSignedIn ? '/reviews' : '/signin',
     },
@@ -115,7 +115,7 @@ export default async function Home() {
         '検索やランキングで次に試したいミントチョコを探しましょう。気になる銘柄はマイページで管理できます。',
       highlight: 'Discovery',
       icon: Calendar,
-      accent: 'from-cyan-100 via-teal-50 to-white',
+      accent: 'from-[#cfeede] via-[#85c5a3] to-white',
       comingSoon: true,
       note: 'ランキング・おすすめ機能は順次追加予定です。',
     },
@@ -129,21 +129,31 @@ export default async function Home() {
     : { href: '/guide', label: '使い方を見る' }
 
   return (
-    <main className="space-y-12 px-4 py-10">
-      <section className="mx-auto w-full max-w-5xl rounded-3xl bg-gradient-to-r from-sky-50 via-cyan-50 to-emerald-50 px-6 py-16 shadow-sm">
-        {/* <div className="mb-8 flex justify-center">
+    <main className="space-y-12 px-0 py-0">
+       <div className="mb-0 flex justify-center">
           <Image
-            src="/top.webp"
+            src="/top.png"
             alt="ちょこみんずのキービジュアル"
             width={2040}
             height={1027}
-            className="h-auto max-w-full rounded-2xl shadow-lg"
+            className="h-auto max-w-full"
             priority
           />
-        </div> */}
+        </div>
+        <div className="mb-0 flex justify-center">
+          <Image
+            src="/line.png"
+            alt="ちょこみんずのキービジュアル"
+            width={1040}
+            height={1027}
+            className="h-auto max-w-full"
+            priority
+          />
+        </div>
+      <section className="mx-auto w-full max-w-5xl rounded-3xl bg-white px-6 py-16 shadow-sm">
         <div className="text-center">
           <Badge variant="secondary" className="mb-4 bg-white/80 text-sky-600">
-            ちょこみんずについて
+            ちょこみんずで出来ること
           </Badge>
           <p className="text-xl text-slate-800">
             ちょこみんずはブランド登録からレビュー投稿まで、チョコ好きのワークフローを丸ごとサポートするコミュニティです。
@@ -169,14 +179,18 @@ export default async function Home() {
           </div>
         </div>
         <div className="mt-10 flex flex-col items-center gap-4 md:flex-row md:justify-center">
-          <Button asChild size="lg" className="shadow-lg hover:shadow-xl">
+          <Button
+            asChild
+            size="lg"
+            className="bg-[#8FCBAB] text-slate-900 shadow-lg hover:bg-[#7BB898] hover:shadow-xl"
+          >
             <Link href={primaryCta.href}>{primaryCta.label}</Link>
           </Button>
           <Button
             asChild
             variant="outline"
             size="lg"
-            className="border-sky-200 text-sky-600 hover:bg-sky-100"
+            className="border-[#8FCBAB] text-[#3E5C4F] hover:bg-[#8FCBAB]/20"
           >
             <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
           </Button>
@@ -188,55 +202,47 @@ export default async function Home() {
           <h2 className="text-3xl font-semibold text-slate-900">
             ちょこみんずの使い方
           </h2>
-          <p className="mt-2 text-slate-600">
-            ブランド登録やチョコのレビューなど、ガイドページと同じ流れでご紹介します。
-          </p>
+         
         </div>
         <div className="space-y-6">
           {features.map((feature, index) => (
             <Card
               key={feature.title}
-              className="border-slate-100 p-6 shadow-md"
+              className="border-[#8FCBAB]/40 bg-white p-6 shadow-lg"
             >
               <div className="flex flex-col items-center gap-6 md:flex-row">
                 <div className="flex-1 text-center md:text-left">
-                  <p className="text-sm font-semibold text-orange-500">
+                  <p className="text-sm font-semibold text-[#3E5C4F]">
                     STEP {index + 1}
                   </p>
-                  <h3 className="mt-2 text-2xl font-bold text-slate-900">
+                  <h3 className="mt-2 text-2xl font-bold text-[#1F3028]">
                     {feature.title}
                   </h3>
-                  <p className="mt-4 text-base leading-relaxed text-slate-600">
+                  <p className="mt-4 text-base leading-relaxed text-[#445851]">
                     {feature.description}
                   </p>
                   {feature.note ? (
-                    <p className="text-muted-foreground mt-2 text-sm">
+                    <p className="mt-2 text-sm text-[#5F746B]">
                       {feature.note}
                     </p>
                   ) : null}
                   <div className="mt-6">
                     {feature.comingSoon ? (
-                      <Button variant="secondary" disabled>
+                      <Button
+                        variant="secondary"
+                        disabled
+                        className="bg-[#CFE6DA] text-[#5F746B]"
+                      >
                         近日公開予定
                       </Button>
                     ) : (
                       <Button
                         asChild
-                        className="bg-orange-500 hover:bg-orange-600"
+                        className="bg-[#8FCBAB] text-[#1F3028] hover:bg-[#7BB898]"
                       >
                         <Link href={feature.ctaHref!}>{feature.ctaLabel}</Link>
                       </Button>
                     )}
-                  </div>
-                </div>
-                <div className="flex w-full justify-center md:w-auto">
-                  <div
-                    className={`flex h-40 w-40 flex-col items-center justify-center rounded-2xl bg-gradient-to-br ${feature.accent} text-center shadow-inner`}
-                  >
-                    <feature.icon className="mb-3 h-10 w-10 text-slate-700" />
-                    <span className="text-sm font-semibold text-slate-700">
-                      {feature.highlight}
-                    </span>
                   </div>
                 </div>
               </div>
