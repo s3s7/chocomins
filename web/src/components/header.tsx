@@ -5,6 +5,13 @@ import { Role } from '@prisma/client'
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { Zen_Maru_Gothic } from 'next/font/google'
+
+const zenMaruGothic = Zen_Maru_Gothic({
+  subsets: ['latin'],
+  weight: '700',
+  display: 'swap',
+})
 
 export function Header() {
   const { data: session } = useSession()
@@ -25,83 +32,49 @@ export function Header() {
   }
 
   return (
-    <header className="flex items-center justify-between bg-sky-100 px-4 py-2">
-      <Link href="/" className="text-lg font-bold">
+    <header className="flex items-center justify-between bg-[#563406] px-4 py-5 text-white">
+      <Link href="/" className={`${zenMaruGothic.className} text-lg font-bold`}>
         ちょこみんず
       </Link>
       <div className="flex items-center space-x-4">
         {session?.user ? (
           <div className="flex items-center space-x-2">
-            <span>こんにちは, {session.user.name || session.user.email}</span>
-            <Link
-              href="/brands"
-              className="rounded bg-blue-500 px-3 py-1 text-white"
-            >
+            <Link href="/brands" className="rounded px-3 py-1">
               メーカー・店舗一覧
             </Link>
-            <Link
-              href="/brands/new"
-              className="rounded bg-green-500 px-3 py-1 text-white"
-            >
+            <Link href="/brands/new" className="rounded px-3 py-1">
               メーカー・店舗入力
             </Link>
-            <Link
-              href="/chocolates"
-              className="rounded bg-blue-500 px-3 py-1 text-white"
-            >
-              チョコレート一覧
+            <Link href="/chocolates" className="rounded px-3 py-1">
+              商品一覧
             </Link>
-            <Link
-              href="/chocolates/new"
-              className="rounded bg-green-500 px-3 py-1 text-white"
-            >
-              チョコレート入力
+            <Link href="/chocolates/new" className="rounded px-3 py-1">
+              商品入力
             </Link>
-            <Link
-              href="/reviews"
-              className="rounded bg-blue-500 px-3 py-1 text-white"
-            >
+            <Link href="/reviews" className="rounded px-3 py-1">
               投稿一覧
             </Link>
-            <Link
-              href="/reviews/new"
-              className="rounded bg-green-500 px-3 py-1 text-white"
-            >
+            <Link href="/reviews/new" className="rounded px-3 py-1">
               レビュー入力
             </Link>
-            <Link
-              href="/mypage"
-              className="rounded bg-blue-500 px-3 py-1 text-white"
-            >
+            <Link href="/mypage" className="rounded px-3 py-1">
               マイページ
             </Link>
             {session.user.role === Role.ADMIN && (
-              <Link
-                href="/admin"
-                className="rounded bg-yellow-500 px-3 py-1 text-white"
-              >
+              <Link href="/admin" className="rounded px-3 py-1">
                 管理者ページ
               </Link>
             )}
-            <button
-              onClick={handleLogout}
-              className="rounded bg-red-500 px-3 py-1 text-white"
-            >
+            <button onClick={handleLogout} className="rounded px-3 py-1">
               ログアウト
             </button>
           </div>
         ) : (
           <div className="flex space-x-2">
-            <Link
-              href="/signin"
-              className="rounded bg-blue-500 px-3 py-1 text-white"
-            >
+            <Link href="/signin" className="rounded px-3 py-1">
               ログイン
             </Link>
-            <Link
-              href="/signup"
-              className="rounded bg-blue-500 px-3 py-1 text-white"
-            >
+            <Link href="/signup" className="rounded px-3 py-1">
               新規登録
             </Link>
           </div>

@@ -81,7 +81,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground bg-[#D7F0E5];
   }
 }
 
@@ -91,4 +91,21 @@ gmp-place-autocomplete {
   border: 1px solid hsl(var(--border));
   border-radius: calc(var(--radius));
   width: 100%;
+}
+
+@layer utilities {
+  /* shadcn Input (data-slot="input") を白に固定 */
+  [data-slot='form-control'] {
+    background-color: white !important;
+  }
+
+  /* Textarea も白に固定（必要なら） */
+  textarea {
+    background-color: white !important;
+  }
+
+  /* SelectTrigger（shadcn Select はボタンになることが多い） */
+  button[role='combobox'] {
+    background-color: white !important;
+  }
 }

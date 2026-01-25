@@ -1,6 +1,7 @@
 import { ChocolateForm } from '@/app/chocolates/_components/chocolate-form'
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
+import { FormPageLayout } from '@/components/form-page-layout'
 
 export default async function ChocolateListPage() {
   const session = await auth()
@@ -10,8 +11,8 @@ export default async function ChocolateListPage() {
   }
 
   return (
-    <main className="mx-auto max-w-2xl space-y-6 p-6">
+    <FormPageLayout title="商品登録">
       <ChocolateForm />
-    </main>
+    </FormPageLayout>
   )
 }
