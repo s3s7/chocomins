@@ -130,26 +130,26 @@ export default async function Home() {
 
   return (
     <main className="space-y-12 px-0 py-0">
-       <div className="mb-0 flex justify-center">
-          <Image
-            src="/top.png"
-            alt="ちょこみんずのキービジュアル"
-            width={2040}
-            height={1027}
-            className="h-auto max-w-full"
-            priority
-          />
-        </div>
-        <div className="mb-0 flex justify-center">
-          <Image
-            src="/line.png"
-            alt="ちょこみんずのキービジュアル"
-            width={1040}
-            height={1027}
-            className="h-auto max-w-full"
-            priority
-          />
-        </div>
+      <div className="mb-0 flex justify-center">
+        <Image
+          src="/top.png"
+          alt="ちょこみんずのキービジュアル"
+          width={2040}
+          height={1027}
+          className="h-auto max-w-full"
+          priority
+        />
+      </div>
+      <div className="mb-0 flex justify-center">
+        <Image
+          src="/line.png"
+          alt="ちょこみんずのキービジュアル"
+          width={1040}
+          height={1027}
+          className="h-auto max-w-full"
+          priority
+        />
+      </div>
       <section className="mx-auto w-full max-w-5xl rounded-3xl bg-white px-6 py-16 shadow-sm">
         <div className="text-center">
           <Badge variant="secondary" className="mb-4 bg-white/80 text-sky-600">
@@ -202,7 +202,6 @@ export default async function Home() {
           <h2 className="text-3xl font-semibold text-slate-900">
             ちょこみんずの使い方
           </h2>
-         
         </div>
         <div className="space-y-6">
           {features.map((feature, index) => (

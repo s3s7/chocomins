@@ -118,8 +118,6 @@ export const ChocolateForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4 rounded-md border p-4"
       >
-       
-
         {/* 横並びレイアウト例（md以上で2カラム） */}
         <div className="grid gap-6 md:grid-cols-2">
           <div className="space-y-4">
@@ -151,7 +149,11 @@ export const ChocolateForm = () => {
                 <FormItem>
                   <FormLabel>商品説明</FormLabel>
                   <FormControl>
-                    <Textarea rows={4} placeholder="商品の説明を入力" {...field} />
+                    <Textarea
+                      rows={4}
+                      placeholder="商品の説明を入力"
+                      {...field}
+                    />
                   </FormControl>
                   <FieldHelp>
                     味や香り、感じた特徴やおすすめシーンなどを200文字以内で入力してください。（必須、最大200文字）
@@ -304,9 +306,7 @@ export const ChocolateForm = () => {
           {isPending ? '投稿中...' : '投稿'}
         </Button>
       </form>
-      
     </Form>
-    
   )
 }
 
@@ -331,7 +331,9 @@ function HasMintCheckboxField({ field }: HasMintCheckboxFieldProps) {
   return (
     <FormItem>
       <HasMintCheckboxContent field={field} />
-      <FieldHelp>ミントの風味が感じられる場合はオンにしてください。（必須）</FieldHelp>
+      <FieldHelp>
+        ミントの風味が感じられる場合はオンにしてください。（必須）
+      </FieldHelp>
       <FormMessage />
     </FormItem>
   )

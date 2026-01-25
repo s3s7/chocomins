@@ -33,10 +33,7 @@ export function Header() {
 
   return (
     <header className="flex items-center justify-between bg-[#563406] px-4 py-5 text-white">
-      <Link
-        href="/"
-        className={`${zenMaruGothic.className} text-lg font-bold`}
-      >
+      <Link href="/" className={`${zenMaruGothic.className} text-lg font-bold`}>
         ちょこみんず
       </Link>
       <div className="flex items-center space-x-4">
@@ -45,40 +42,22 @@ export function Header() {
             <Link href="/brands" className="rounded px-3 py-1">
               メーカー・店舗一覧
             </Link>
-            <Link
-              href="/brands/new"
-              className="rounded px-3 py-1"
-            >
+            <Link href="/brands/new" className="rounded px-3 py-1">
               メーカー・店舗入力
             </Link>
-            <Link
-              href="/chocolates"
-              className="rounded px-3 py-1"
-            >
+            <Link href="/chocolates" className="rounded px-3 py-1">
               商品一覧
             </Link>
-            <Link
-              href="/chocolates/new"
-              className="rounded px-3 py-1"
-            >
+            <Link href="/chocolates/new" className="rounded px-3 py-1">
               商品入力
             </Link>
-            <Link
-              href="/reviews"
-              className="rounded px-3 py-1"
-            >
+            <Link href="/reviews" className="rounded px-3 py-1">
               投稿一覧
             </Link>
-            <Link
-              href="/reviews/new"
-              className="rounded px-3 py-1"
-            >
+            <Link href="/reviews/new" className="rounded px-3 py-1">
               レビュー入力
             </Link>
-            <Link
-              href="/mypage"
-              className="rounded px-3 py-1"
-            >
+            <Link href="/mypage" className="rounded px-3 py-1">
               マイページ
             </Link>
             {session.user.role === Role.ADMIN && (
@@ -86,10 +65,7 @@ export function Header() {
                 管理者ページ
               </Link>
             )}
-            <button
-              onClick={handleLogout}
-              className="rounded px-3 py-1"
-            >
+            <button onClick={handleLogout} className="rounded px-3 py-1">
               ログアウト
             </button>
           </div>
