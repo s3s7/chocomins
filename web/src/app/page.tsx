@@ -34,22 +34,22 @@ type Feature = {
 //   openGraph: {
 //     title: 'ちょこみんず',
 //     description:
-//       'ちょこみんずでブランドやチョコを整理し、レビューを投稿して新しい一粒に出会いましょう。',
+//       'ちょこみんずでメーカー・店舗やチョコを整理し、レビューを投稿して新しい一粒に出会いましょう。',
 //     images: ['/window.svg'],
 //   },
 //   twitter: {
 //     card: 'summary_large_image',
 //     title: 'ちょこみんず',
 //     description:
-//       'ちょこみんずは、ブランド登録からレビュー投稿までをサポートするチョコミント好きのための場所です。',
+//       'ちょこみんずは、メーカー・店舗登録からレビュー投稿までをサポートするチョコミント好きのための場所です。',
 //     images: ['/window.svg'],
 //   },
 // }
 
 const heroMessages = [
-  '「お気に入りのショコラトリーを忘れたくない」',
-  '「推しチョコとの出会いをシェアしたい」',
-  'その思い出、ちょこみんずに残しませんか？',
+  '「お気に入りのチョコミント商品を忘れたくない」',
+  '「推しチョコミントとの出会いをシェアしたい」',
+  'ちょこみんずに残しませんか？',
 ]
 
 export default async function Home() {
@@ -60,7 +60,7 @@ export default async function Home() {
     {
       title: 'アカウント登録 / ログイン',
       description:
-        'メールアドレスだけで簡単にスタート。ログインするとブランド登録やレビュー投稿などすべての機能を利用できます。',
+        'メールアドレスだけで簡単にスタート。ログインすると店舗登録やレビュー投稿などすべての機能を利用できます。',
       highlight: 'Sign in',
       icon: Users,
       accent: 'from-[#c9f1e3] via-[#8fcbab] to-white',
@@ -70,17 +70,17 @@ export default async function Home() {
     {
       title: 'メーカー・店舗の登録',
       description:
-        '地元のショコラトリーや旅先で出会ったお店を記録。ブランドごとに特徴をまとめておけば、レビュー作成時にすぐ呼び出せます。',
+        '地元のカフェや旅先で出会ったお店を記録。店舗ごとに特徴をまとめておけば、レビュー作成時にすぐ呼び出せます。',
       highlight: 'Brand Library',
       icon: Gift,
       accent: 'from-[#d4f5ea] via-[#97d2b5] to-white',
-      ctaLabel: isSignedIn ? 'ブランドを登録' : 'ログインして登録',
+      ctaLabel: isSignedIn ? '店舗・を登録' : 'ログインして登録',
       ctaHref: isSignedIn ? '/brands/new' : '/signin',
     },
     {
       title: 'チョコレート情報のストック',
       description:
-        'カカオ含有率やテイスト、価格帯をチョコ単位で整理。メモやおすすめシーンを書き添えられ、写真投稿は近日公開予定です。',
+        'カカオ含有率やテイスト、価格帯をチョコ単位で整理。メモを書き添えられ、写真投稿は近日公開予定です。',
       highlight: 'Chocolate Notes',
       icon: Inbox,
       accent: 'from-[#d9f8ee] via-[#9fd8c0] to-white',
@@ -91,7 +91,7 @@ export default async function Home() {
     {
       title: 'レビュー・感想を投稿',
       description:
-        '味や香り、ペアリングした飲み物の感想を残しましょう。リンク共有すれば推しチョコを仲間にも紹介できます。',
+        '味やミント感など感想を残しましょう。リンク共有すれば推しチョコを仲間にも紹介できます。',
       highlight: 'Review Share',
       icon: Eye,
       accent: 'from-[#c3ebde] via-[#89c5a0] to-white',
@@ -100,24 +100,24 @@ export default async function Home() {
       note: '写真投稿は順次アップデート予定。',
     },
     {
+      title: '次の一粒を探す',
+      description: '次に試したい商品をレビューや商品一覧で探しましょう。',
+      highlight: 'Discovery',
+      icon: Calendar,
+      accent: 'from-[#cfeede] via-[#85c5a3] to-white',
+      ctaLabel: isSignedIn ? 'レビュー一覧へ' : 'ログインして参加',
+      ctaHref: isSignedIn ? '/reviews' : '/signin',
+      comingSoon: false,
+      note: '',
+    },
+    {
       title: 'コミュニティとの連携',
-      description:
-        '気になるレビューにコメントしたり、お気に入りに登録して再購入を逃さないように。非公開設定も柔軟に選べます。',
+      description: '気になるレビューにコメントしよう',
       highlight: 'Community',
       icon: Users,
       accent: 'from-[#def7ed] via-[#a3d9c0] to-white',
       ctaLabel: isSignedIn ? 'レビュー一覧へ' : 'ログインして参加',
       ctaHref: isSignedIn ? '/reviews' : '/signin',
-    },
-    {
-      title: '次の一粒を探す',
-      description:
-        '検索やランキングで次に試したいミントチョコを探しましょう。気になる銘柄はマイページで管理できます。',
-      highlight: 'Discovery',
-      icon: Calendar,
-      accent: 'from-[#cfeede] via-[#85c5a3] to-white',
-      comingSoon: true,
-      note: 'ランキング・おすすめ機能は順次追加予定です。',
     },
   ]
 
@@ -143,7 +143,7 @@ export default async function Home() {
       <div className="mb-0 flex justify-center">
         <Image
           src="/line.png"
-          alt="ちょこみんずのキービジュアル"
+          alt="区切り線"
           width={1040}
           height={1027}
           className="h-auto max-w-full"
@@ -156,7 +156,7 @@ export default async function Home() {
             ちょこみんずで出来ること
           </Badge>
           <p className="text-xl text-slate-800">
-            ちょこみんずはブランド登録からレビュー投稿まで、チョコ好きのワークフローを丸ごとサポートするコミュニティです。
+            ちょこみんずは、メーカー・店舗登録から商品登録、商品のレビュー投稿まで、チョコミント好きの情報管理や共有をサポートするサービスです。
           </p>
         </div>
         <div className="mt-10 grid gap-8 md:grid-cols-[1fr_auto_1fr] md:items-center">

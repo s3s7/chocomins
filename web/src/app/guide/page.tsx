@@ -95,6 +95,17 @@ export default async function GuidePage() {
     },
     {
       number: 5,
+      colorClass: 'bg-teal-500',
+      title: '次の一粒を探す',
+      description:
+        'レビュー検索やランキングを活用して、次に試したいミントチョコを見つけましょう。季節限定の一粒も逃さずキャッチできます。',
+      bullets: [
+        '検索フィルターで味わいを絞り込み',
+        '気になるチョコはマイページで管理',
+      ],
+    },
+    {
+      number: 6,
       colorClass: 'bg-rose-500',
       title: 'コミュニティとの連携',
       description:
@@ -112,17 +123,6 @@ export default async function GuidePage() {
           </AlertDescription>
         </Alert>
       ),
-    },
-    {
-      number: 6,
-      colorClass: 'bg-teal-500',
-      title: '次の一粒を探す',
-      description:
-        'レビュー検索やランキングを活用して、次に試したいミントチョコを見つけましょう。季節限定の一粒も逃さずキャッチできます。',
-      bullets: [
-        '検索フィルターで味わいを絞り込み',
-        '気になるチョコはマイページで管理',
-      ],
     },
   ]
 
