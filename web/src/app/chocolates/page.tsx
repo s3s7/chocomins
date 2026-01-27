@@ -12,7 +12,7 @@ export default async function ChocolateListPage() {
   const chocolates = await getChocolates()
 
   return (
-    <main className="mx-auto max-w-2xl space-y-6 p-6">
+    <main className="mx-auto max-w-6xl space-y-6 p-6">
       <h1 className="text-2xl font-bold">チョコレート一覧</h1>
       <ChocolateList
         chocolates={chocolates}

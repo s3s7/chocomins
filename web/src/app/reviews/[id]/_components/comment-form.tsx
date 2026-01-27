@@ -66,7 +66,11 @@ export function CommentForm({ reviewId }: { reviewId: string }) {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isPending}>
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="bg-[#CFE6DA] text-gray-800 hover:bg-[#b7dacf]"
+        >
           {isPending ? '送信中...' : 'コメントを投稿'}
         </Button>
       </form>
