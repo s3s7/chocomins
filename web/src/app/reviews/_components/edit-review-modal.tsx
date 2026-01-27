@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, startTransition } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, type UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useActionState } from 'react'
 import { toast } from 'sonner'
@@ -27,7 +27,11 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { updateReview } from '@/app/actions/review/update'
 import { ReviewWithUser } from '@/types'
-import { EditReviewInput, editReviewSchema } from '@/schemas/review'
+import {
+  EditReviewInput,
+  ReviewInput,
+  editReviewSchema,
+} from '@/schemas/review'
 import { getErrorMessage } from '@/lib/error-messages'
 import {
   Select,
@@ -37,6 +41,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Rating, RatingButton } from '@/components/ui/shadcn-io/rating'
+import {
+  PlaceAutocompleteField,
+  type PlaceSelection,
+} from './place-autocomplete-field'
 
 type Props = {
   review: ReviewWithUser
@@ -55,6 +63,7 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
     [],
   )
   const [chocolateLoading, setChocolateLoading] = useState(true)
+  const [placeSelection, setPlaceSelection] = useState<PlaceSelection>({})
 
   const form = useForm<EditReviewInput>({
     resolver: zodResolver(editReviewSchema),
@@ -64,6 +73,7 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
       content: review.content,
       mintiness: review.mintiness,
       chocolateId: review.chocolateId,
+      address: '',
     },
   })
 
@@ -74,6 +84,22 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
     formData.append('content', values.content)
     formData.append('mintiness', String(values.mintiness))
     formData.append('chocolateId', values.chocolateId)
+    if (placeSelection.googlePlaceId) {
+      formData.append('googlePlaceId', placeSelection.googlePlaceId)
+    }
+    if (placeSelection.placeName) {
+      formData.append('placeName', placeSelection.placeName)
+    }
+    const addressToSend = placeSelection.address ?? values.address
+    if (addressToSend) {
+      formData.append('address', addressToSend)
+    }
+    if (placeSelection.lat) {
+      formData.append('lat', placeSelection.lat)
+    }
+    if (placeSelection.lng) {
+      formData.append('lng', placeSelection.lng)
+    }
     startTransition(() => {
       dispatch(formData)
     })
@@ -85,6 +111,7 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
     if (state.isSuccess) {
       toast.success('投稿が更新されました！')
       form.reset()
+      setPlaceSelection({})
       onCloseAction()
     } else if (state.errorCode) {
       toast.error(getErrorMessage(state.errorCode))
@@ -133,6 +160,11 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
                   <FormMessage />
                 </FormItem>
               )}
+            />
+
+            <PlaceAutocompleteField
+              form={form as unknown as UseFormReturn<ReviewInput>}
+              onSelectionChange={setPlaceSelection}
             />
 
             <FormField

@@ -15,9 +15,11 @@ export type ReviewWithUser = Review & {
     category?: Pick<Category, 'name'> | null
   }
   place:
-    | (Pick<Place, 'lat' | 'lng'> & {
+    | (Pick<Place, 'lat' | 'lng' | 'address' | 'name'> & {
         lat: number | null
         lng: number | null
+        address?: string | null
+        name?: string | null
       })
     | null
 }

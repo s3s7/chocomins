@@ -72,6 +72,8 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
   const chocolateName = review.chocolate?.name ?? 'チョコレート未登録'
   // const chocolateCategory = review.chocolate?.category?.name ?? 'カテゴリ未設定'
   const chocolateBrand = review.chocolate?.brand?.name ?? 'メーカー・店舗未設定'
+  const placeholderImageUrl =
+    'https://dummy.kobeya.com/?width=300&height=200&bg=c3c88d&color=373436&text=No%20Image&_=1769497540044'
 
   const cardInner = (
     <>
@@ -98,6 +100,14 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
             {rating} / 5
           </span>
         </div>
+      </div>
+      <div className="mt-4 w-full overflow-hidden rounded-2xl border border-emerald-50 bg-[#c3c88d]">
+        <img
+          src={placeholderImageUrl}
+          alt="No Image"
+          className="h-48 w-full object-cover"
+          loading="lazy"
+        />
       </div>
     </>
   )

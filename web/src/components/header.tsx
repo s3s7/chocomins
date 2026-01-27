@@ -6,6 +6,13 @@ import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Zen_Maru_Gothic } from 'next/font/google'
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarTrigger,
+} from '@/components/ui/menubar'
 
 const zenMaruGothic = Zen_Maru_Gothic({
   subsets: ['latin'],
@@ -38,36 +45,83 @@ export function Header() {
       </Link>
       <div className="flex items-center space-x-4">
         {session?.user ? (
-          <div className="flex items-center space-x-2">
-            <Link href="/brands" className="rounded px-3 py-1">
-              メーカー・店舗一覧
-            </Link>
-            <Link href="/brands/new" className="rounded px-3 py-1">
-              メーカー・店舗入力
-            </Link>
-            <Link href="/chocolates" className="rounded px-3 py-1">
-              商品一覧
-            </Link>
-            <Link href="/chocolates/new" className="rounded px-3 py-1">
-              商品入力
-            </Link>
-            <Link href="/reviews" className="rounded px-3 py-1">
-              投稿一覧
-            </Link>
-            <Link href="/reviews/new" className="rounded px-3 py-1">
-              レビュー入力
-            </Link>
-            <Link href="/mypage" className="rounded px-3 py-1">
-              マイページ
-            </Link>
-            {session.user.role === Role.ADMIN && (
-              <Link href="/admin" className="rounded px-3 py-1">
-                管理者ページ
+          <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2">
+              <Link href="/reviews" className="rounded px-3 py-1">
+                レビュー一覧
               </Link>
-            )}
-            <button onClick={handleLogout} className="rounded px-3 py-1">
-              ログアウト
-            </button>
+              <Link href="/reviews/new" className="rounded px-3 py-1">
+                レビュー入力
+              </Link>
+              <button onClick={handleLogout} className="rounded px-3 py-1">
+                ログアウト
+              </button>
+            </div>
+            <Menubar className="border-white/30 bg-transparent text-white">
+              <MenubarMenu>
+                <MenubarTrigger className="text-white">
+                  メーカー・店舗
+                </MenubarTrigger>
+                <MenubarContent className="bg-white text-gray-900">
+                  <MenubarItem asChild>
+                    <Link href="/brands" className="flex w-full items-center">
+                      一覧
+                    </Link>
+                  </MenubarItem>
+                  <MenubarItem asChild>
+                    <Link
+                      href="/brands/new"
+                      className="flex w-full items-center"
+                    >
+                      入力
+                    </Link>
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
+              <MenubarMenu>
+                <MenubarTrigger className="text-white">商品</MenubarTrigger>
+                <MenubarContent className="bg-white text-gray-900">
+                  <MenubarItem asChild>
+                    <Link
+                      href="/chocolates"
+                      className="flex w-full items-center"
+                    >
+                      一覧
+                    </Link>
+                  </MenubarItem>
+                  <MenubarItem asChild>
+                    <Link
+                      href="/chocolates/new"
+                      className="flex w-full items-center"
+                    >
+                      入力
+                    </Link>
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
+              <MenubarMenu>
+                <MenubarTrigger className="text-white">その他</MenubarTrigger>
+                <MenubarContent className="bg-white text-gray-900">
+                  <MenubarItem asChild>
+                    <Link href="/mypage" className="flex w-full items-center">
+                      マイページ
+                    </Link>
+                  </MenubarItem>
+                  <MenubarItem asChild>
+                    <Link href="/guide" className="flex w-full items-center">
+                      使い方
+                    </Link>
+                  </MenubarItem>
+                  {session.user.role === Role.ADMIN && (
+                    <MenubarItem asChild>
+                      <Link href="/admin" className="flex w-full items-center">
+                        管理者ページ
+                      </Link>
+                    </MenubarItem>
+                  )}
+                </MenubarContent>
+              </MenubarMenu>
+            </Menubar>
           </div>
         ) : (
           <div className="flex space-x-2">
@@ -77,6 +131,9 @@ export function Header() {
             <Link href="/signup" className="rounded px-3 py-1">
               新規登録
             </Link>
+            {/* <Link href="/guide" className="rounded px-3 py-1">
+              使い方
+            </Link> */}
           </div>
         )}
       </div>

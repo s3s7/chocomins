@@ -19,7 +19,7 @@ export async function getReviews() {
         },
       },
       place: {
-        select: { lat: true, lng: true },
+        select: { lat: true, lng: true, address: true, name: true },
       },
     },
   })
