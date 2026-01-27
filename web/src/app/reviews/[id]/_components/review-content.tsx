@@ -88,7 +88,11 @@ export function ReviewContent({
 
       {(isOwner || isAdmin) && (
         <div className="mt-4 flex gap-2">
-          <Button size="sm" onClick={() => setEditing(true)}>
+          <Button
+            size="sm"
+            className="bg-[#CFE6DA] text-gray-800 hover:bg-[#b7dacf]"
+            onClick={() => setEditing(true)}
+          >
             編集
           </Button>
           <Button
