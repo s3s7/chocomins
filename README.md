@@ -1,3 +1,7 @@
+
+
+ちょこみんず
+
 # ちょこみんず
 〜チョコミント専門の口コミ・共有アプリ　あなたにぴったりの「美味しい」と「爽快」を探そう！〜
 
@@ -76,24 +80,21 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
 # ■技術スタック
 | カテゴリ | 技術 |
 |---|---|
-| バックエンド | Ruby:3.3.6 / Ruby on Rails 7.2.1 |
-| フロントエンド | Ruby on Rails / JavaScript / Hotwire (Turbo, Stimulus) |
-| CSSフレームワーク | Tailwind CSS + daisyUI |
-| Web API | LINE Messaging API |
+| バックエンド | TypeScript:5.9.3 / Next.js:15.4.10 |
+| フロントエンド | TypeScript:5.9.3 / React:19.1.2 / Next.js:15.4.10 |
+| CSSフレームワーク | Tailwind CSS + shadcn/ui |
+| ORM | Prisma:6.19.0 |
+| Web API |  Google Places API / Google Maps JavaScript API |
 | データベースサーバー | PostgreSQL |
-| インメモリデータベース | Redis |
-| 認証 | Devise / OmniAuth (Line OAuth2) |
-| ファイルサーバー | Amazon S3 |
-| 環境構築 | Docker |
+| 認証 | NextAuth.js |
+| 環境構築 | Docker / supabase |
 | CI/CD | GitHub Actions |
-| アプリケーションサーバー | Render |
-| テスト | RSpec / Factory Bot / Capybara |
-| バックグラウンドジョブ | Sidekiq |
-| その他 | Kaminari (ページネーション) / Meta-tags (OGP) |
-| 画像管理 | Active Storage + ImageMagick |
+| アプリケーションサーバー | Vercel |
+| テスト | jest:30.2.0 |
+
 
 # ■画面遷移図
 Figma：
 
 # ■ER図
-
+[![Image from Gyazo](https://i.gyazo.com/3a2440e54f661876699315928f4216b9.png)](https://gyazo.com/3a2440e54f661876699315928f4216b9)
