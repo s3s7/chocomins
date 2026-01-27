@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useTransition } from 'react'
 import { Role } from '@prisma/client'
-import { ChocolateWithRelations } from '@/types'
+import { ChocolateDetail } from '@/types'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { EditChocolateModal } from '../../_components/edit-chocolate-modal'
@@ -12,9 +12,7 @@ import { getErrorMessage } from '@/lib/error-messages'
 import { useRouter } from 'next/navigation'
 
 type ChocolateContentProps = {
-  chocolate: ChocolateWithRelations & {
-    cacaoPercent: number | null
-  }
+  chocolate: ChocolateDetail
   currentUserRole: string
 }
 

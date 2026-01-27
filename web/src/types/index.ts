@@ -29,6 +29,10 @@ export type ChocolateWithRelations = Chocolate & {
   category: Pick<Category, 'name'> | null
 }
 
+export type ChocolateDetail = Omit<ChocolateWithRelations, 'cacaoPercent'> & {
+  cacaoPercent: number | null
+}
+
 export type ActionResult =
   | { isSuccess: false; errorCode: ErrorCode }
   | { isSuccess: true }
