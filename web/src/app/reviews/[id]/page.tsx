@@ -29,7 +29,11 @@ export default async function ReviewDetailPage({
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-6">
-      <ReviewContent review={review} />
+      <ReviewContent
+        review={review}
+        currentUserId={session.user.id}
+        currentUserRole={session.user.role}
+      />
       <CommentForm reviewId={review.id} />
 
       <Suspense fallback={<CommentSkeleton />}>

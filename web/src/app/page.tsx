@@ -46,12 +46,6 @@ type Feature = {
 //   },
 // }
 
-const heroMessages = [
-  '「お気に入りのチョコミント商品を忘れたくない」',
-  '「推しチョコミントとの出会いをシェアしたい」',
-  'ちょこみんずに残しませんか？',
-]
-
 export default async function Home() {
   const session = await auth()
   const isSignedIn = Boolean(session?.user)
@@ -70,7 +64,7 @@ export default async function Home() {
     {
       title: 'メーカー・店舗の登録',
       description:
-        '地元のカフェや旅先で出会ったお店を記録。店舗ごとに特徴をまとめておけば、レビュー作成時にすぐ呼び出せます。',
+        '製造元のメーカーや地元のカフェや旅先で出会ったお店を記録。店舗ごとに特徴をまとめておけば、レビュー作成時にすぐ呼び出せます。',
       highlight: 'Brand Library',
       icon: Gift,
       accent: 'from-[#d4f5ea] via-[#97d2b5] to-white',
@@ -112,7 +106,7 @@ export default async function Home() {
     },
     {
       title: 'コミュニティとの連携',
-      description: '気になるレビューにコメントしよう',
+      description: '気になるレビューにコメントして盛り上がろう！',
       highlight: 'Community',
       icon: Users,
       accent: 'from-[#def7ed] via-[#a3d9c0] to-white',
