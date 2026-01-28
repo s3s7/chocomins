@@ -83,7 +83,7 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
 | Web API |  Google Places API / Google Maps JavaScript API |
 | データベースサーバー | PostgreSQL |
 | 認証 | NextAuth.js |
-| 環境構築 | Docker / supabase |
+| 環境構築 | Docker / Supabase |
 | CI/CD | GitHub Actions |
 | アプリケーションサーバー | Vercel |
 | テスト | jest:30.2.0 |
