@@ -1,9 +1,6 @@
 import { prisma } from '@/lib/prisma'
-import { ChocolateDetail } from '@/types'
 
-export async function getChocolateById(
-  chocolateId: string,
-): Promise<ChocolateDetail | null> {
+export async function getChocolateById(chocolateId: string) {
   const chocolate = await prisma.chocolate.findUnique({
     where: { id: chocolateId },
     include: {
@@ -18,11 +15,5 @@ export async function getChocolateById(
 
   if (!chocolate) return null
 
-  return {
-    ...chocolate,
-    cacaoPercent:
-      chocolate.cacaoPercent == null
-        ? null
-        : Number(chocolate.cacaoPercent),
-  }
+  return chocolate
 }
