@@ -93,5 +93,4 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
 Figma：
 
 # ■ER図
-[![Image from Gyazo](https://i.gyazo.com/3a2440e54f661876699315928f4216b9.png)](https://gyazo.com/3a2440e54f661876699315928f4216b9)
 [![Image from Gyazo](https://i.gyazo.com/6accdc89572f96a9f48bdde35e680a57.png)](https://gyazo.com/6accdc89572f96a9f48bdde35e680a57)
