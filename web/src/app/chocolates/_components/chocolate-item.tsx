@@ -87,60 +87,63 @@ export function ChocolateItem({
             }}
           >
             <CardContent className="flex-grow space-y-4 p-6">
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900">
-                    {chocolate.name}
-                  </h3>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      {chocolate.name}
+                    </h3>
+                  </div>
                 </div>
+                <div className="text-sm text-gray-500">
+                  <p>メーカー：{chocolate.brandName ?? '未設定'}</p>
+                  {/* <p>カテゴリ：{chocolate.categoryName ?? '未設定'}</p> */}
+                </div>
+                <p className="text-sm text-gray-700">
+                  説明：
+                  {(chocolate.description || '説明はありません').slice(0, 10)}
+                  {chocolate.description && chocolate.description.length > 10
+                    ? '…'
+                    : ''}
+                </p>
               </div>
-              <div className="text-sm text-gray-500">
-                <p>メーカー：{chocolate.brandName ?? '未設定'}</p>
-                {/* <p>カテゴリ：{chocolate.categoryName ?? '未設定'}</p> */}
-              </div>
-              <p className="text-sm text-gray-700">
-                説明：{(chocolate.description || '説明はありません').slice(0, 10)}
-                {chocolate.description && chocolate.description.length > 10
-                  ? '…'
-                  : ''}
-              </p>
-            </div>
 
-            <div className="overflow-hidden rounded-2xl border border-emerald-50 bg-[#c3c88d]">
-              <img
-                src={placeholderImageUrl}
-                alt="No Image"
-                className="h-48 w-full object-cover"
-                loading="lazy"
-              />
-            </div>
+              <div className="overflow-hidden rounded-2xl border border-emerald-50 bg-[#c3c88d]">
+                <img
+                  src={placeholderImageUrl}
+                  alt="No Image"
+                  className="h-48 w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
 
-            <dl className="grid grid-cols-2 gap-3 text-sm">
-              <div>
-                <dt className="text-gray-500">カカオ含有率</dt>
-                <dd className="font-semibold text-gray-900">
-                  {cacaoPercentText}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-gray-500">ミント入り</dt>
-                <dd className="font-semibold text-gray-900">
-                  {chocolate.hasMint ? 'あり' : 'なし'}
-                </dd>
-              </div>
-              <p className="text-xs text-gray-500">
-                作成日：<br></br>
-                <span suppressHydrationWarning>{createdAtText}</span>
-              </p>
-              <div>
-                <dt className="text-gray-500">価格</dt>
-                <dd className="font-semibold text-gray-900">
-                  {chocolate.price != null ? `${chocolate.price}円` : '未設定'}
-                </dd>
-              </div>
-            </dl>
-          </CardContent>
+              <dl className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <dt className="text-gray-500">カカオ含有率</dt>
+                  <dd className="font-semibold text-gray-900">
+                    {cacaoPercentText}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-gray-500">ミント入り</dt>
+                  <dd className="font-semibold text-gray-900">
+                    {chocolate.hasMint ? 'あり' : 'なし'}
+                  </dd>
+                </div>
+                <p className="text-xs text-gray-500">
+                  作成日：<br></br>
+                  <span suppressHydrationWarning>{createdAtText}</span>
+                </p>
+                <div>
+                  <dt className="text-gray-500">価格</dt>
+                  <dd className="font-semibold text-gray-900">
+                    {chocolate.price != null
+                      ? `${chocolate.price}円`
+                      : '未設定'}
+                  </dd>
+                </div>
+              </dl>
+            </CardContent>
 
             <CardFooter className="flex flex-col gap-2 px-6 pt-0 pb-6 sm:flex-row">
               {isAdmin && (
