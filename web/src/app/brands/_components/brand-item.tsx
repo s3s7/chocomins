@@ -86,8 +86,12 @@ export function BrandItem({ brand, currentUserRole }: BrandItemProps) {
           </CardContent>
 
           {isAdmin && (
-            <CardFooter className="flex gap-2 px-6 pb-6 pt-0">
-              <Button size="sm" onClick={() => setEditing(true)} className="flex-1">
+            <CardFooter className="flex gap-2 px-6 pt-0 pb-6">
+              <Button
+                size="sm"
+                onClick={() => setEditing(true)}
+                className="flex-1"
+              >
                 編集
               </Button>
               <Button

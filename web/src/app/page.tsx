@@ -9,6 +9,7 @@ import {
   Eye,
   type LucideIcon,
 } from 'lucide-react'
+import { Zen_Maru_Gothic } from 'next/font/google'
 
 import { auth } from '@/lib/auth'
 import { Button } from '@/components/ui/button'
@@ -26,6 +27,12 @@ type Feature = {
   comingSoon?: boolean
   note?: string
 }
+
+const zenMaruGothic = Zen_Maru_Gothic({
+  subsets: ['latin'],
+  weight: '700',
+  display: 'swap',
+})
 
 // export const metadata: Metadata = {
 //   title: 'ちょこみんず',
@@ -124,7 +131,7 @@ export default async function Home() {
 
   return (
     <main className="space-y-12 px-0 py-0">
-      <div className="mb-0 flex justify-center">
+       <div className="mb-5 flex justify-center">
         <Image
           src="/t.png"
           alt="ちょこみんずのキービジュアル"
@@ -134,7 +141,7 @@ export default async function Home() {
           priority
         />
       </div>
-      <div className="mb-0 flex justify-center">
+      {/* <div className="mb-0 flex justify-center">
         <Image
           src="/line.png"
           alt="区切り線"
@@ -143,14 +150,17 @@ export default async function Home() {
           className="h-auto max-w-full"
           priority
         />
-      </div>
+      </div> */}
       <section className="mx-auto w-full max-w-5xl rounded-3xl bg-white px-6 py-16 shadow-sm">
         <div className="text-center">
-          <Badge variant="secondary" className="mb-4 bg-white/80 text-sky-600">
-            ちょこみんずで出来ること
+          <Badge
+            variant="secondary"
+            className={`${zenMaruGothic.className} mb-4 bg-white/80 text-sky-600 text-3xl font-bold px-11 py-3`}
+          >
+            ちょこみんずとは
           </Badge>
           <p className="text-xl text-slate-800">
-            ちょこみんずは、メーカー・店舗登録から商品登録、商品のレビュー投稿まで、チョコミント好きの情報管理や共有をサポートするサービスです。
+            メーカー・店舗登録から商品登録、商品のレビュー投稿まで、チョコミント好きの情報管理や共有をサポートするサービスです。
           </p>
         </div>
         <div className="mt-10 flex flex-col items-center gap-4 md:flex-row md:justify-center">

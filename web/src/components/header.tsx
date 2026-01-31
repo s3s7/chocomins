@@ -46,18 +46,25 @@ export function Header() {
       <div className="flex items-center space-x-4">
         {session?.user ? (
           <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-2">
-              <Link href="/reviews" className="rounded px-3 py-1">
-                レビュー一覧
-              </Link>
-              <Link href="/reviews/new" className="rounded px-3 py-1">
-                レビュー入力
-              </Link>
-              <button onClick={handleLogout} className="rounded px-3 py-1">
-                ログアウト
-              </button>
-            </div>
             <Menubar className="border-white/30 bg-transparent text-white">
+              <MenubarMenu>
+                <MenubarTrigger className="text-white">レビュー</MenubarTrigger>
+                <MenubarContent className="bg-white text-gray-900">
+                  <MenubarItem asChild>
+                    <Link href="/reviews" className="flex w-full items-center">
+                      一覧
+                    </Link>
+                  </MenubarItem>
+                  <MenubarItem asChild>
+                    <Link
+                      href="/reviews/new"
+                      className="flex w-full items-center"
+                    >
+                      入力
+                    </Link>
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
               <MenubarMenu>
                 <MenubarTrigger className="text-white">
                   メーカー・店舗
@@ -107,11 +114,11 @@ export function Header() {
                       マイページ
                     </Link>
                   </MenubarItem>
-                  <MenubarItem asChild>
+                  {/* <MenubarItem asChild>
                     <Link href="/guide" className="flex w-full items-center">
                       使い方
                     </Link>
-                  </MenubarItem>
+                  </MenubarItem> */}
                   {session.user.role === Role.ADMIN && (
                     <MenubarItem asChild>
                       <Link href="/admin" className="flex w-full items-center">
@@ -119,21 +126,74 @@ export function Header() {
                       </Link>
                     </MenubarItem>
                   )}
+                  <MenubarItem
+                    variant="destructive"
+                    onSelect={() => {
+                      void handleLogout()
+                    }}
+                  >
+                    ログアウト
+                  </MenubarItem>
                 </MenubarContent>
               </MenubarMenu>
             </Menubar>
           </div>
         ) : (
-          <div className="flex space-x-2">
-            <Link href="/signin" className="rounded px-3 py-1">
-              ログイン
-            </Link>
-            <Link href="/signup" className="rounded px-3 py-1">
-              新規登録
-            </Link>
-            {/* <Link href="/guide" className="rounded px-3 py-1">
-              使い方
-            </Link> */}
+          <div className="flex items-center space-x-3">
+            <Menubar className="border-white/30 bg-transparent text-white">
+              <MenubarMenu>
+                <MenubarTrigger className="text-white">
+                  ログイン / 新規登録
+                </MenubarTrigger>
+                <MenubarContent className="bg-white text-gray-900">
+                  <MenubarItem asChild>
+                    <Link href="/signin" className="flex w-full items-center">
+                      ログイン
+                    </Link>
+                  </MenubarItem>
+                  <MenubarItem asChild>
+                    <Link href="/signup" className="flex w-full items-center">
+                      新規登録
+                    </Link>
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
+              <MenubarMenu>
+                <MenubarTrigger className="text-white">レビュー</MenubarTrigger>
+                <MenubarContent className="bg-white text-gray-900">
+                  <MenubarItem asChild>
+                    <Link href="/reviews" className="flex w-full items-center">
+                      一覧
+                    </Link>
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
+              <MenubarMenu>
+                <MenubarTrigger className="text-white">
+                  メーカー・店舗
+                </MenubarTrigger>
+                <MenubarContent className="bg-white text-gray-900">
+                  <MenubarItem asChild>
+                    <Link href="/brands" className="flex w-full items-center">
+                      一覧
+                    </Link>
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
+              <MenubarMenu>
+                <MenubarTrigger className="text-white">商品</MenubarTrigger>
+                <MenubarContent className="bg-white text-gray-900">
+                  <MenubarItem asChild>
+                    <Link
+                      href="/chocolates"
+                      className="flex w-full items-center"
+                    >
+                      一覧
+                    </Link>
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
+            </Menubar>
           </div>
         )}
       </div>
