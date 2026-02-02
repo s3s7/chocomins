@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Chocolate, Role } from '@prisma/client'
@@ -33,8 +34,7 @@ export function ChocolateItem({
     chocolate.cacaoPercent != null
       ? `${chocolate.cacaoPercent.toString()}%`
       : '-'
-  const placeholderImageUrl =
-    'https://dummy.kobeya.com/?width=300&height=200&bg=c3c88d&color=373436&text=No%20Image&_=1769497540044'
+  const placeholderImageUrl = '/no_image.webp'
   const createdAtText = useMemo(() => {
     try {
       return new Intl.DateTimeFormat('ja-JP', {
@@ -109,11 +109,14 @@ export function ChocolateItem({
               </div>
 
               <div className="overflow-hidden rounded-2xl border border-emerald-50 bg-[#c3c88d]">
-                <img
+                <Image
                   src={placeholderImageUrl}
                   alt="No Image"
+                  width={600}
+                  height={400}
                   className="h-48 w-full object-cover"
                   loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 33vw"
                 />
               </div>
 

@@ -69,9 +69,9 @@ export default async function Home() {
       ctaHref: isSignedIn ? '/mypage' : '/signin',
     },
     {
-      title: 'メーカー・店舗の登録',
+      title: 'メーカー / 店舗の登録',
       description:
-        '製造元のメーカーや地元のカフェや旅先で出会ったお店を記録。店舗ごとに特徴をまとめておけば、レビュー作成時にすぐ呼び出せます。',
+        'チョコミント商品の情報を登録しよう。メーカーや地元のカフェ、旅先で出会ったお店を記録できます。',
       highlight: 'Brand Library',
       icon: Gift,
       accent: 'from-[#d4f5ea] via-[#97d2b5] to-white',
@@ -79,9 +79,9 @@ export default async function Home() {
       ctaHref: isSignedIn ? '/brands/new' : '/signin',
     },
     {
-      title: 'チョコレート情報のストック',
+      title: 'チョコレート情報の登録',
       description:
-        'カカオ含有率やテイスト、価格帯をチョコ単位で整理。メモを書き添えられ、写真投稿は近日公開予定です。',
+        '説明、価格などを保存して、食べたチョコを記録しましょう。',
       highlight: 'Chocolate Notes',
       icon: Inbox,
       accent: 'from-[#d9f8ee] via-[#9fd8c0] to-white',
@@ -90,7 +90,7 @@ export default async function Home() {
       note: '写真投稿機能は現在開発中です。',
     },
     {
-      title: 'レビュー・感想を投稿',
+      title: 'レビューを投稿',
       description:
         '味やミント感など感想を残しましょう。リンク共有すれば推しチョコを仲間にも紹介できます。',
       highlight: 'Review Share',
@@ -98,7 +98,6 @@ export default async function Home() {
       accent: 'from-[#c3ebde] via-[#89c5a0] to-white',
       ctaLabel: isSignedIn ? 'レビューを書く' : 'ログインして投稿',
       ctaHref: isSignedIn ? '/reviews/new' : '/signin',
-      note: '写真投稿は順次アップデート予定。',
     },
     {
       title: '次の一粒を探す',
@@ -106,8 +105,8 @@ export default async function Home() {
       highlight: 'Discovery',
       icon: Calendar,
       accent: 'from-[#cfeede] via-[#85c5a3] to-white',
-      ctaLabel: isSignedIn ? 'レビュー一覧へ' : 'ログインして参加',
-      ctaHref: isSignedIn ? '/reviews' : '/signin',
+      ctaLabel: isSignedIn ? 'レビュー一覧へ' : 'レビュー一覧へ',
+      ctaHref: isSignedIn ? '/reviews' : '/reviews',
       comingSoon: false,
       note: '',
     },
@@ -124,14 +123,14 @@ export default async function Home() {
 
   const primaryCta = isSignedIn
     ? { href: '/mypage', label: 'マイページへ' }
-    : { href: '/signin', label: 'ログイン・新規登録' }
+    : { href: '/signup', label: '新規登録' }
   const secondaryCta = isSignedIn
     ? { href: '/reviews/new', label: '最初の記録を作成' }
-    : { href: '/guide', label: '使い方を見る' }
+    : { href: '/signin', label: 'ログイン' }
 
   return (
     <main className="space-y-12 px-0 py-0">
-       <div className="mb-5 flex justify-center">
+      <div className="mb-5 flex justify-center">
         <Image
           src="/t.png"
           alt="ちょこみんずのキービジュアル"
@@ -155,12 +154,12 @@ export default async function Home() {
         <div className="text-center">
           <Badge
             variant="secondary"
-            className={`${zenMaruGothic.className} mb-4 bg-white/80 text-sky-600 text-3xl font-bold px-11 py-3`}
+            className={`${zenMaruGothic.className} mb-4 bg-white/80 px-11 py-3 text-3xl font-bold text-sky-600`}
           >
-            ちょこみんずとは
+            「ちょこみんず」とは？
           </Badge>
           <p className="text-xl text-slate-800">
-            メーカー・店舗登録から商品登録、商品のレビュー投稿まで、チョコミント好きの情報管理や共有をサポートするサービスです。
+            チョコミント好きのための情報管理や共有をするサービスです。<br></br>商品のメーカー / 店舗を登録し、レビューを投稿して情報を交換できます。
           </p>
         </div>
         <div className="mt-10 flex flex-col items-center gap-4 md:flex-row md:justify-center">
@@ -210,7 +209,7 @@ export default async function Home() {
                       {feature.note}
                     </p>
                   ) : null}
-                  <div className="mt-6">
+                  {/* <div className="mt-6">
                     {feature.comingSoon ? (
                       <Button
                         variant="secondary"
@@ -227,7 +226,7 @@ export default async function Home() {
                         <Link href={feature.ctaHref!}>{feature.ctaLabel}</Link>
                       </Button>
                     )}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </Card>

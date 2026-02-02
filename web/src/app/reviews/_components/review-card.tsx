@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useMemo } from 'react'
 import { Star } from 'lucide-react'
+import Image from 'next/image'
 
 import { ReviewWithUser } from '@/types'
 import { cn } from '@/lib/utils'
@@ -72,8 +73,7 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
   const chocolateName = review.chocolate?.name ?? 'チョコレート未登録'
   // const chocolateCategory = review.chocolate?.category?.name ?? 'カテゴリ未設定'
   const chocolateBrand = review.chocolate?.brand?.name ?? 'メーカー・店舗未設定'
-  const placeholderImageUrl =
-    'https://dummy.kobeya.com/?width=300&height=200&bg=c3c88d&color=373436&text=No%20Image&_=1769497540044'
+  const placeholderImageUrl = '/no_image.webp'
 
   const cardInner = (
     <>
@@ -102,11 +102,14 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
         </div>
       </div>
       <div className="mt-4 w-full overflow-hidden rounded-2xl border border-emerald-50 bg-[#c3c88d]">
-        <img
+        <Image
           src={placeholderImageUrl}
           alt="No Image"
+          width={600}
+          height={400}
           className="h-48 w-full object-cover"
           loading="lazy"
+          sizes="(max-width: 1024px) 100vw, 33vw"
         />
       </div>
     </>
