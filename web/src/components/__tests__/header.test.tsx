@@ -27,6 +27,10 @@ jest.mock('sonner', () => ({
 
 describe('Header - Logout', () => {
   const originalConfirm = window.confirm
+  const openMenu = async (menuLabel: string) => {
+    const menuTrigger = screen.getByRole('menuitem', { name: menuLabel })
+    await userEvent.click(menuTrigger)
+  }
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -54,8 +58,11 @@ describe('Header - Logout', () => {
 
     render(<Header />)
 
-    const logoutButton = screen.getByRole('button', { name: 'ログアウト' })
-    await userEvent.click(logoutButton)
+    await openMenu('その他')
+    const logoutMenuItem = await screen.findByRole('menuitem', {
+      name: 'ログアウト',
+    })
+    await userEvent.click(logoutMenuItem)
 
     await waitFor(() => {
       expect(signOutMock).toHaveBeenCalledWith({ redirect: false })
@@ -69,7 +76,11 @@ describe('Header - Logout', () => {
 
     render(<Header />)
 
-    await userEvent.click(screen.getByRole('button', { name: 'ログアウト' }))
+    await openMenu('その他')
+    const logoutMenuItem = await screen.findByRole('menuitem', {
+      name: 'ログアウト',
+    })
+    await userEvent.click(logoutMenuItem)
 
     await waitFor(() => {
       expect(signOutMock).not.toHaveBeenCalled()
@@ -78,7 +89,7 @@ describe('Header - Logout', () => {
     })
   })
 
-  it('未ログイン時はログアウトボタンが表示されない', () => {
+  it('未ログイン時はログアウトボタンが表示されない', async () => {
     useSessionMock.mockReturnValueOnce({
       data: null,
       status: 'unauthenticated',
@@ -86,7 +97,11 @@ describe('Header - Logout', () => {
 
     render(<Header />)
 
-    expect(screen.queryByRole('button', { name: 'ログアウト' })).toBeNull()
-    expect(screen.getByRole('link', { name: 'ログイン' })).toBeInTheDocument()
+    expect(screen.queryByRole('menuitem', { name: 'ログアウト' })).toBeNull()
+
+    await openMenu('ログイン / 新規登録')
+    expect(
+      await screen.findByRole('menuitem', { name: 'ログイン' }),
+    ).toBeInTheDocument()
   })
 })

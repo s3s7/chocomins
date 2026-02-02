@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useTransition } from 'react'
 import { Role } from '@prisma/client'
-import { ChocolateDetail } from '@/types'
+import { ChocolateWithRelations } from '@/types'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { EditChocolateModal } from '../../_components/edit-chocolate-modal'
@@ -12,7 +12,7 @@ import { getErrorMessage } from '@/lib/error-messages'
 import { useRouter } from 'next/navigation'
 
 type ChocolateContentProps = {
-  chocolate: ChocolateDetail
+  chocolate: ChocolateWithRelations
   currentUserRole: string
 }
 
@@ -31,7 +31,7 @@ export function ChocolateContent({
 
   const cacaoPercentText =
     chocolate.cacaoPercent != null
-      ? `${chocolate.cacaoPercent.toString()}%`
+      ? `${chocolate.cacaoPercent.toNumber()}%`
       : '-'
 
   const createdAtText = useMemo(() => {
@@ -150,6 +150,10 @@ export function ChocolateContent({
         key={editing ? 'editing' : 'closed'}
         chocolate={{
           ...chocolate,
+          cacaoPercent:
+            chocolate.cacaoPercent != null
+              ? chocolate.cacaoPercent.toNumber()
+              : null,
           brandName: chocolate.brand?.name ?? '',
           categoryName: chocolate.category?.name ?? null,
         }}

@@ -13,7 +13,7 @@ export default async function ChocolateListPage() {
 
   return (
     <main className="mx-auto max-w-6xl space-y-6 p-6">
-      <h1 className="text-2xl font-bold">チョコレート一覧</h1>
+      <h1 className="text-center text-2xl font-bold">チョコレート一覧</h1>
       <ChocolateList
         chocolates={chocolates}
         currentUserRole={session.user.role}
