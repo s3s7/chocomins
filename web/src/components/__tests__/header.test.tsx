@@ -89,7 +89,7 @@ describe('Header - Logout', () => {
     })
   })
 
-  it('未ログイン時はログアウトボタンが表示されない', () => {
+  it('未ログイン時はログアウトボタンが表示されない', async () => {
     useSessionMock.mockReturnValueOnce({
       data: null,
       status: 'unauthenticated',
