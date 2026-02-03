@@ -10,14 +10,14 @@ import { deleteChocolate } from '@/app/actions/chocolate/delete'
 import { toast } from 'sonner'
 import { getErrorMessage } from '@/lib/error-messages'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 type ChocolateContentProps = {
   chocolate: ChocolateWithRelations
   currentUserRole: string
 }
 
-const placeholderImageUrl =
-  'https://dummy.kobeya.com/?width=300&height=200&bg=c3c88d&color=373436&text=No%20Image&_=1769497540044'
+const placeholderImageUrl = '/no_image.webp'
 
 export function ChocolateContent({
   chocolate,
@@ -91,11 +91,14 @@ export function ChocolateContent({
           </div>
 
           <div className="overflow-hidden rounded-2xl border border-emerald-50 bg-[#c3c88d]">
-            <img
+            <Image
               src={placeholderImageUrl}
               alt="No Image"
+              width={600}
+              height={400}
               className="h-60 w-full object-cover"
               loading="lazy"
+              sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
 

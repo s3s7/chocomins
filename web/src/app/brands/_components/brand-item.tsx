@@ -8,6 +8,7 @@ import { EditBrandModal } from './edit-brand-modal'
 import { toast } from 'sonner'
 import { getErrorMessage } from '@/lib/error-messages'
 import { useMemo, useState, useTransition } from 'react'
+import Image from 'next/image'
 
 type BrandItemProps = {
   brand: Brand
@@ -18,8 +19,7 @@ export function BrandItem({ brand, currentUserRole }: BrandItemProps) {
   const [isPending, startTransition] = useTransition()
   const isAdmin = currentUserRole === Role.ADMIN
   const [editing, setEditing] = useState(false)
-  const placeholderImageUrl =
-    'https://dummy.kobeya.com/?width=300&height=200&bg=c3c88d&color=373436&text=No%20Image&_=1769497540044'
+  const placeholderImageUrl = '/no_image.webp'
   const createdAtText = useMemo(() => {
     try {
       return new Intl.DateTimeFormat('ja-JP', {
@@ -76,11 +76,14 @@ export function BrandItem({ brand, currentUserRole }: BrandItemProps) {
             </div>
 
             <div className="overflow-hidden rounded-2xl border border-emerald-50 bg-[#c3c88d]">
-              <img
+              <Image
                 src={placeholderImageUrl}
                 alt="No Image"
+                width={600}
+                height={400}
                 className="h-48 w-full object-cover"
                 loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 33vw"
               />
             </div>
           </CardContent>
