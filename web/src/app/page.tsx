@@ -80,8 +80,7 @@ export default async function Home() {
     },
     {
       title: 'チョコレート情報の登録',
-      description:
-        '説明、価格などを保存して、食べたチョコを記録しましょう。',
+      description: '説明、価格などを保存して、食べたチョコを記録しましょう。',
       highlight: 'Chocolate Notes',
       icon: Inbox,
       accent: 'from-[#d9f8ee] via-[#9fd8c0] to-white',
@@ -159,7 +158,9 @@ export default async function Home() {
             「ちょこみんず」とは？
           </Badge>
           <p className="text-xl text-slate-800">
-            チョコミント好きのための情報管理や共有をするサービスです。<br></br>商品のメーカー / 店舗を登録し、レビューを投稿して情報を交換できます。
+            チョコミント好きのための情報管理や共有をするサービスです。<br></br>
+            商品のメーカー /
+            店舗を登録し、レビューを投稿して情報を交換できます。
           </p>
         </div>
         <div className="mt-10 flex flex-col items-center gap-4 md:flex-row md:justify-center">
