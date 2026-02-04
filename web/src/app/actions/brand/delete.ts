@@ -23,6 +23,8 @@ export async function deleteBrand(formData: FormData): Promise<ActionResult> {
   try {
     await deleteBrandFromDB({
       ...parsed.data,
+      userId: session.user.id,
+      userRole: session.user.role,
     })
 
     revalidatePath('/brands')
@@ -34,7 +36,7 @@ export async function deleteBrand(formData: FormData): Promise<ActionResult> {
       switch (err.message) {
         case ErrorCodes.NOT_FOUND:
           return { isSuccess: false, errorCode: ErrorCodes.NOT_FOUND }
-        case ErrorCodes.UNAUTHORIZED:
+        case ErrorCodes.FORBIDDEN:
           return { isSuccess: false, errorCode: ErrorCodes.FORBIDDEN }
         default:
           return { isSuccess: false, errorCode: ErrorCodes.SERVER_ERROR }

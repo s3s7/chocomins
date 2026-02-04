@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { ErrorCodes } from '@/types'
+import { Role } from '@prisma/client'
 
 type UpdateChocolateInput = {
   chocolateId: string
@@ -11,6 +12,8 @@ type UpdateChocolateInput = {
   brandId: string
   price?: number
   categoryId?: string | null
+  userId: string
+  userRole: Role
 }
 
 export async function updateChocolateInDB({
@@ -23,6 +26,8 @@ export async function updateChocolateInDB({
   brandId,
   price,
   categoryId,
+  userId,
+  userRole,
 }: UpdateChocolateInput) {
   const chocolate = await prisma.chocolate.findUnique({
     where: { id: chocolateId },
@@ -36,15 +41,14 @@ export async function updateChocolateInDB({
     throw new Error(ErrorCodes.NOT_FOUND)
   }
 
-  // // 認可チェック
-  // const isOwner = chocolate.userId === userId
-  // const isAdmin = userRole === Role.ADMIN
-  // if (!isOwner && !isAdmin) {
-  //   console.error(
-  //     `Unauthorized update attempt: chocolateId=${chocolateId}, userId=${userId}, role=${userRole}`,
-  //   )
-  //   throw new Error(ErrorCodes.FORBIDDEN)
-  // }
+  const isOwner = chocolate.userId === userId
+  const isAdmin = userRole === Role.ADMIN
+  if (!isOwner && !isAdmin) {
+    console.error(
+      `Unauthorized update attempt: chocolateId=${chocolateId}, userId=${userId}, role=${userRole}`,
+    )
+    throw new Error(ErrorCodes.FORBIDDEN)
+  }
 
   // 投稿の更新
   return await prisma.chocolate.update({
