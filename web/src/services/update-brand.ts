@@ -7,7 +7,7 @@ type UpdateBrandInput = {
   name: string
   country?: string | null
   userId: string
-  userRole: Role
+  userRole: string
 }
 
 export async function updateBrandInDB({

@@ -5,7 +5,7 @@ import { Role } from '@prisma/client'
 type DeleteBrandInput = {
   brandId: string
   userId: string
-  userRole: Role
+  userRole: string
 }
 
 export async function deleteBrandFromDB({

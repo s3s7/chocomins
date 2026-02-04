@@ -13,7 +13,7 @@ type UpdateChocolateInput = {
   price?: number
   categoryId?: string | null
   userId: string
-  userRole: Role
+  userRole: string
 }
 
 export async function updateChocolateInDB({
