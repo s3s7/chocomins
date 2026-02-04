@@ -15,6 +15,7 @@ import Image from 'next/image'
 type ChocolateContentProps = {
   chocolate: ChocolateWithRelations
   currentUserRole: string
+  currentUserId: string
 }
 
 const placeholderImageUrl = '/no_image.webp'
@@ -22,12 +23,15 @@ const placeholderImageUrl = '/no_image.webp'
 export function ChocolateContent({
   chocolate,
   currentUserRole,
+  currentUserId,
 }: ChocolateContentProps) {
   const [editing, setEditing] = useState(false)
   const [isDeleting, startTransition] = useTransition()
   const router = useRouter()
 
   const isAdmin = currentUserRole === Role.ADMIN
+  const isOwner = chocolate.userId === currentUserId && currentUserId.length > 0
+  const canManage = isAdmin || isOwner
 
   const cacaoPercentText =
     chocolate.cacaoPercent != null
@@ -49,7 +53,7 @@ export function ChocolateContent({
   }, [chocolate.createdAt])
 
   const handleDelete = () => {
-    if (!isAdmin) return
+    if (!canManage) return
     const confirmDelete = window.confirm('本当に削除しますか？')
     if (!confirmDelete) return
 
@@ -129,7 +133,7 @@ export function ChocolateContent({
             </div>
           </dl>
 
-          {isAdmin && (
+          {canManage && (
             <div className="mt-4 flex flex-wrap gap-3">
               <Button
                 className="bg-[#CFE6DA] text-gray-800 hover:bg-[#b7dacf]"

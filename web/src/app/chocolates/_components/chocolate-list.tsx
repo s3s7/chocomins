@@ -10,11 +10,13 @@ type ChocolateForClient = Omit<Chocolate, 'cacaoPercent'> & {
 type ChocolateListProps = {
   chocolates: ChocolateForClient[]
   currentUserRole: string
+  currentUserId: string
 }
 
 export function ChocolateList({
   chocolates,
   currentUserRole,
+  currentUserId,
 }: ChocolateListProps) {
   if (chocolates.length === 0) {
     return <p className="text-gray-500">投稿がまだありません。</p>
@@ -27,6 +29,7 @@ export function ChocolateList({
           key={chocolate.id}
           chocolate={chocolate}
           currentUserRole={currentUserRole}
+          currentUserId={currentUserId}
         />
       ))}
     </ul>

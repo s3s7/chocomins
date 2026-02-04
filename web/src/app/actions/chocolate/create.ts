@@ -71,6 +71,7 @@ export async function createChocolate(
     // 投稿データをデータベースに保存
     await createChocolateInDB({
       ...parsed.data,
+      userId: session.user.id,
     })
 
     // 投稿一覧ページのキャッシュを再検証（最新の投稿を表示）

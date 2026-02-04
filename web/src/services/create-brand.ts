@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 type CreateBrandInput = {
   name: string
   country?: string | null
+  userId: string
 }
 
 export async function createBrandInDB(input: CreateBrandInput) {
@@ -10,6 +11,7 @@ export async function createBrandInDB(input: CreateBrandInput) {
     data: {
       name: input.name,
       country: input.country ?? null,
+      userId: input.userId,
     },
   })
 }

@@ -78,6 +78,8 @@ export async function updateChocolate(
       hasMint: parsed.data.hasMint,
       brandId: parsed.data.brandId,
       categoryId: parsed.data.categoryId,
+      userId: session.user.id,
+      userRole: session.user.role,
     })
 
     revalidatePath('/chocolates')

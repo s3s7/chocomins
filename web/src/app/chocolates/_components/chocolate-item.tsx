@@ -20,15 +20,19 @@ type ChocolateForClient = Omit<Chocolate, 'cacaoPercent'> & {
 type ChocolateItemProps = {
   chocolate: ChocolateForClient
   currentUserRole: string
+  currentUserId: string
 }
 
 export function ChocolateItem({
   chocolate,
   currentUserRole,
+  currentUserId,
 }: ChocolateItemProps) {
   const [editing, setEditing] = useState(false)
 
   const isAdmin = currentUserRole === Role.ADMIN
+  const isOwner = chocolate.userId === currentUserId && currentUserId.length > 0
+  const canManage = isAdmin || isOwner
 
   const cacaoPercentText =
     chocolate.cacaoPercent != null
@@ -51,6 +55,7 @@ export function ChocolateItem({
 
   const [isPending, startTransition] = useTransition()
   const handleDelete = () => {
+    if (!canManage) return
     const confirmDelete = window.confirm('本当にこの投稿を削除しますか？')
     if (!confirmDelete) return
 
@@ -149,7 +154,7 @@ export function ChocolateItem({
             </CardContent>
 
             <CardFooter className="flex flex-col gap-2 px-6 pt-0 pb-6 sm:flex-row">
-              {isAdmin && (
+              {canManage && (
                 <div className="flex flex-1 gap-2">
                   <Button
                     size="sm"

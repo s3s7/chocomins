@@ -13,6 +13,7 @@ export async function getChocolates() {
       price: true,
       brandId: true,
       categoryId: true,
+      userId: true,
       createdAt: true,
       updatedAt: true,
       brand: { select: { name: true } },

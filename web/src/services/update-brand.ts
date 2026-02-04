@@ -1,16 +1,21 @@
 import { prisma } from '@/lib/prisma'
 import { ErrorCodes } from '@/types'
+import { Role } from '@prisma/client'
 
 type UpdateBrandInput = {
   brandId: string
   name: string
   country?: string | null
+  userId: string
+  userRole: string
 }
 
 export async function updateBrandInDB({
   brandId,
   name,
   country,
+  userId,
+  userRole,
 }: UpdateBrandInput) {
   const brand = await prisma.brand.findUnique({ where: { id: brandId } })
 
@@ -18,6 +23,16 @@ export async function updateBrandInDB({
   if (!brand) {
     console.error(`Brand not found: brandId=${brandId}`)
     throw new Error(ErrorCodes.NOT_FOUND)
+  }
+
+  const isOwner = brand.userId === userId
+  const isAdmin = userRole === Role.ADMIN
+
+  if (!isOwner && !isAdmin) {
+    console.error(
+      `Unauthorized brand update: brandId=${brandId}, userId=${userId}, role=${userRole}`,
+    )
+    throw new Error(ErrorCodes.FORBIDDEN)
   }
 
   // 更新

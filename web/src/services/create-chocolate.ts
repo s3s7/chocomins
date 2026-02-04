@@ -9,6 +9,7 @@ type CreateChocolateInput = {
   price?: number
   brandId: string
   categoryId?: string | null
+  userId: string
 }
 
 export async function createChocolateInDB(input: CreateChocolateInput) {
@@ -22,6 +23,7 @@ export async function createChocolateInDB(input: CreateChocolateInput) {
       price: input.price ?? null,
       brandId: input.brandId,
       categoryId: input.categoryId ?? null, // optional
+      userId: input.userId,
     },
   })
 }

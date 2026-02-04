@@ -13,11 +13,18 @@ import Image from 'next/image'
 type BrandItemProps = {
   brand: Brand
   currentUserRole: string
+  currentUserId: string
 }
 
-export function BrandItem({ brand, currentUserRole }: BrandItemProps) {
+export function BrandItem({
+  brand,
+  currentUserRole,
+  currentUserId,
+}: BrandItemProps) {
   const [isPending, startTransition] = useTransition()
   const isAdmin = currentUserRole === Role.ADMIN
+  const isOwner = brand.userId === currentUserId && currentUserId.length > 0
+  const canManage = isAdmin || isOwner
   const [editing, setEditing] = useState(false)
   const placeholderImageUrl = '/no_image.webp'
   const createdAtText = useMemo(() => {
@@ -33,6 +40,7 @@ export function BrandItem({ brand, currentUserRole }: BrandItemProps) {
   }, [brand.createdAt])
 
   const handleDelete = () => {
+    if (!canManage) return
     const confirmDelete = window.confirm(
       '本当にこのメーカー・店舗を削除しますか？',
     )
@@ -88,7 +96,7 @@ export function BrandItem({ brand, currentUserRole }: BrandItemProps) {
             </div>
           </CardContent>
 
-          {isAdmin && (
+          {canManage && (
             <CardFooter className="flex gap-2 px-6 pt-0 pb-6">
               <Button
                 size="sm"

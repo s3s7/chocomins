@@ -1,5 +1,5 @@
 import { auth } from '@/lib/auth'
-import { redirect, notFound } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import { getChocolateById } from '@/services/get-chocolate-by-id'
 import { ChocolateContent } from './_components/chocolate-content'
 
@@ -10,9 +10,6 @@ type PageParams = {
 export default async function ChocolateDetailPage({ params }: PageParams) {
   const { id } = await params
   const session = await auth()
-  if (!session?.user) {
-    redirect('/')
-  }
 
   const chocolate = await getChocolateById(id)
   if (!chocolate) {
@@ -23,7 +20,8 @@ export default async function ChocolateDetailPage({ params }: PageParams) {
     <div className="mx-auto max-w-3xl space-y-6 p-6">
       <ChocolateContent
         chocolate={chocolate}
-        currentUserRole={session.user.role}
+        currentUserRole={session?.user?.role ?? ''}
+        currentUserId={session?.user?.id ?? ''}
       />
     </div>
   )

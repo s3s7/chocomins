@@ -36,6 +36,7 @@ export async function createBrand(
     // データベースに保存
     await createBrandInDB({
       ...parsed.data,
+      userId: session.user.id,
     })
 
     // 一覧ページなどを再検証

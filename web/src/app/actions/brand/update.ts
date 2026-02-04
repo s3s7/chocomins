@@ -34,6 +34,8 @@ export async function updateBrand(
       brandId: input.brandId,
       name: parsed.data.name,
       country: parsed.data.country,
+      userId: session.user.id,
+      userRole: session.user.role,
     })
 
     revalidatePath('/brands')

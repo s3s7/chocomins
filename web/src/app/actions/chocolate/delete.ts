@@ -28,6 +28,8 @@ export async function deleteChocolate(
   try {
     await deleteChocolateFromDB({
       ...parsed.data,
+      userId: session.user.id,
+      userRole: session.user.role,
     })
 
     revalidatePath('/chocolates')
@@ -39,7 +41,7 @@ export async function deleteChocolate(
       switch (err.message) {
         case ErrorCodes.NOT_FOUND:
           return { isSuccess: false, errorCode: ErrorCodes.NOT_FOUND }
-        case ErrorCodes.UNAUTHORIZED:
+        case ErrorCodes.FORBIDDEN:
           return { isSuccess: false, errorCode: ErrorCodes.FORBIDDEN }
         default:
           return { isSuccess: false, errorCode: ErrorCodes.SERVER_ERROR }
