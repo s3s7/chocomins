@@ -251,7 +251,11 @@ export const ReviewForm = () => {
           <span className="text-muted-foreground text-xs">ミント感</span>
         </div> */}
 
-        <Button type="submit" disabled={isPending}>
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="bg-[#8FCBAB] text-slate-900 hover:bg-[#7BB898]"
+        >
           {isPending ? '投稿中...' : '投稿'}
         </Button>
       </form>
