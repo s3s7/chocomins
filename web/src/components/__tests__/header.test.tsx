@@ -7,9 +7,11 @@ const pushMock = jest.fn()
 const signOutMock = jest.fn()
 const toastSuccessMock = jest.fn<void, [string]>()
 const toastErrorMock = jest.fn<void, [string]>()
+const usePathnameMock = jest.fn(() => '/')
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({ push: pushMock }),
+  usePathname: () => usePathnameMock(),
 }))
 
 const useSessionMock = jest.fn()
@@ -34,6 +36,7 @@ describe('Header - Logout', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    usePathnameMock.mockReturnValue('/')
     // 認証済みセッション
     useSessionMock.mockReturnValue({
       data: {
@@ -99,9 +102,7 @@ describe('Header - Logout', () => {
 
     expect(screen.queryByRole('menuitem', { name: 'ログアウト' })).toBeNull()
 
-    await openMenu('ログイン / 新規登録')
-    expect(
-      await screen.findByRole('menuitem', { name: 'ログイン' }),
-    ).toBeInTheDocument()
+    expect(await screen.findByRole('link', { name: 'ログイン' })).toBeVisible()
+    expect(await screen.findByRole('link', { name: '新規登録' })).toBeVisible()
   })
 })
