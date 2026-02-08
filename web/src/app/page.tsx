@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 // import type { Metadata } from 'next'
@@ -17,7 +18,7 @@ import { Card } from '@/components/ui/card'
 
 type Feature = {
   title: string
-  description: string
+  description: ReactNode
   highlight: string
   icon: LucideIcon
   accent: string
