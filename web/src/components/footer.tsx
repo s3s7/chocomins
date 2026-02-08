@@ -4,7 +4,7 @@
 
 export function Footer() {
   return (
-    <footer className="bg-[#563406] px-4 py-6 text-center text-sm text-white">
+    <footer className="bg-[#9BD0D8] px-4 py-6 text-center text-sm text-slate-900">
       <p>&copy; {new Date().getFullYear()} ちょこみんず</p>
       <div className="mt-2 flex flex-wrap justify-center gap-4">
         {/* <Link href="/contact" className="hover:text-gray-900">

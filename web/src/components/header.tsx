@@ -1,11 +1,14 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Role } from '@prisma/client'
 import { signOut, useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Zen_Maru_Gothic } from 'next/font/google'
+import { Button } from '@/components/ui/button'
 import {
   Menubar,
   MenubarContent,
@@ -23,6 +26,22 @@ const zenMaruGothic = Zen_Maru_Gothic({
 export function Header() {
   const { data: session } = useSession()
   const router = useRouter()
+  const pathname = usePathname()
+  const isHome = pathname === '/'
+
+  const [scrolled, setScrolled] = useState(false)
+
+  // ホームだけスクロール監視（ホーム以外は常に白背景）
+  useEffect(() => {
+    if (!isHome) {
+      setScrolled(false)
+      return
+    }
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [isHome])
 
   const handleLogout = async () => {
     const confirmLogout = window.confirm('本当にログアウトしますか？')
@@ -38,17 +57,59 @@ export function Header() {
     }
   }
 
+  // ヘッダー背景：
+  // - ホーム：上は透明、スクロールで白+ぼかし
+  // - ホーム以外：常に白
+  const headerClass = [
+    'fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between px-4 transition-colors duration-300',
+    isHome
+      ? scrolled
+        ? 'bg-white/80 text-slate-900 backdrop-blur border-b border-slate-200'
+        : 'bg-transparent text-slate-900'
+      : 'bg-white text-slate-900 border-b border-slate-200',
+  ].join(' ')
+
+  const logoClass = [
+    zenMaruGothic.className,
+    'flex items-center gap-2 text-lg font-bold transition-colors text-slate-900',
+  ].join(' ')
+
+  // Menubar 全体は箱を作らない（外枠なし）
+  const menubarClass = 'bg-transparent p-0 border-0 shadow-none'
+
+  // MenubarTrigger の見た目（ピル型 + 黒い枠）
+  const menuTriggerClass = [
+    'bg-white text-slate-900 border-black/60',
+    'hover:bg-slate-50',
+    'data-[state=open]:bg-slate-100 data-[state=open]:text-slate-900 data-[state=open]:border-black',
+  ].join(' ')
+
+  // 未ログイン時の通常ボタン（ログイン/新規登録/各ページリンク用）
+  const authButtonClass =
+    'rounded-full border border-black/60 bg-white px-6 py-3 text-slate-900 hover:bg-slate-50'
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between bg-[#563406] px-4 text-white">
-      <Link href="/" className={`${zenMaruGothic.className} text-lg font-bold`}>
-        ちょこみんず
+    <header className={headerClass}>
+      <Link href="/" className={logoClass}>
+        <span>ちょこみんず</span>
+        <Image
+          src="/leaf.png"
+          alt="ちょこみんずのロゴ"
+          width={53}
+          height={53}
+          priority
+        />
       </Link>
+
       <div className="flex items-center space-x-4">
         {session?.user ? (
+          // ===== ログイン後：Menubar =====
           <div className="flex items-center space-x-3">
-            <Menubar className="border-white/30 bg-transparent text-white">
+            <Menubar className={menubarClass}>
               <MenubarMenu>
-                <MenubarTrigger className="text-white">レビュー</MenubarTrigger>
+                <MenubarTrigger className={menuTriggerClass}>
+                  レビュー
+                </MenubarTrigger>
                 <MenubarContent className="bg-white text-gray-900">
                   <MenubarItem asChild>
                     <Link href="/reviews" className="flex w-full items-center">
@@ -65,8 +126,9 @@ export function Header() {
                   </MenubarItem>
                 </MenubarContent>
               </MenubarMenu>
+
               <MenubarMenu>
-                <MenubarTrigger className="text-white">
+                <MenubarTrigger className={menuTriggerClass}>
                   メーカー・店舗
                 </MenubarTrigger>
                 <MenubarContent className="bg-white text-gray-900">
@@ -85,8 +147,11 @@ export function Header() {
                   </MenubarItem>
                 </MenubarContent>
               </MenubarMenu>
+
               <MenubarMenu>
-                <MenubarTrigger className="text-white">商品</MenubarTrigger>
+                <MenubarTrigger className={menuTriggerClass}>
+                  商品
+                </MenubarTrigger>
                 <MenubarContent className="bg-white text-gray-900">
                   <MenubarItem asChild>
                     <Link
@@ -106,19 +171,18 @@ export function Header() {
                   </MenubarItem>
                 </MenubarContent>
               </MenubarMenu>
+
               <MenubarMenu>
-                <MenubarTrigger className="text-white">その他</MenubarTrigger>
+                <MenubarTrigger className={menuTriggerClass}>
+                  その他
+                </MenubarTrigger>
                 <MenubarContent className="bg-white text-gray-900">
                   <MenubarItem asChild>
                     <Link href="/mypage" className="flex w-full items-center">
                       マイページ
                     </Link>
                   </MenubarItem>
-                  {/* <MenubarItem asChild>
-                    <Link href="/guide" className="flex w-full items-center">
-                      使い方
-                    </Link>
-                  </MenubarItem> */}
+
                   {session.user.role === Role.ADMIN && (
                     <MenubarItem asChild>
                       <Link href="/admin" className="flex w-full items-center">
@@ -126,11 +190,10 @@ export function Header() {
                       </Link>
                     </MenubarItem>
                   )}
+
                   <MenubarItem
                     variant="destructive"
-                    onSelect={() => {
-                      void handleLogout()
-                    }}
+                    onSelect={() => void handleLogout()}
                   >
                     ログアウト
                   </MenubarItem>
@@ -139,61 +202,27 @@ export function Header() {
             </Menubar>
           </div>
         ) : (
-          <div className="flex items-center space-x-3">
-            <Menubar className="border-white/30 bg-transparent text-white">
-              <MenubarMenu>
-                <MenubarTrigger className="text-white">
-                  ログイン / 新規登録
-                </MenubarTrigger>
-                <MenubarContent className="bg-white text-gray-900">
-                  <MenubarItem asChild>
-                    <Link href="/signin" className="flex w-full items-center">
-                      ログイン
-                    </Link>
-                  </MenubarItem>
-                  <MenubarItem asChild>
-                    <Link href="/signup" className="flex w-full items-center">
-                      新規登録
-                    </Link>
-                  </MenubarItem>
-                </MenubarContent>
-              </MenubarMenu>
-              <MenubarMenu>
-                <MenubarTrigger className="text-white">レビュー</MenubarTrigger>
-                <MenubarContent className="bg-white text-gray-900">
-                  <MenubarItem asChild>
-                    <Link href="/reviews" className="flex w-full items-center">
-                      一覧
-                    </Link>
-                  </MenubarItem>
-                </MenubarContent>
-              </MenubarMenu>
-              <MenubarMenu>
-                <MenubarTrigger className="text-white">
-                  メーカー・店舗
-                </MenubarTrigger>
-                <MenubarContent className="bg-white text-gray-900">
-                  <MenubarItem asChild>
-                    <Link href="/brands" className="flex w-full items-center">
-                      一覧
-                    </Link>
-                  </MenubarItem>
-                </MenubarContent>
-              </MenubarMenu>
-              <MenubarMenu>
-                <MenubarTrigger className="text-white">商品</MenubarTrigger>
-                <MenubarContent className="bg-white text-gray-900">
-                  <MenubarItem asChild>
-                    <Link
-                      href="/chocolates"
-                      className="flex w-full items-center"
-                    >
-                      一覧
-                    </Link>
-                  </MenubarItem>
-                </MenubarContent>
-              </MenubarMenu>
-            </Menubar>
+          // ===== 未ログイン：全部「普通のボタン」+ 「一覧」表記 =====
+          <div className="flex items-center gap-3">
+            <Button asChild size="lg" className={authButtonClass}>
+              <Link href="/signin">ログイン</Link>
+            </Button>
+
+            <Button asChild size="lg" className={authButtonClass}>
+              <Link href="/signup">新規登録</Link>
+            </Button>
+
+            <Button asChild size="lg" className={authButtonClass}>
+              <Link href="/reviews">レビュー一覧</Link>
+            </Button>
+
+            <Button asChild size="lg" className={authButtonClass}>
+              <Link href="/brands">メーカー / 店舗一覧</Link>
+            </Button>
+
+            <Button asChild size="lg" className={authButtonClass}>
+              <Link href="/chocolates">商品一覧</Link>
+            </Button>
           </div>
         )}
       </div>
