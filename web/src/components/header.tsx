@@ -71,7 +71,7 @@ export function Header() {
 
   const logoClass = [
     zenMaruGothic.className,
-    'flex items-center gap-2 text-lg font-bold transition-colors text-slate-900',
+    'inline-flex items-center gap-0 text-xl font-bold transition-colors text-slate-900',
   ].join(' ')
 
   // Menubar 全体は箱を作らない（外枠なし）
@@ -91,12 +91,13 @@ export function Header() {
   return (
     <header className={headerClass}>
       <Link href="/" className={logoClass}>
-        <span>ちょこみんず</span>
+        <span className="leading-none whitespace-nowrap">ちょこみんず</span>
         <Image
           src="/leaf.png"
           alt="ちょこみんずのロゴ"
           width={53}
           height={53}
+          className="ml-0"
           priority
         />
       </Link>

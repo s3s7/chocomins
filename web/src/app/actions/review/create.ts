@@ -25,6 +25,7 @@ export async function createReview(
     content: formData.get('content')?.toString() ?? '',
     mintiness: Number(formData.get('mintiness') ?? 0),
     chocolateId: formData.get('chocolateId')?.toString() ?? '',
+    imagePath: formData.get('imagePath')?.toString() ?? undefined,
   }
 
   // Google Places 由来の拡張データ（任意）
@@ -61,6 +62,7 @@ export async function createReview(
       chocolateId: parsed.data.chocolateId,
       userId: session.user.id,
       placeId,
+      imagePath: parsed.data.imagePath,
     })
 
     // 投稿一覧ページのキャッシュを再検証（最新の投稿を表示）

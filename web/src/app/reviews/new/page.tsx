@@ -10,9 +10,11 @@ export default async function ReviewListPage() {
     redirect('/') // 未ログインならトップページへ
   }
 
+  const userId = session.user.id
+
   return (
     <FormPageLayout title="レビュー登録">
-      <ReviewForm />
+      <ReviewForm userId={userId} />
     </FormPageLayout>
   )
 }
