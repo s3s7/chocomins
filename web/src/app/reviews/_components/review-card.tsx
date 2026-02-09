@@ -63,6 +63,32 @@ function StarRating({ rating }: { rating: number }) {
   )
 }
 
+/** ===== 画像URL変換ヘルパー（詳細と同じ方針） ===== */
+const REVIEW_IMAGE_BUCKET = 'review-images'
+
+const buildReviewImageUrl = (imagePath?: string | null) => {
+  if (!imagePath) return null
+  if (/^https?:\/\//.test(imagePath)) return imagePath
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  if (!supabaseUrl) return null
+
+  const normalizedBase = supabaseUrl.endsWith('/')
+    ? supabaseUrl.slice(0, -1)
+    : supabaseUrl
+
+  const normalizedPath = imagePath.startsWith('/')
+    ? imagePath.slice(1)
+    : imagePath
+
+  return `${normalizedBase}/storage/v1/object/public/${REVIEW_IMAGE_BUCKET}/${normalizedPath}`
+}
+
+/** ===== ローカル開発中だけ next/image 最適化を切る ===== */
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+const IS_LOCAL_SUPABASE =
+  SUPABASE_URL.includes('127.0.0.1') || SUPABASE_URL.includes('localhost')
+
 export function ReviewCard({ review, href }: ReviewCardProps) {
   const linkHref = href === undefined ? `/reviews/${review.id}` : href
   const isLinkEnabled = typeof linkHref === 'string' && linkHref.length > 0
@@ -71,28 +97,23 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
   const avatarColor = useMemo(() => getAvatarColor(userName), [userName])
   const rating = clampRating(review.mintiness)
   const chocolateName = review.chocolate?.name ?? 'チョコレート未登録'
-  // const chocolateCategory = review.chocolate?.category?.name ?? 'カテゴリ未設定'
   const chocolateBrand = review.chocolate?.brand?.name ?? 'メーカー・店舗未設定'
   const placeholderImageUrl = '/no_image.webp'
+
+  // ★投稿画像があればそれを、なければ no_image
+  const imageUrl = buildReviewImageUrl(review.imagePath) ?? placeholderImageUrl
 
   const cardInner = (
     <>
       <span>{chocolateName}</span>
       <div className="mt-5 flex flex-wrap items-center gap-2 text-xs text-gray-500">
-        {/* <Badge
-          variant="secondary"
-          className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-700 hover:bg-emerald-100"
-        >
-          {chocolateCategory}
-        </Badge> */}
         <span>メーカー・店舗名：{chocolateBrand}</span>
       </div>
 
       <h3 className="mt-4 text-lg font-semibold text-gray-900">
         {review.title}
       </h3>
-      {/* <p className="mt-1 text-xs font-medium text-emerald-600">{chocolateName}</p> */}
-      {/* <p className="mt-3 text-sm leading-relaxed text-gray-700">{review.content}</p> */}
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-center gap-2">
           <StarRating rating={rating} />
@@ -101,15 +122,18 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
           </span>
         </div>
       </div>
+
       <div className="mt-4 w-full overflow-hidden rounded-2xl border border-emerald-50 bg-[#c3c88d]">
         <Image
-          src={placeholderImageUrl}
-          alt="No Image"
+          src={imageUrl}
+          alt={review.imagePath ? `${review.title} の投稿画像` : 'No Image'}
           width={600}
           height={400}
           className="h-48 w-full object-cover"
           loading="lazy"
           sizes="(max-width: 1024px) 100vw, 33vw"
+          // ★ここがポイント：ローカルSupabaseのときだけ最適化をOFF
+          unoptimized={IS_LOCAL_SUPABASE}
         />
       </div>
     </>
@@ -145,9 +169,7 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
               <p className="text-sm font-semibold text-gray-800">{userName}</p>
             </div>
 
-            <p className="text-xs text-gray-500">
-              {formatDate(review.createdAt)}{' '}
-            </p>
+            <p className="text-xs text-gray-500">{formatDate(review.createdAt)} </p>
           </CardFooter>
         </Link>
       ) : (
@@ -166,15 +188,12 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
               </Avatar>
 
               <div>
-                <p className="text-sm font-semibold text-gray-800">
-                  {userName}
-                </p>
+                <p className="text-sm font-semibold text-gray-800">{userName}</p>
               </div>
             </div>
             <p className="text-xs text-gray-500">
               {formatDate(review.createdAt)} に投稿
             </p>
-            {/* <span>更新日: {formatDate(review.updatedAt)}</span> */}
           </CardFooter>
         </>
       )}

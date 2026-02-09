@@ -12,8 +12,9 @@ export async function updateReview(
   formData: FormData,
 ): Promise<ActionResult> {
   const session = await auth()
-  if (!session?.user)
+  if (!session?.user) {
     return { isSuccess: false, errorCode: ErrorCodes.UNAUTHORIZED }
+  }
 
   const input: EditReviewInput = {
     reviewId: formData.get('reviewId')?.toString() ?? '',
@@ -23,6 +24,19 @@ export async function updateReview(
     chocolateId: formData.get('chocolateId')?.toString() ?? '',
   }
 
+  // ★ 画像パス（任意）
+  // - 送られてこない(null) => 変更しない (undefined)
+  // - 空文字 '' => 削除扱い (null)
+  // - 文字列 => その値に更新
+  const imagePathRaw = formData.get('imagePath')
+  const imagePath: string | null | undefined =
+    imagePathRaw === null
+      ? undefined
+      : imagePathRaw.toString().length === 0
+        ? null
+        : imagePathRaw.toString()
+
+  // Google Places 由来の拡張データ（任意）
   const googlePlaceId = formData.get('googlePlaceId')?.toString()
   const placeName = formData.get('placeName')?.toString()
   const address = formData.get('address')?.toString()
@@ -39,9 +53,9 @@ export async function updateReview(
   const lngNumber = parseCoordinate(lng)
 
   const parsed = editReviewSchema.safeParse(input)
-
-  if (!parsed.success)
+  if (!parsed.success) {
     return { isSuccess: false, errorCode: ErrorCodes.INVALID_INPUT }
+  }
 
   try {
     let placeId: string | undefined
@@ -65,9 +79,13 @@ export async function updateReview(
       userId: session.user.id,
       userRole: session.user.role,
       placeId,
+      imagePath,
     })
 
+    // 一覧と詳細の両方を更新
     revalidatePath('/reviews')
+    revalidatePath(`/reviews/${parsed.data.reviewId}`)
+
     return { isSuccess: true }
   } catch (err) {
     console.error(err)

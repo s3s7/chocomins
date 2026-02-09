@@ -10,6 +10,21 @@ import { toast } from 'sonner'
 import { getErrorMessage } from '@/lib/error-messages'
 import { Role } from '@prisma/client'
 import { EditReviewModal } from '../../_components/edit-review-modal'
+import { ImgEditor } from '@/lib/img-editor'
+
+const imgEditor = new ImgEditor(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+)
+
+const buildReviewImageUrl = (imagePath?: string | null) => {
+  if (!imagePath) return null
+  if (/^https?:\/\//.test(imagePath)) return imagePath
+  const normalizedPath = imagePath.startsWith('/')
+    ? imagePath.slice(1)
+    : imagePath
+  return imgEditor.getPublicUrl(normalizedPath)
+}
 
 type ReviewContentProps = {
   review: ReviewWithUser
@@ -26,15 +41,20 @@ export function ReviewContent({
   const lng = review.place?.lng ?? null
   const address = review.place?.address ?? null
   const placeName = review.place?.name ?? null
+
   const locationTexts = [address, placeName].filter(
     (text): text is string => typeof text === 'string' && text.length > 0,
   )
   const locationLabel = locationTexts.join(' / ')
+
   const [editing, setEditing] = useState(false)
   const [isDeleting, startTransition] = useTransition()
   const router = useRouter()
+
   const isOwner = review.userId === currentUserId
   const isAdmin = currentUserRole === Role.ADMIN
+
+  const imageUrl = buildReviewImageUrl(review.imagePath)
 
   const handleDelete = () => {
     const confirmDelete = window.confirm('本当にこの投稿を削除しますか？')
@@ -67,6 +87,21 @@ export function ReviewContent({
       <p className="text-sm text-gray-600">
         チョコレート: {review.chocolate?.name ?? '不明'}
       </p>
+
+      {imageUrl && (
+        <div className="mt-4 space-y-2">
+          <p className="text-sm font-medium text-gray-600">投稿画像</p>
+          <div className="overflow-hidden rounded-2xl">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={imageUrl}
+              alt={`${review.title}の投稿画像`}
+              className="max-h-[520px] w-full object-contain"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      )}
 
       {typeof lat === 'number' && typeof lng === 'number' ? (
         <div className="mt-4 space-y-2">

@@ -11,6 +11,9 @@ type UpdateReviewInput = {
   userId: string
   userRole: string
   placeId?: string | null
+
+  // ★追加：undefined = 変更なし / null = 削除 / string = 更新
+  imagePath?: string | null
 }
 
 export async function updateReviewInDB({
@@ -22,6 +25,7 @@ export async function updateReviewInDB({
   userId,
   userRole,
   placeId,
+  imagePath,
 }: UpdateReviewInput) {
   const review = await prisma.review.findUnique({ where: { id: reviewId } })
 
@@ -50,6 +54,8 @@ export async function updateReviewInDB({
       mintiness,
       chocolateId,
       ...(placeId !== undefined ? { placeId: placeId ?? null } : {}),
+      // ★imagePath が渡されたときだけ更新する
+      ...(imagePath !== undefined ? { imagePath } : {}),
     },
   })
 }
