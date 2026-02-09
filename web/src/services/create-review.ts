@@ -7,6 +7,7 @@ type CreateReviewInput = {
   userId: string
   chocolateId: string
   placeId?: string
+  imagePath?: string
 }
 
 export async function createReviewInDB(input: CreateReviewInput) {
@@ -18,6 +19,7 @@ export async function createReviewInDB(input: CreateReviewInput) {
       userId: input.userId,
       chocolateId: input.chocolateId,
       placeId: input.placeId,
+      imagePath: input.imagePath,
     },
   })
 }

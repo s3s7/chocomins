@@ -1,3 +1,4 @@
 .env
 web/.npm
 .devcontainer
+.env.local

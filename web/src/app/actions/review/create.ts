@@ -11,38 +11,43 @@ export async function createReview(
   _: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> {
-  // 認証情報を取得
   const session = await auth()
 
-  // ユーザーがログインしていない場合
   if (!session?.user) {
     return { isSuccess: false, errorCode: ErrorCodes.UNAUTHORIZED }
   }
 
-  // フォームデータから投稿情報を取得
+  const imagePathRaw = formData.get('imagePath')
+  const imagePath =
+    typeof imagePathRaw === 'string' && imagePathRaw.trim().length > 0
+      ? imagePathRaw.trim()
+      : undefined
+
+  // ★重要：他人のパスを勝手に紐付けられないようにする
+  if (imagePath && !imagePath.startsWith(`reviews/${session.user.id}/`)) {
+    return { isSuccess: false, errorCode: ErrorCodes.INVALID_INPUT }
+  }
+
   const input: ReviewInput = {
     title: formData.get('title')?.toString() ?? '',
     content: formData.get('content')?.toString() ?? '',
     mintiness: Number(formData.get('mintiness') ?? 0),
     chocolateId: formData.get('chocolateId')?.toString() ?? '',
+    imagePath,
   }
 
-  // Google Places 由来の拡張データ（任意）
   const googlePlaceId = formData.get('googlePlaceId')?.toString()
   const placeName = formData.get('placeName')?.toString()
   const address = formData.get('address')?.toString()
   const lat = formData.get('lat') ? Number(formData.get('lat')) : undefined
   const lng = formData.get('lng') ? Number(formData.get('lng')) : undefined
 
-  // バリデーションチェック
   const parsed = reviewSchema.safeParse(input)
   if (!parsed.success) {
-    // 入力が不正な場合
     return { isSuccess: false, errorCode: ErrorCodes.INVALID_INPUT }
   }
 
   try {
-    // 投稿データをデータベースに保存
     let placeId: string | undefined
     if (googlePlaceId && placeName) {
       const place = await upsertPlace({
@@ -54,6 +59,7 @@ export async function createReview(
       })
       placeId = place.id
     }
+
     await createReviewInDB({
       title: parsed.data.title,
       content: parsed.data.content,
@@ -61,15 +67,12 @@ export async function createReview(
       chocolateId: parsed.data.chocolateId,
       userId: session.user.id,
       placeId,
+      imagePath: parsed.data.imagePath,
     })
 
-    // 投稿一覧ページのキャッシュを再検証（最新の投稿を表示）
     revalidatePath('/reviews')
-
-    // 成功時は isSuccess: true を返す
     return { isSuccess: true }
   } catch (err) {
-    // サーバーエラーの場合
     console.error('error:', err)
     return { isSuccess: false, errorCode: ErrorCodes.SERVER_ERROR }
   }

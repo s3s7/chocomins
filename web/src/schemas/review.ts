@@ -13,8 +13,8 @@ export const reviewSchema = z.object({
     .number<number>()
     .min(0, 'ミント感は0以上である必要があります'),
   chocolateId: z.string().min(1, 'チョコレートは必須です'),
-  // 任意の住所欄（Google Map API連携は別途対応可能）
   address: z.string().optional(),
+  imagePath: z.string().optional(),
 })
 
 export type ReviewInput = z.infer<typeof reviewSchema>

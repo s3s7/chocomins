@@ -1,10 +1,9 @@
 'use client'
 
 import { useForm } from 'react-hook-form'
-
 import { toast } from 'sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useActionState, useState } from 'react'
+import { useActionState, useEffect, useState, startTransition } from 'react'
 import { createReview } from '@/app/actions/review/create'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -26,7 +25,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { ReviewInput, reviewSchema } from '@/schemas/review'
-import { startTransition, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { getErrorMessage } from '@/lib/error-messages'
 import { Rating, RatingButton } from '@/components/ui/shadcn-io/rating'
@@ -34,11 +32,20 @@ import {
   PlaceAutocompleteField,
   type PlaceSelection,
 } from './place-autocomplete-field'
+import { ImgEditor } from '@/lib/img-editor'
 
 type ChocolateOption = {
   id: string
   name: string
 }
+
+const imgEditor = new ImgEditor(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+)
+
+const MAX_BYTES = 5 * 1024 * 1024
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 export const ReviewForm = () => {
   const [state, dispatch, isPending] = useActionState(createReview, null)
@@ -49,6 +56,12 @@ export const ReviewForm = () => {
   const [placeSelection, setPlaceSelection] = useState<PlaceSelection>({})
   const router = useRouter()
 
+  // 画像まわり
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null)
+  const [imagePath, setImagePath] = useState<string | null>(null)
+  const [imageUploading, setImageUploading] = useState(false)
+
   const form = useForm<ReviewInput>({
     resolver: zodResolver(reviewSchema),
     defaultValues: {
@@ -57,15 +70,52 @@ export const ReviewForm = () => {
       mintiness: 0,
       chocolateId: '',
       address: '',
+      imagePath: undefined,
     },
   })
 
-  const onSubmit = (values: ReviewInput) => {
+  // プレビューURL後始末
+  useEffect(() => {
+    return () => {
+      if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl)
+    }
+  }, [imagePreviewUrl])
+
+  const onSubmit = async (values: ReviewInput) => {
+    // 画像を選んでいる場合：送信前にアップロードして path を確定させる
+    let pathToSend: string | null = imagePath
+
+    if (imageFile && !pathToSend) {
+      // client side validation
+      if (!ALLOWED_TYPES.includes(imageFile.type)) {
+        toast.error('JPEG/PNG/WebPのみ対応です')
+        return
+      }
+      if (imageFile.size > MAX_BYTES) {
+        toast.error('画像サイズは5MB以下にしてください')
+        return
+      }
+
+      setImageUploading(true)
+      try {
+        const { path } = await imgEditor.uploadImage(imageFile)
+        pathToSend = path
+        setImagePath(path)
+      } catch (e) {
+        console.error(e)
+        toast.error('画像アップロードに失敗しました')
+        return
+      } finally {
+        setImageUploading(false)
+      }
+    }
+
     const formData = new FormData()
     formData.append('title', values.title)
     formData.append('content', values.content)
     formData.append('mintiness', String(values.mintiness))
     formData.append('chocolateId', values.chocolateId)
+
     if (placeSelection.googlePlaceId) {
       formData.append('googlePlaceId', placeSelection.googlePlaceId as string)
     }
@@ -79,6 +129,10 @@ export const ReviewForm = () => {
     if (placeSelection.lat) formData.append('lat', placeSelection.lat as string)
     if (placeSelection.lng) formData.append('lng', placeSelection.lng as string)
 
+    if (pathToSend) {
+      formData.append('imagePath', pathToSend)
+    }
+
     startTransition(() => {
       dispatch(formData)
     })
@@ -89,11 +143,17 @@ export const ReviewForm = () => {
 
     if (state.isSuccess) {
       form.reset()
+      setImageFile(null)
+      setImagePath(null)
+      if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl)
+      setImagePreviewUrl(null)
+
       toast.success('投稿が完了しました！')
       router.push('/reviews')
     } else {
       toast.error(getErrorMessage(state.errorCode))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state, form, router])
 
   useEffect(() => {
@@ -136,10 +196,12 @@ export const ReviewForm = () => {
             </FormItem>
           )}
         />
+
         <PlaceAutocompleteField
           form={form}
           onSelectionChange={setPlaceSelection}
         />
+
         <FormField
           control={form.control}
           name="chocolateId"
@@ -184,6 +246,7 @@ export const ReviewForm = () => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="content"
@@ -208,7 +271,6 @@ export const ReviewForm = () => {
           name="mintiness"
           render={({ field }) => {
             const mintinessValue = field.value ?? 0
-
             return (
               <FormItem>
                 <FormLabel>ミント感</FormLabel>
@@ -242,21 +304,46 @@ export const ReviewForm = () => {
           }}
         />
 
-        {/* <div className="flex flex-col items-center gap-3">
-          <Rating defaultValue={3}>
-            {Array.from({ length: 5 }).map((_, index) => (
-              <RatingButton key={index} />
-            ))}
-          </Rating>
-          <span className="text-muted-foreground text-xs">ミント感</span>
-        </div> */}
+        {/* 画像入力 */}
+        <FormItem>
+          <FormLabel>画像（任意・1枚）</FormLabel>
+          <FormControl>
+            <Input
+              type="file"
+              accept="image/*"
+              className="!bg-white"
+              disabled={isPending || imageUploading}
+              onChange={(e) => {
+                const file = e.currentTarget.files?.[0] ?? null
+                setImageFile(file)
+                setImagePath(null)
+
+                if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl)
+                setImagePreviewUrl(file ? URL.createObjectURL(file) : null)
+              }}
+            />
+          </FormControl>
+          <FormDescription>JPEG/PNG/WebP、5MBまで</FormDescription>
+          {imagePreviewUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={imagePreviewUrl}
+              alt="preview"
+              className="mt-2 max-h-60 w-full rounded-md border object-contain"
+            />
+          )}
+        </FormItem>
 
         <Button
           type="submit"
-          disabled={isPending}
+          disabled={isPending || imageUploading}
           className="bg-[#8FCBAB] text-slate-900 hover:bg-[#7BB898]"
         >
-          {isPending ? '投稿中...' : '投稿'}
+          {isPending
+            ? '投稿中...'
+            : imageUploading
+              ? '画像アップロード中...'
+              : '投稿'}
         </Button>
       </form>
     </Form>
