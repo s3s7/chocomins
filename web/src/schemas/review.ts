@@ -12,6 +12,10 @@ export const reviewSchema = z.object({
   mintiness: z.coerce
     .number<number>()
     .min(0, 'ミント感は0以上である必要があります'),
+  chocoRichness: z.coerce
+    .number<number>()
+    .min(0, 'チョコ感は0以上である必要があります')
+    .max(5, 'チョコ感は5以下である必要があります'),
   chocolateId: z.string().min(1, 'チョコレートは必須です'),
   address: z.string().optional(),
   imagePath: z.string().optional(),

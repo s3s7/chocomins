@@ -169,7 +169,9 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
               <p className="text-sm font-semibold text-gray-800">{userName}</p>
             </div>
 
-            <p className="text-xs text-gray-500">{formatDate(review.createdAt)} </p>
+            <p className="text-xs text-gray-500">
+              {formatDate(review.createdAt)}{' '}
+            </p>
           </CardFooter>
         </Link>
       ) : (
@@ -188,7 +190,9 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
               </Avatar>
 
               <div>
-                <p className="text-sm font-semibold text-gray-800">{userName}</p>
+                <p className="text-sm font-semibold text-gray-800">
+                  {userName}
+                </p>
               </div>
             </div>
             <p className="text-xs text-gray-500">

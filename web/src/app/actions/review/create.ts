@@ -32,6 +32,7 @@ export async function createReview(
     title: formData.get('title')?.toString() ?? '',
     content: formData.get('content')?.toString() ?? '',
     mintiness: Number(formData.get('mintiness') ?? 0),
+    chocoRichness: Number(formData.get('chocoRichness') ?? 0),
     chocolateId: formData.get('chocolateId')?.toString() ?? '',
     imagePath,
   }
@@ -64,6 +65,7 @@ export async function createReview(
       title: parsed.data.title,
       content: parsed.data.content,
       mintiness: parsed.data.mintiness,
+      chocoRichness: parsed.data.chocoRichness,
       chocolateId: parsed.data.chocolateId,
       userId: session.user.id,
       placeId,

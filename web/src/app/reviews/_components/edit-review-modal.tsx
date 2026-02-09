@@ -74,27 +74,40 @@ const buildReviewImageUrl = (imagePath?: string | null) => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   if (!supabaseUrl) return null
 
-  const base = supabaseUrl.endsWith('/') ? supabaseUrl.slice(0, -1) : supabaseUrl
-  const normalizedPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath
+  const base = supabaseUrl.endsWith('/')
+    ? supabaseUrl.slice(0, -1)
+    : supabaseUrl
+  const normalizedPath = imagePath.startsWith('/')
+    ? imagePath.slice(1)
+    : imagePath
 
   return `${base}/storage/v1/object/public/${REVIEW_IMAGE_BUCKET}/${normalizedPath}`
 }
 
 export function EditReviewModal({ review, open, onCloseAction }: Props) {
   const [state, dispatch, isPending] = useActionState(updateReview, null)
-  const [chocolateOptions, setChocolateOptions] = useState<ChocolateOption[]>([])
+  const [chocolateOptions, setChocolateOptions] = useState<ChocolateOption[]>(
+    [],
+  )
   const [chocolateLoading, setChocolateLoading] = useState(true)
   const [placeSelection, setPlaceSelection] = useState<PlaceSelection>({})
 
   // --- 画像まわり ---
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null)
-  const [imagePath, setImagePath] = useState<string | null>(review.imagePath ?? null)
+  const [imagePath, setImagePath] = useState<string | null>(
+    review.imagePath ?? null,
+  )
   const [imageUploading, setImageUploading] = useState(false)
   const [removeImage, setRemoveImage] = useState(false)
 
-  const existingImageUrl = useMemo(() => buildReviewImageUrl(review.imagePath), [review.imagePath])
-  const shownPreview = imagePreviewUrl ?? (removeImage ? null : (buildReviewImageUrl(imagePath) ?? existingImageUrl))
+  const existingImageUrl = useMemo(
+    () => buildReviewImageUrl(review.imagePath),
+    [review.imagePath],
+  )
+  const shownPreview =
+    imagePreviewUrl ??
+    (removeImage ? null : (buildReviewImageUrl(imagePath) ?? existingImageUrl))
 
   const form = useForm<EditReviewInput>({
     resolver: zodResolver(editReviewSchema),
@@ -103,6 +116,7 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
       title: review.title,
       content: review.content,
       mintiness: review.mintiness,
+      chocoRichness: review.chocoRichness ?? 0,
       chocolateId: review.chocolateId,
       address: '',
       // imagePath はフォーム入力としては持たせなくてもOK（FormDataで送る）
@@ -138,6 +152,7 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
     formData.append('title', values.title)
     formData.append('content', values.content)
     formData.append('mintiness', String(values.mintiness))
+    formData.append('chocoRichness', String(values.chocoRichness))
     formData.append('chocolateId', values.chocolateId)
 
     if (placeSelection.googlePlaceId) {
@@ -269,11 +284,19 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
                     name={field.name}
                     onValueChange={field.onChange}
                     value={field.value || undefined}
-                    disabled={isPending || chocolateLoading || chocolateOptions.length === 0}
+                    disabled={
+                      isPending ||
+                      chocolateLoading ||
+                      chocolateOptions.length === 0
+                    }
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder={chocolateLoading ? '取得中...' : '選択してください'} />
+                        <SelectValue
+                          placeholder={
+                            chocolateLoading ? '取得中...' : '選択してください'
+                          }
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -350,6 +373,44 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
               }}
             />
 
+            <FormField
+              control={form.control}
+              name="chocoRichness"
+              render={({ field }) => {
+                const chocoValue = field.value ?? 0
+                return (
+                  <FormItem>
+                    <FormLabel>チョコ感</FormLabel>
+                    <FormControl>
+                      <input
+                        type="number"
+                        name={field.name}
+                        value={chocoValue}
+                        readOnly
+                        ref={field.ref}
+                        className="sr-only"
+                      />
+                    </FormControl>
+                    <div className="flex flex-col items-center gap-3">
+                      <Rating
+                        aria-label="チョコ感"
+                        value={chocoValue}
+                        onValueChange={field.onChange}
+                      >
+                        {Array.from({ length: 5 }).map((_, index) => (
+                          <RatingButton key={index} />
+                        ))}
+                      </Rating>
+                      <span className="text-muted-foreground text-xs">
+                        チョコ感: {chocoValue}
+                      </span>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+
             {/* ✅ 画像入力（編集モーダル用） */}
             <FormItem>
               <FormLabel>画像（任意・1枚）</FormLabel>
@@ -380,7 +441,11 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
                 <Button
                   type="button"
                   variant="outline"
-                  disabled={isPending || imageUploading || (!review.imagePath && !imagePreviewUrl && !imagePath)}
+                  disabled={
+                    isPending ||
+                    imageUploading ||
+                    (!review.imagePath && !imagePreviewUrl && !imagePath)
+                  }
                   onClick={() => {
                     setImageFile(null)
                     setImagePath(null)
@@ -393,7 +458,9 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
                   画像を削除
                 </Button>
                 {imageUploading && (
-                  <span className="text-xs text-gray-500">画像アップロード中...</span>
+                  <span className="text-xs text-gray-500">
+                    画像アップロード中...
+                  </span>
                 )}
               </div>
 
@@ -415,7 +482,11 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
                 キャンセル
               </Button>
               <Button type="submit" disabled={isPending || imageUploading}>
-                {isPending ? '保存中...' : imageUploading ? '画像アップロード中...' : '保存'}
+                {isPending
+                  ? '保存中...'
+                  : imageUploading
+                    ? '画像アップロード中...'
+                    : '保存'}
               </Button>
             </div>
           </form>

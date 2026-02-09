@@ -68,6 +68,7 @@ export const ReviewForm = () => {
       title: '',
       content: '',
       mintiness: 0,
+      chocoRichness: 0,
       chocolateId: '',
       address: '',
       imagePath: undefined,
@@ -114,6 +115,7 @@ export const ReviewForm = () => {
     formData.append('title', values.title)
     formData.append('content', values.content)
     formData.append('mintiness', String(values.mintiness))
+    formData.append('chocoRichness', String(values.chocoRichness))
     formData.append('chocolateId', values.chocolateId)
 
     if (placeSelection.googlePlaceId) {
@@ -296,6 +298,44 @@ export const ReviewForm = () => {
                   </Rating>
                   <span className="text-muted-foreground text-xs">
                     ミント感: {mintinessValue}
+                  </span>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )
+          }}
+        />
+
+        <FormField
+          control={form.control}
+          name="chocoRichness"
+          render={({ field }) => {
+            const chocoValue = field.value ?? 0
+            return (
+              <FormItem>
+                <FormLabel>チョコ感</FormLabel>
+                <FormControl>
+                  <input
+                    type="number"
+                    name={field.name}
+                    value={chocoValue}
+                    readOnly
+                    ref={field.ref}
+                    className="sr-only"
+                  />
+                </FormControl>
+                <div className="flex flex-col items-center gap-3">
+                  <Rating
+                    aria-label="チョコ感"
+                    value={chocoValue}
+                    onValueChange={field.onChange}
+                  >
+                    {Array.from({ length: 5 }).map((_, index) => (
+                      <RatingButton key={index} />
+                    ))}
+                  </Rating>
+                  <span className="text-muted-foreground text-xs">
+                    チョコ感: {chocoValue}
                   </span>
                 </div>
                 <FormMessage />
