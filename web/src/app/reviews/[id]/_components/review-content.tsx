@@ -11,6 +11,41 @@ import { getErrorMessage } from '@/lib/error-messages'
 import { Role } from '@prisma/client'
 import { EditReviewModal } from '../../_components/edit-review-modal'
 import { ImgEditor } from '@/lib/img-editor'
+import { Star } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+const clampScore = (value?: number | null) =>
+  typeof value === 'number' ? Math.max(0, Math.min(5, value)) : 0
+
+const ScoreStars = ({
+  label,
+  value,
+}: {
+  label: string
+  value?: number | null
+}) => {
+  const clamped = clampScore(value)
+  const stars = Array.from({ length: 5 })
+  return (
+    <div className="rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3">
+      <p className="text-xs font-semibold text-emerald-600">{label}</p>
+      <div className="mt-2 flex items-center gap-1">
+        {stars.map((_, index) => (
+          <Star
+            key={index}
+            className={cn(
+              'h-5 w-5 text-emerald-200',
+              index < clamped && 'fill-emerald-500 text-emerald-500',
+            )}
+          />
+        ))}
+        <span className="ml-2 text-sm font-semibold text-emerald-900">
+          {typeof value === 'number' ? `${value} / 5` : '未評価'}
+        </span>
+      </div>
+    </div>
+  )
+}
 
 const imgEditor = new ImgEditor()
 
@@ -84,6 +119,11 @@ export function ReviewContent({
       <p className="text-sm text-gray-600">
         チョコレート: {review.chocolate?.name ?? '不明'}
       </p>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <ScoreStars label="ミント感" value={review.mintiness} />
+        <ScoreStars label="チョコ感" value={review.chocoRichness} />
+      </div>
 
       {imageUrl && (
         <div className="mt-4 space-y-2">

@@ -127,12 +127,6 @@ export function ChocolateItem({
 
               <dl className="grid grid-cols-2 gap-3 text-sm">
                 <div>
-                  <dt className="text-gray-500">カカオ含有率</dt>
-                  <dd className="font-semibold text-gray-900">
-                    {cacaoPercentText}
-                  </dd>
-                </div>
-                <div>
                   <dt className="text-gray-500">ミント入り</dt>
                   <dd className="font-semibold text-gray-900">
                     {chocolate.hasMint ? 'あり' : 'なし'}
