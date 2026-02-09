@@ -24,6 +24,12 @@ const nextConfig: NextConfig = {
         pathname: '/storage/v1/object/public/**',
       },
 
+      // Cloud Supabase（例: https://xxxxx.supabase.co）
+      {
+        protocol: 'https',
+        hostname: 'slhoooilqunsxafaaucf.supabase.co',
+        pathname: '/storage/v1/object/public/**',
+      },
     ],
   },
 }

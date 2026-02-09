@@ -21,6 +21,7 @@ export async function updateReview(
     title: formData.get('title')?.toString() ?? '',
     content: formData.get('content')?.toString() ?? '',
     mintiness: Number(formData.get('mintiness') ?? 0),
+    chocoRichness: Number(formData.get('chocoRichness') ?? 0),
     chocolateId: formData.get('chocolateId')?.toString() ?? '',
   }
 
@@ -75,6 +76,7 @@ export async function updateReview(
       title: parsed.data.title,
       content: parsed.data.content,
       mintiness: parsed.data.mintiness,
+      chocoRichness: parsed.data.chocoRichness,
       chocolateId: parsed.data.chocolateId,
       userId: session.user.id,
       userRole: session.user.role,
