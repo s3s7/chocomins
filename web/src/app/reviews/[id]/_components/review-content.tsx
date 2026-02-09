@@ -12,10 +12,7 @@ import { Role } from '@prisma/client'
 import { EditReviewModal } from '../../_components/edit-review-modal'
 import { ImgEditor } from '@/lib/img-editor'
 
-const imgEditor = new ImgEditor(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-)
+const imgEditor = new ImgEditor()
 
 const buildReviewImageUrl = (imagePath?: string | null) => {
   if (!imagePath) return null

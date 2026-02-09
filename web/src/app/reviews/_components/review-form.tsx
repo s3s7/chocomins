@@ -39,10 +39,7 @@ type ChocolateOption = {
   name: string
 }
 
-const imgEditor = new ImgEditor(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-)
+const imgEditor = new ImgEditor()
 
 const MAX_BYTES = 5 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']

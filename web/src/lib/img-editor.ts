@@ -48,18 +48,15 @@
 //     return { src }
 //   }
 // }
-import { createClient } from '@supabase/supabase-js'
+import { supabaseClient } from './supabase-client'
 
 const BUCKET = 'review-images'
 
 export class ImgEditor {
   private supabase
 
-  constructor(supabaseUrl: string, supabaseAnonKey: string) {
-    if (!supabaseUrl || !supabaseAnonKey) {
-      throw new Error('Supabase env missing')
-    }
-    this.supabase = createClient(supabaseUrl, supabaseAnonKey)
+  constructor() {
+    this.supabase = supabaseClient
   }
 
   // 署名発行APIを叩いて、署名トークンでアップロードする
