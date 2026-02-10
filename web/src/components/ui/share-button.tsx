@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { FaXTwitter } from "react-icons/fa6";
 
 interface ShareButtonProps {
-  url: string; // できれば絶対URLを渡すのが理想
+  url: string;
   title: string;
   showCopyButton?: boolean;
   showNativeShare?: boolean;

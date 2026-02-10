@@ -118,7 +118,7 @@ export default async function Home() {
     <main className="space-y-12 px-0 py-0">
       {/* <div className="mb-5 flex justify-center">
         <Image
-          src="/t.png"
+          src="/top.webp"
           alt="ちょこみんずのキービジュアル"
           // width={2040}
           // height={1027}
@@ -130,7 +130,7 @@ export default async function Home() {
       </div> */}
       <div className="relative -mt-16 mb-5 flex justify-center">
         <Image
-          src="/t.png"
+          src="/top.webp"
           alt="ちょこみんずのキービジュアル"
           width={1940}
           height={607}
@@ -200,7 +200,7 @@ export default async function Home() {
           {/* 右：画像 */}
           <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-3xl">
             <Image
-              src="/tt.png" // ここを表示したい画像に変更（例: /hero-side.webp）
+              src="/topChoco.webp" // ここを表示したい画像に変更（例: /hero-side.webp）
               alt="チョコミントのイメージ"
               width={900}
               height={900}
