@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-// import type { Metadata } from 'next'
 import {
   Calendar,
   Gift,
@@ -34,24 +33,6 @@ const zenMaruGothic = Zen_Maru_Gothic({
   display: 'swap',
 })
 
-// export const metadata: Metadata = {
-//   title: 'ちょこみんず',
-//   description:
-//     'ちょこみんずは、気になるメーカーやチョコレートを記録し、レビューを通じて推しチョコを共有できるコミュニティです。',
-//   openGraph: {
-//     title: 'ちょこみんず',
-//     description:
-//       'ちょこみんずでメーカー・店舗やチョコを整理し、レビューを投稿して新しい一粒に出会いましょう。',
-//     images: ['/window.svg'],
-//   },
-//   twitter: {
-//     card: 'summary_large_image',
-//     title: 'ちょこみんず',
-//     description:
-//       'ちょこみんずは、メーカー・店舗登録からレビュー投稿までをサポートするチョコミント好きのための場所です。',
-//     images: ['/window.svg'],
-//   },
-// }
 
 export default async function Home() {
   const session = await auth()
