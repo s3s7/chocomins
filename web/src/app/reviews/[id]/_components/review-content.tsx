@@ -13,6 +13,7 @@ import { EditReviewModal } from '../../_components/edit-review-modal'
 import { ImgEditor } from '@/lib/img-editor'
 import { Star } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import ShareButton from '@/components/ui/share-button'
 
 const clampScore = (value?: number | null) =>
   typeof value === 'number' ? Math.max(0, Math.min(5, value)) : 0
@@ -87,6 +88,7 @@ export function ReviewContent({
   const isAdmin = currentUserRole === Role.ADMIN
 
   const imageUrl = buildReviewImageUrl(review.imagePath)
+  const shareUrl = `/reviews/${review.id}`
 
   const handleDelete = () => {
     const confirmDelete = window.confirm('本当にこの投稿を削除しますか？')
@@ -151,12 +153,21 @@ export function ReviewContent({
         <p className="mt-2 text-sm text-gray-500">位置情報が未登録です</p>
       )}
 
-      <p className="text-sm text-gray-500">
-        by {review.user?.name ?? '匿名'} /{' '}
-        <span suppressHydrationWarning>
-          {new Date(review.createdAt).toLocaleString()}
-        </span>
-      </p>
+      <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-500">
+        <p>
+          by {review.user?.name ?? '匿名'} /{' '}
+          <span suppressHydrationWarning>
+            {new Date(review.createdAt).toLocaleString()}
+          </span>
+        </p>
+        <ShareButton
+          url={shareUrl}
+          title={review.title}
+          showCopyButton={false}
+          showNativeShare={false}
+          className="ml-auto gap-2"
+        />
+      </div>
 
       {(isOwner || isAdmin) && (
         <div className="mt-4 flex gap-2">
