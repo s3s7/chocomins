@@ -25,14 +25,14 @@ export const metadata: Metadata = {
     title: 'ちょこみんず',
     description:
       'ちょこみんずでメーカー・店舗やチョコを整理し、レビューを投稿して新しい一粒に出会いましょう。',
-    images: ['/t.png'],
+    images: ['/top.webp'],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'ちょこみんず',
     description:
       'ちょこみんずは、メーカー・店舗登録からレビュー投稿までをサポートするチョコミント好きのための場所です。',
-    images: ['/t.png'],
+    images: ['/top.webp'],
   },
 }
 
