@@ -130,10 +130,6 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
         <p className="text-xl font-bold text-gray-900">{reviewLabel}</p>
       </div>
 
-      <h3 className="mt-4 text-lg font-semibold text-gray-900">
-        {reviewLabel}
-      </h3>
-
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-center gap-2">
           <StarRating rating={rating} />
