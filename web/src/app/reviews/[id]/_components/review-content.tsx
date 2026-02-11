@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import Link from 'next/link'
+import { useMemo, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { ReviewWithUser } from '@/types'
 import Map from '@/components/ui/map'
@@ -14,6 +15,7 @@ import { ImgEditor } from '@/lib/img-editor'
 import { Star } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import ShareButton from '@/components/ui/share-button'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 const clampScore = (value?: number | null) =>
   typeof value === 'number' ? Math.max(0, Math.min(5, value)) : 0
@@ -21,25 +23,43 @@ const clampScore = (value?: number | null) =>
 const ScoreStars = ({
   label,
   value,
+  variant = 'panel',
 }: {
   label: string
   value?: number | null
+  variant?: 'panel' | 'chip'
 }) => {
   const clamped = clampScore(value)
   const stars = Array.from({ length: 5 })
+  const starIcons = stars.map((_, index) => (
+    <Star
+      key={`${label}-${index}`}
+      className={cn(
+        'h-4 w-4 text-emerald-200',
+        index < clamped && 'fill-emerald-500 text-emerald-500',
+      )}
+    />
+  ))
+
+  if (variant === 'chip') {
+    return (
+      <div className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50/80 px-3 py-1 text-xs font-semibold text-emerald-700">
+        <span>{label}</span>
+        <div className="flex items-center gap-0.5">{starIcons}</div>
+        <span className="text-emerald-900">
+          {typeof value === 'number' ? `${value}/5` : '未評価'}
+        </span>
+      </div>
+    )
+  }
+
   return (
-    <div className="rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3">
-      <p className="text-xs font-semibold text-emerald-600">{label}</p>
+    <div className="rounded-2xl border border-emerald-100 bg-gradient-to-b from-emerald-50 to-white px-4 py-3 shadow-sm">
+      <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+        {label}
+      </p>
       <div className="mt-2 flex items-center gap-1">
-        {stars.map((_, index) => (
-          <Star
-            key={index}
-            className={cn(
-              'h-5 w-5 text-emerald-200',
-              index < clamped && 'fill-emerald-500 text-emerald-500',
-            )}
-          />
-        ))}
+        {starIcons}
         <span className="ml-2 text-sm font-semibold text-emerald-900">
           {typeof value === 'number' ? `${value} / 5` : '未評価'}
         </span>
@@ -58,6 +78,20 @@ const buildReviewImageUrl = (imagePath?: string | null) => {
     : imagePath
   return imgEditor.getPublicUrl(normalizedPath)
 }
+
+const getAvatarColor = (seed: string) => {
+  if (!seed) return '#1f2937'
+  let hash = 0
+  for (let i = 0; i < seed.length; i += 1) {
+    hash = seed.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  const hue = Math.abs(hash) % 360
+  return `hsl(${hue}, 45%, 45%)`
+}
+
+const getInitial = (name?: string | null) => name?.trim()?.[0] ?? '？'
+
+const placeholderImageUrl = '/no_image.webp'
 
 type ReviewContentProps = {
   review: ReviewWithUser
@@ -87,8 +121,26 @@ export function ReviewContent({
   const isOwner = review.userId === currentUserId
   const isAdmin = currentUserRole === Role.ADMIN
 
-  const imageUrl = buildReviewImageUrl(review.imagePath)
+  const imageUrl = buildReviewImageUrl(review.imagePath) ?? placeholderImageUrl
   const shareUrl = `/reviews/${review.id}`
+  const chocolateName = review.chocolate?.name ?? 'チョコレート未登録'
+  const chocolateBrand = review.chocolate?.brand?.name ?? 'メーカー・店舗未設定'
+  const chocolateCategory = review.chocolate?.category?.name ?? 'カテゴリ未設定'
+  const userName = review.user?.name ?? '匿名'
+  const avatarColor = useMemo(() => getAvatarColor(userName), [userName])
+  const createdAtLabel = useMemo(() => {
+    try {
+      return new Intl.DateTimeFormat('ja-JP', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      }).format(new Date(review.createdAt))
+    } catch {
+      return review.createdAt.toString()
+    }
+  }, [review.createdAt])
 
   const handleDelete = () => {
     const confirmDelete = window.confirm('本当にこの投稿を削除しますか？')
@@ -115,79 +167,117 @@ export function ReviewContent({
 
   return (
     <>
-      <h1 className="text-2xl font-bold">{review.title}</h1>
-      <p className="text-gray-700">{review.content}</p>
-
-      <p className="text-sm text-gray-600">
-        チョコレート: {review.chocolate?.name ?? '不明'}
-      </p>
-
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <ScoreStars label="ミント感" value={review.mintiness} />
-        <ScoreStars label="チョコ感" value={review.chocoRichness} />
+      <div className="flex flex-col gap-4 border-b border-gray-100 pb-6 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex-1">
+          <h1 className="mt-2 text-2xl font-bold sm:text-3xl">
+            <span className="mr-3 block text-sm font-semibold text-gray-500 sm:inline">
+              {chocolateBrand}
+            </span>
+            <br></br>
+            {chocolateName}
+          </h1>
+         
+          <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-emerald-50 bg-emerald-50/40 p-3 text-sm text-gray-700">
+            
+            <div className="flex flex-wrap items-center gap-2">
+              <ScoreStars label="ミント感" value={review.mintiness} variant="chip" />
+              <ScoreStars label="チョコ感" value={review.chocoRichness} variant="chip" />
+            </div>
+          </div>
+        </div>
       </div>
 
-      {imageUrl && (
-        <div className="mt-4 space-y-2">
-          <p className="text-sm font-medium text-gray-600">投稿画像</p>
-          <div className="overflow-hidden rounded-2xl">
+      <div className="mt-6 md:flex md:space-x-6">
+        <div className="w-full md:w-1/2">
+          <div className="h-[250px] w-full overflow-hidden rounded-xl shadow-md">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imageUrl}
-              alt={`${review.title}の投稿画像`}
-              className="max-h-[520px] w-full object-contain"
+              alt={`${chocolateName}の投稿画像`}
+              className="h-full w-full object-cover"
               loading="lazy"
             />
           </div>
+          <div className="mt-4 flex items-center gap-3 text-sm text-gray-600">
+            <Avatar className="h-10 w-10">
+              <AvatarFallback
+                className="text-sm font-semibold text-white"
+                style={{ backgroundColor: avatarColor }}
+              >
+                {getInitial(userName)}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="font-semibold text-gray-900">{userName}</p>
+              <p className="text-xs text-gray-500" suppressHydrationWarning>
+                {createdAtLabel}
+              </p>
+            </div>
+          </div>
         </div>
-      )}
 
-      {typeof lat === 'number' && typeof lng === 'number' ? (
-        <div className="mt-4 space-y-2">
-          {locationLabel.length > 0 && (
-            <p className="text-sm text-gray-600">{locationLabel}</p>
-          )}
-          <Map lat={lat} lng={lng} />
+        <div className="mt-6 w-full md:mt-0 md:w-1/2">
+          <div className="rounded-xl border border-emerald-100 bg-white p-2 sm:p-4 shadow">
+            {typeof lat === 'number' && typeof lng === 'number' ? (
+              <Map lat={lat} lng={lng} />
+            ) : (
+              <div className="flex h-[320px] w-full flex-col items-center justify-center rounded-2xl bg-emerald-50 text-sm text-emerald-700">
+                位置情報が未登録です
+              </div>
+            )}
+            {locationLabel.length > 0 && (
+              <p className="mt-3 text-xs text-gray-600">{locationLabel}</p>
+            )}
+          </div>
         </div>
-      ) : (
-        <p className="mt-2 text-sm text-gray-500">位置情報が未登録です</p>
-      )}
+      </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-500">
-        <p>
-          by {review.user?.name ?? '匿名'} /{' '}
-          <span suppressHydrationWarning>
-            {new Date(review.createdAt).toLocaleString()}
-          </span>
-        </p>
+      <div className="mt-6">
+        <p className="font-semibold text-gray-800">レビュー本文</p>
+        <div className="mt-2 rounded-lg border border-gray-100 bg-white p-3 text-sm text-gray-800">
+          {review.content}
+        </div>
+      </div>
+
+      <div className="mt-6 flex flex-col gap-3 text-sm text-gray-500 sm:flex-row sm:items-center">
         <ShareButton
           url={shareUrl}
           title={review.title}
           showCopyButton={false}
-          showNativeShare={false}
-          className="ml-auto gap-2"
+          className="sm:ml-auto"
         />
       </div>
 
       {(isOwner || isAdmin) && (
-        <div className="mt-4 flex gap-2">
-          <Button
-            size="sm"
-            className="bg-[#CFE6DA] text-gray-800 hover:bg-[#b7dacf]"
-            onClick={() => setEditing(true)}
-          >
-            編集
-          </Button>
-          <Button
-            size="sm"
-            variant="destructive"
-            onClick={handleDelete}
-            disabled={isDeleting}
-          >
-            {isDeleting ? '削除中...' : '削除'}
-          </Button>
+        <div className="mt-8 space-y-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setEditing(true)}
+            >
+              編集
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? '削除中...' : '削除'}
+            </Button>
+          </div>
         </div>
       )}
+
+      <div className="mt-6 flex justify-center">
+        <Link
+          href="/reviews"
+          className="inline-flex items-center rounded-lg bg-emerald-500 px-6 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-600"
+        >
+          みんなのレビューに戻る
+        </Link>
+      </div>
 
       <EditReviewModal
         key={editing ? 'editing' : 'closed'}
