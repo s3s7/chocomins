@@ -16,6 +16,9 @@ export async function getReviewById(reviewId: string) {
           },
         },
       },
+      brand: {
+        select: { name: true },
+      },
       place: {
         select: { lat: true, lng: true, address: true, name: true },
       },

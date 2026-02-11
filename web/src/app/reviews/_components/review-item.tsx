@@ -64,7 +64,8 @@ export function ReviewItem({
           </span>
         </p>
         <p className="text-sm text-gray-600">
-          チョコレート: {review.chocolate?.name ?? '不明'}
+          メーカー・店舗：
+          {review.brand?.name ?? review.chocolate?.brand?.name ?? '未設定'}
         </p>
         <p className="text-sm text-gray-600">ミント感: {review.mintiness}</p>
         <p>{review.content}</p>

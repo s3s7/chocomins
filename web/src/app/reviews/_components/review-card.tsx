@@ -97,7 +97,10 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
   const avatarColor = useMemo(() => getAvatarColor(userName), [userName])
   const rating = clampRating(review.mintiness)
   const chocolateName = review.chocolate?.name ?? 'チョコレート未登録'
-  const chocolateBrand = review.chocolate?.brand?.name ?? 'メーカー・店舗未設定'
+  const chocolateBrand =
+    review.brand?.name ??
+    review.chocolate?.brand?.name ??
+    'メーカー・店舗未設定'
   const placeholderImageUrl = '/no_image.webp'
 
   // ★投稿画像があればそれを、なければ no_image
