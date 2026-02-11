@@ -151,30 +151,6 @@ export function Header() {
 
               <MenubarMenu>
                 <MenubarTrigger className={menuTriggerClass}>
-                  商品
-                </MenubarTrigger>
-                <MenubarContent className="bg-white text-gray-900">
-                  <MenubarItem asChild>
-                    <Link
-                      href="/chocolates"
-                      className="flex w-full items-center"
-                    >
-                      一覧
-                    </Link>
-                  </MenubarItem>
-                  <MenubarItem asChild>
-                    <Link
-                      href="/chocolates/new"
-                      className="flex w-full items-center"
-                    >
-                      入力
-                    </Link>
-                  </MenubarItem>
-                </MenubarContent>
-              </MenubarMenu>
-
-              <MenubarMenu>
-                <MenubarTrigger className={menuTriggerClass}>
                   その他
                 </MenubarTrigger>
                 <MenubarContent className="bg-white text-gray-900">
@@ -221,9 +197,6 @@ export function Header() {
               <Link href="/brands">メーカー / 店舗一覧</Link>
             </Button>
 
-            <Button asChild size="lg" className={authButtonClass}>
-              <Link href="/chocolates">商品一覧</Link>
-            </Button>
           </div>
         )}
       </div>

@@ -60,16 +60,6 @@ export default async function Home() {
       ctaHref: isSignedIn ? '/brands/new' : '/signin',
     },
     {
-      title: 'チョコミント商品の登録',
-      description: '商品情報、価格などを保存して、食べた商品を記録しましょう。',
-      highlight: 'Chocolate Notes',
-      icon: Inbox,
-      accent: 'from-[#d9f8ee] via-[#9fd8c0] to-white',
-      ctaLabel: isSignedIn ? 'チョコを登録' : 'ログインして登録',
-      ctaHref: isSignedIn ? '/chocolates/new' : '/signin',
-      note: '写真投稿機能は現在開発中です。',
-    },
-    {
       title: 'レビューを投稿',
       description:
         'チョコ・ミント感(★5段階評価)など感想を残しましょう。推し商品を仲間に共有できます。',

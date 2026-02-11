@@ -108,7 +108,7 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
     resolver: zodResolver(editReviewSchema),
     defaultValues: {
       reviewId: review.id,
-      title: review.title,
+      chocolateName: review.chocolateName,
       content: review.content,
       mintiness: review.mintiness,
       chocoRichness: review.chocoRichness ?? 0,
@@ -144,7 +144,7 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
   const onSubmit = async (values: EditReviewInput) => {
     const formData = new FormData()
     formData.append('reviewId', values.reviewId)
-    formData.append('title', values.title)
+    formData.append('chocolateName', values.chocolateName)
     formData.append('content', values.content)
     formData.append('mintiness', String(values.mintiness))
     formData.append('chocoRichness', String(values.chocoRichness))
@@ -258,6 +258,20 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
                   <FormLabel>タイトル</FormLabel>
                   <FormControl>
                     <Input placeholder="タイトルを入力" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="chocolateName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>チョコレート名</FormLabel>
+                  <FormControl>
+                    <Input placeholder="チョコレート名を入力" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

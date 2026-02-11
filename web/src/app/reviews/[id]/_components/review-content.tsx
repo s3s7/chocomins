@@ -123,11 +123,20 @@ export function ReviewContent({
 
   const imageUrl = buildReviewImageUrl(review.imagePath) ?? placeholderImageUrl
   const shareUrl = `/reviews/${review.id}`
-  const chocolateName = review.chocolate?.name ?? 'チョコレート未登録'
+  const chocolateNameFromRelation =
+    review.chocolate?.name ?? 'チョコレート未登録'
   const chocolateBrand =
     review.brand?.name ??
     review.chocolate?.brand?.name ??
     'メーカー・店舗未設定'
+  const shareTitle =
+    review.chocolateName?.length > 0
+      ? review.chocolateName
+      : `${chocolateBrand} ${chocolateNameFromRelation}`.trim()
+  const chocolateHeading =
+    review.chocolateName?.length > 0
+      ? review.chocolateName
+      : chocolateNameFromRelation
   const chocolateCategory = review.chocolate?.category?.name ?? 'カテゴリ未設定'
   const userName = review.user?.name ?? '匿名'
   const avatarColor = useMemo(() => getAvatarColor(userName), [userName])
@@ -177,7 +186,7 @@ export function ReviewContent({
               {chocolateBrand}
             </span>
             <br></br>
-            {chocolateName}
+            {chocolateHeading}
           </h1>
          
           <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-emerald-50 bg-emerald-50/40 p-3 text-sm text-gray-700">
@@ -196,7 +205,7 @@ export function ReviewContent({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imageUrl}
-              alt={`${chocolateName}の投稿画像`}
+              alt={`${shareTitle}の投稿画像`}
               className="h-full w-full object-cover"
               loading="lazy"
             />
@@ -245,8 +254,9 @@ export function ReviewContent({
       <div className="mt-6 flex flex-col gap-3 text-sm text-gray-500 sm:flex-row sm:items-center">
         <ShareButton
           url={shareUrl}
-          title={review.title}
+          title={shareTitle}
           showCopyButton={false}
+          showNativeShare={false}
           className="sm:ml-auto"
         />
       </div>
