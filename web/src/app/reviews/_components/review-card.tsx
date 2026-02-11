@@ -119,7 +119,6 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
         />
       </div>
 
-   
       <div className="mt-5 space-y-1">
         <p className="text-sm font-semibold text-gray-500">
           {chocolateBrand}

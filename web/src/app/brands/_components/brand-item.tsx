@@ -10,6 +10,29 @@ import { getErrorMessage } from '@/lib/error-messages'
 import { useMemo, useState, useTransition } from 'react'
 import Image from 'next/image'
 
+const BRAND_IMAGE_BUCKET = 'review-images'
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+const IS_LOCAL_SUPABASE =
+  SUPABASE_URL.includes('127.0.0.1') || SUPABASE_URL.includes('localhost')
+
+const buildBrandImageUrl = (imagePath?: string | null) => {
+  if (!imagePath) return null
+  if (/^https?:\/\//.test(imagePath)) return imagePath
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  if (!supabaseUrl) return null
+
+  const normalizedBase = supabaseUrl.endsWith('/')
+    ? supabaseUrl.slice(0, -1)
+    : supabaseUrl
+
+  const normalizedPath = imagePath.startsWith('/')
+    ? imagePath.slice(1)
+    : imagePath
+
+  return `${normalizedBase}/storage/v1/object/public/${BRAND_IMAGE_BUCKET}/${normalizedPath}`
+}
+
 type BrandItemProps = {
   brand: Brand
   currentUserRole: string
@@ -27,6 +50,10 @@ export function BrandItem({
   const canManage = isAdmin || isOwner
   const [editing, setEditing] = useState(false)
   const placeholderImageUrl = '/no_image.webp'
+  const brandImageUrl = useMemo(
+    () => buildBrandImageUrl(brand.imagePath) ?? placeholderImageUrl,
+    [brand.imagePath, placeholderImageUrl],
+  )
   const createdAtText = useMemo(() => {
     try {
       return new Intl.DateTimeFormat('ja-JP', {
@@ -85,13 +112,14 @@ export function BrandItem({
 
             <div className="overflow-hidden rounded-2xl border border-emerald-50 bg-[#c3c88d]">
               <Image
-                src={placeholderImageUrl}
-                alt="No Image"
+                src={brandImageUrl}
+                alt={brand.imagePath ? `${brand.name}の画像` : 'No Image'}
                 width={600}
                 height={400}
                 className="h-48 w-full object-cover"
                 loading="lazy"
                 sizes="(max-width: 1024px) 100vw, 33vw"
+                unoptimized={IS_LOCAL_SUPABASE}
               />
             </div>
           </CardContent>

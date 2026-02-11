@@ -8,6 +8,7 @@ type UpdateBrandInput = {
   country?: string | null
   userId: string
   userRole: string
+  imagePath?: string | null
 }
 
 export async function updateBrandInDB({
@@ -16,6 +17,7 @@ export async function updateBrandInDB({
   country,
   userId,
   userRole,
+  imagePath,
 }: UpdateBrandInput) {
   const brand = await prisma.brand.findUnique({ where: { id: brandId } })
 
@@ -41,6 +43,7 @@ export async function updateBrandInDB({
     data: {
       name,
       country: country ?? null,
+      ...(imagePath !== undefined ? { imagePath } : {}),
     },
   })
 }

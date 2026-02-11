@@ -11,6 +11,7 @@ export const getErrorMessage = (errorCode: ErrorCode | string): string => {
         : 'このメールアドレスは既に登録されています',
     NOT_FOUND: '投稿が見つかりません',
     FORBIDDEN: 'この操作を行う権限がありません',
+    BRAND_EXISTS: '同じ名前のメーカー・店舗が既に存在します',
   }
 
   return messages[errorCode as ErrorCode] || '予期せぬエラーが発生しました'

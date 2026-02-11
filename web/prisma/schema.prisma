@@ -121,6 +121,7 @@ model Brand {
   id         String      @id @default(uuid())
   name       String      @unique
   country    String?
+  imagePath  String?
   userId     String?
   chocolates Chocolate[]
   places     Place[] // 直営店がある場合のみ紐付く
