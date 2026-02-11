@@ -38,6 +38,8 @@ model Review {
   userId        String
   chocolateId   String?
   chocolate     Chocolate? @relation(fields: [chocolateId], references: [id])
+  brandId       String?
+  brand         Brand?     @relation(fields: [brandId], references: [id])
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments      Comment[]
   // 場所情報（Google Places）への参照（任意）
@@ -124,6 +126,7 @@ model Brand {
   imagePath  String?
   userId     String?
   chocolates Chocolate[]
+  reviews    Review[]
   places     Place[] // 直営店がある場合のみ紐付く
   user       User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
   createdAt  DateTime    @default(now())

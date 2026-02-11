@@ -28,6 +28,12 @@ export async function createReview(
     return { isSuccess: false, errorCode: ErrorCodes.INVALID_INPUT }
   }
 
+  const brandIdRaw = formData.get('brandId')
+  const brandId =
+    typeof brandIdRaw === 'string' && brandIdRaw.trim().length > 0
+      ? brandIdRaw.trim()
+      : ''
+
   const chocolateIdRaw = formData.get('chocolateId')
   const chocolateId =
     typeof chocolateIdRaw === 'string' && chocolateIdRaw.trim().length > 0
@@ -39,7 +45,7 @@ export async function createReview(
     content: formData.get('content')?.toString() ?? '',
     mintiness: Number(formData.get('mintiness') ?? 0),
     chocoRichness: Number(formData.get('chocoRichness') ?? 0),
-    chocolateId,
+    brandId,
     imagePath,
   }
 
@@ -72,7 +78,8 @@ export async function createReview(
       content: parsed.data.content,
       mintiness: parsed.data.mintiness,
       chocoRichness: parsed.data.chocoRichness,
-      chocolateId: parsed.data.chocolateId ?? null,
+      brandId: parsed.data.brandId,
+      chocolateId,
       userId: session.user.id,
       placeId,
       imagePath: parsed.data.imagePath,

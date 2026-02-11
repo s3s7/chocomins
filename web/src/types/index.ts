@@ -10,10 +10,12 @@ import {
 
 export type ReviewWithUser = Review & {
   user: Pick<User, 'name'> | null
-  chocolate: Pick<Chocolate, 'name'> & {
-    brand?: Pick<Brand, 'name'> | null
-    category?: Pick<Category, 'name'> | null
-  }
+  chocolate:
+    | (Pick<Chocolate, 'name'> & {
+        brand?: Pick<Brand, 'name'> | null
+        category?: Pick<Category, 'name'> | null
+      })
+    | null
   place:
     | (Pick<Place, 'lat' | 'lng' | 'address' | 'name'> & {
         lat: number | null

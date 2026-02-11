@@ -16,11 +16,11 @@ export async function updateReview(
     return { isSuccess: false, errorCode: ErrorCodes.UNAUTHORIZED }
   }
 
-  const chocolateIdRaw = formData.get('chocolateId')
-  const normalizedChocolateId =
-    typeof chocolateIdRaw === 'string' && chocolateIdRaw.trim().length > 0
-      ? chocolateIdRaw.trim()
-      : undefined
+  const brandIdRaw = formData.get('brandId')
+  const normalizedBrandId =
+    typeof brandIdRaw === 'string' && brandIdRaw.trim().length > 0
+      ? brandIdRaw.trim()
+      : ''
 
   const input: EditReviewInput = {
     reviewId: formData.get('reviewId')?.toString() ?? '',
@@ -28,7 +28,7 @@ export async function updateReview(
     content: formData.get('content')?.toString() ?? '',
     mintiness: Number(formData.get('mintiness') ?? 0),
     chocoRichness: Number(formData.get('chocoRichness') ?? 0),
-    chocolateId: normalizedChocolateId,
+    brandId: normalizedBrandId,
   }
 
   // ★ 画像パス（任意）
@@ -83,7 +83,7 @@ export async function updateReview(
       content: parsed.data.content,
       mintiness: parsed.data.mintiness,
       chocoRichness: parsed.data.chocoRichness,
-      chocolateId: parsed.data.chocolateId ?? null,
+      brandId: parsed.data.brandId,
       userId: session.user.id,
       userRole: session.user.role,
       placeId,

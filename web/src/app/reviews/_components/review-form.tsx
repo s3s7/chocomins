@@ -34,23 +34,20 @@ import {
 } from './place-autocomplete-field'
 import { ImgEditor } from '@/lib/img-editor'
 
-type ChocolateOption = {
+type BrandOption = {
   id: string
   name: string
 }
 
 const imgEditor = new ImgEditor()
-const NO_CHOCOLATE_VALUE = '__NO_CHOCOLATE__'
 
 const MAX_BYTES = 5 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 export const ReviewForm = () => {
   const [state, dispatch, isPending] = useActionState(createReview, null)
-  const [chocolateOptions, setChocolateOptions] = useState<ChocolateOption[]>(
-    [],
-  )
-  const [chocolateLoading, setChocolateLoading] = useState(true)
+  const [brandOptions, setBrandOptions] = useState<BrandOption[]>([])
+  const [brandLoading, setBrandLoading] = useState(true)
   const [placeSelection, setPlaceSelection] = useState<PlaceSelection>({})
   const router = useRouter()
 
@@ -67,7 +64,7 @@ export const ReviewForm = () => {
       content: '',
       mintiness: 0,
       chocoRichness: 0,
-      chocolateId: undefined,
+      brandId: '',
       address: '',
       imagePath: undefined,
     },
@@ -114,9 +111,7 @@ export const ReviewForm = () => {
     formData.append('content', values.content)
     formData.append('mintiness', String(values.mintiness))
     formData.append('chocoRichness', String(values.chocoRichness))
-    if (values.chocolateId) {
-      formData.append('chocolateId', values.chocolateId)
-    }
+    formData.append('brandId', values.brandId)
 
     if (placeSelection.googlePlaceId) {
       formData.append('googlePlaceId', placeSelection.googlePlaceId as string)
@@ -159,20 +154,20 @@ export const ReviewForm = () => {
   }, [state, form, router])
 
   useEffect(() => {
-    const fetchChocolates = async () => {
+    const fetchBrands = async () => {
       try {
-        const response = await fetch('/api/chocolates', { cache: 'no-store' })
-        if (!response.ok) throw new Error('Failed to fetch chocolates')
+        const response = await fetch('/api/brands', { cache: 'no-store' })
+        if (!response.ok) throw new Error('Failed to fetch brands')
         const data = await response.json()
-        setChocolateOptions(data.chocolates ?? [])
+        setBrandOptions(data.brands ?? [])
       } catch (error) {
-        console.error('Failed to load chocolates', error)
-        toast.error('チョコレート一覧の取得に失敗しました')
+        console.error('Failed to load brands', error)
+        toast.error('メーカー・店舗一覧の取得に失敗しました')
       } finally {
-        setChocolateLoading(false)
+        setBrandLoading(false)
       }
     }
-    fetchChocolates()
+    fetchBrands()
   }, [])
 
   return (
@@ -206,46 +201,41 @@ export const ReviewForm = () => {
 
         <FormField
           control={form.control}
-          name="chocolateId"
+          name="brandId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>チョコレート</FormLabel>
+              <FormLabel>メーカー・店舗</FormLabel>
               <Select
                 name={field.name}
-                onValueChange={(value) =>
-                  field.onChange(
-                    value === NO_CHOCOLATE_VALUE ? undefined : value,
-                  )
-                }
-                value={field.value ?? NO_CHOCOLATE_VALUE}
-                disabled={isPending || chocolateLoading}
+                onValueChange={field.onChange}
+                value={field.value === '' ? undefined : field.value}
+                disabled={isPending || brandLoading || brandOptions.length === 0}
               >
                 <FormControl>
                   <SelectTrigger className="w-full">
                     <SelectValue
                       placeholder={
-                        chocolateLoading ? '取得中...' : '選択してください'
+                        brandLoading ? '取得中...' : '選択してください'
                       }
                     />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value={NO_CHOCOLATE_VALUE}>紐付けなし</SelectItem>
-                  {chocolateOptions.length === 0 ? (
+                  {brandOptions.length === 0 ? (
                     <div className="text-muted-foreground px-2 py-2 text-sm">
-                      チョコレートが登録されていません
+                      メーカー・店舗が登録されていません
                     </div>
                   ) : (
-                    chocolateOptions.map((chocolate) => (
-                      <SelectItem key={chocolate.id} value={chocolate.id}>
-                        {chocolate.name}
+                    brandOptions.map((brand) => (
+                      <SelectItem key={brand.id} value={brand.id}>
+                        {brand.name}
                       </SelectItem>
                     ))
                   )}
                 </SelectContent>
               </Select>
               <FormDescription>
-                登録済みのチョコレートから選択してください
+                登録済みのメーカー・店舗から選択してください（必須）
               </FormDescription>
               <FormMessage />
             </FormItem>
