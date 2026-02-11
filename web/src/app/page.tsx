@@ -4,7 +4,6 @@ import Image from 'next/image'
 import {
   Calendar,
   Gift,
-  Inbox,
   Users,
   Eye,
   type LucideIcon,
@@ -33,7 +32,6 @@ const zenMaruGothic = Zen_Maru_Gothic({
   display: 'swap',
 })
 
-
 export default async function Home() {
   const session = await auth()
   const isSignedIn = Boolean(session?.user)
@@ -58,16 +56,6 @@ export default async function Home() {
       accent: 'from-[#d4f5ea] via-[#97d2b5] to-white',
       ctaLabel: isSignedIn ? '店舗・を登録' : 'ログインして登録',
       ctaHref: isSignedIn ? '/brands/new' : '/signin',
-    },
-    {
-      title: 'チョコミント商品の登録',
-      description: '商品情報、価格などを保存して、食べた商品を記録しましょう。',
-      highlight: 'Chocolate Notes',
-      icon: Inbox,
-      accent: 'from-[#d9f8ee] via-[#9fd8c0] to-white',
-      ctaLabel: isSignedIn ? 'チョコを登録' : 'ログインして登録',
-      ctaHref: isSignedIn ? '/chocolates/new' : '/signin',
-      note: '写真投稿機能は現在開発中です。',
     },
     {
       title: 'レビューを投稿',
@@ -181,7 +169,7 @@ export default async function Home() {
               <Button
                 asChild
                 size="lg"
-                className="rounded-full border border-transparent bg-[#8FCBAB] px-6 py-3  text-slate-900 shadow-lg hover:bg-[#7BB898] hover:shadow-xl"
+                className="rounded-full border border-transparent bg-[#8FCBAB] px-6 py-3 text-slate-900 shadow-lg hover:bg-[#7BB898] hover:shadow-xl"
               >
                 <Link href={primaryCta.href}>{primaryCta.label}</Link>
               </Button>

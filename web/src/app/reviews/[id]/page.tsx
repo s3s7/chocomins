@@ -23,7 +23,7 @@ export default async function ReviewDetailPage({
 
   return (
     <section className="px-1 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-4xl rounded-2xl bg-white p-3 sm:p-6 shadow-lg">
+      <div className="mx-auto max-w-4xl rounded-2xl bg-white p-3 shadow-lg sm:p-6">
         <ReviewContent
           review={review}
           currentUserId={currentUserId}

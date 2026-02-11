@@ -4,7 +4,7 @@ import { Role } from '@prisma/client'
 
 type UpdateReviewInput = {
   reviewId: string
-  title: string
+  chocolateName: string
   content: string
   mintiness: number
   chocoRichness: number
@@ -20,7 +20,7 @@ type UpdateReviewInput = {
 
 export async function updateReviewInDB({
   reviewId,
-  title,
+  chocolateName,
   content,
   mintiness,
   chocoRichness,
@@ -53,7 +53,7 @@ export async function updateReviewInDB({
   return await prisma.review.update({
     where: { id: reviewId },
     data: {
-      title,
+      chocolateName,
       content,
       mintiness,
       chocoRichness,

@@ -63,7 +63,9 @@ export function EditBrandModal({ brand, open, onCloseAction }: Props) {
   const [state, dispatch, isPending] = useActionState(updateBrand, null)
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null)
-  const [imagePath, setImagePath] = useState<string | null>(brand.imagePath ?? null)
+  const [imagePath, setImagePath] = useState<string | null>(
+    brand.imagePath ?? null,
+  )
   const [imageUploading, setImageUploading] = useState(false)
   const [removeImage, setRemoveImage] = useState(false)
 
@@ -75,7 +77,9 @@ export function EditBrandModal({ brand, open, onCloseAction }: Props) {
     () => (imagePath ? buildBrandImageUrl(imagePath) : null),
     [imagePath],
   )
-  const shownPreview = imagePreviewUrl ?? (removeImage ? null : computedImagePathUrl ?? existingImageUrl)
+  const shownPreview =
+    imagePreviewUrl ??
+    (removeImage ? null : (computedImagePathUrl ?? existingImageUrl))
 
   const form = useForm<EditBrandInput>({
     resolver: zodResolver(editBrandSchema),
@@ -236,7 +240,9 @@ export function EditBrandModal({ brand, open, onCloseAction }: Props) {
                   画像を削除
                 </Button>
                 {imageUploading && (
-                  <span className="text-xs text-gray-500">画像アップロード中...</span>
+                  <span className="text-xs text-gray-500">
+                    画像アップロード中...
+                  </span>
                 )}
               </div>
 

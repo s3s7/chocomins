@@ -24,7 +24,7 @@ export async function updateReview(
 
   const input: EditReviewInput = {
     reviewId: formData.get('reviewId')?.toString() ?? '',
-    title: formData.get('title')?.toString() ?? '',
+    chocolateName: formData.get('chocolateName')?.toString() ?? '',
     content: formData.get('content')?.toString() ?? '',
     mintiness: Number(formData.get('mintiness') ?? 0),
     chocoRichness: Number(formData.get('chocoRichness') ?? 0),
@@ -79,7 +79,7 @@ export async function updateReview(
 
     await updateReviewInDB({
       reviewId: parsed.data.reviewId,
-      title: parsed.data.title,
+      chocolateName: parsed.data.chocolateName,
       content: parsed.data.content,
       mintiness: parsed.data.mintiness,
       chocoRichness: parsed.data.chocoRichness,

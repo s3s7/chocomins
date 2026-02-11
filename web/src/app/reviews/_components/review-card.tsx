@@ -96,12 +96,18 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
   const userName = review.user?.name ?? '匿名'
   const avatarColor = useMemo(() => getAvatarColor(userName), [userName])
   const rating = clampRating(review.mintiness)
-  const chocolateName = review.chocolate?.name ?? 'チョコレート未登録'
+  const chocolateNameFromRelation =
+    review.chocolate?.name ?? 'チョコレート未登録'
   const chocolateBrand =
     review.brand?.name ??
     review.chocolate?.brand?.name ??
     'メーカー・店舗未設定'
   const placeholderImageUrl = '/no_image.webp'
+  const reviewLabel =
+    review.chocolateName?.length > 0
+      ? review.chocolateName
+      : chocolateNameFromRelation
+  const chocolateHeading = reviewLabel
 
   // ★投稿画像があればそれを、なければ no_image
   const imageUrl = buildReviewImageUrl(review.imagePath) ?? placeholderImageUrl
@@ -111,7 +117,7 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
       <div className="mb-4 w-full overflow-hidden rounded-2xl border border-emerald-50 bg-[#c3c88d]">
         <Image
           src={imageUrl}
-          alt={review.imagePath ? `${review.title} の投稿画像` : 'No Image'}
+          alt={review.imagePath ? `${reviewLabel} の投稿画像` : 'No Image'}
           width={600}
           height={400}
           className="h-48 w-full object-cover"
@@ -123,14 +129,12 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
       </div>
 
       <div className="mt-5 space-y-1">
-        <p className="text-sm font-semibold text-gray-500">
-          {chocolateBrand}
-        </p>
-        <p className="text-xl font-bold text-gray-900">{chocolateName}</p>
+        <p className="text-sm font-semibold text-gray-500">{chocolateBrand}</p>
+        <p className="text-xl font-bold text-gray-900">{chocolateHeading}</p>
       </div>
 
       <h3 className="mt-4 text-lg font-semibold text-gray-900">
-        {review.title}
+        {reviewLabel}
       </h3>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -156,7 +160,7 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
         <Link
           href={linkHref}
           className="flex h-full flex-col"
-          aria-label={`${review.title} のレビュー詳細へ`}
+          aria-label={`${reviewLabel} のレビュー詳細へ`}
         >
           <CardContent className="p-6">{cardInner}</CardContent>
 

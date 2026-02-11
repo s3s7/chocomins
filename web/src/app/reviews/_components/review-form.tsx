@@ -60,7 +60,7 @@ export const ReviewForm = () => {
   const form = useForm<ReviewInput>({
     resolver: zodResolver(reviewSchema),
     defaultValues: {
-      title: '',
+      chocolateName: '',
       content: '',
       mintiness: 0,
       chocoRichness: 0,
@@ -107,7 +107,7 @@ export const ReviewForm = () => {
     }
 
     const formData = new FormData()
-    formData.append('title', values.title)
+    formData.append('chocolateName', values.chocolateName)
     formData.append('content', values.content)
     formData.append('mintiness', String(values.mintiness))
     formData.append('chocoRichness', String(values.chocoRichness))
@@ -178,13 +178,13 @@ export const ReviewForm = () => {
       >
         <FormField
           control={form.control}
-          name="title"
+          name="chocolateName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>タイトル</FormLabel>
+              <FormLabel>チョコレート名</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="タイトルを入力"
+                  placeholder="チョコレート名を入力"
                   className="!bg-white"
                   {...field}
                 />
@@ -209,7 +209,9 @@ export const ReviewForm = () => {
                 name={field.name}
                 onValueChange={field.onChange}
                 value={field.value === '' ? undefined : field.value}
-                disabled={isPending || brandLoading || brandOptions.length === 0}
+                disabled={
+                  isPending || brandLoading || brandOptions.length === 0
+                }
               >
                 <FormControl>
                   <SelectTrigger className="w-full">

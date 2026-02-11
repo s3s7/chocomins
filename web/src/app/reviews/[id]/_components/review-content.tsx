@@ -55,7 +55,7 @@ const ScoreStars = ({
 
   return (
     <div className="rounded-2xl border border-emerald-100 bg-gradient-to-b from-emerald-50 to-white px-4 py-3 shadow-sm">
-      <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+      <p className="text-xs font-semibold tracking-wide text-emerald-700 uppercase">
         {label}
       </p>
       <div className="mt-2 flex items-center gap-1">
@@ -123,12 +123,20 @@ export function ReviewContent({
 
   const imageUrl = buildReviewImageUrl(review.imagePath) ?? placeholderImageUrl
   const shareUrl = `/reviews/${review.id}`
-  const chocolateName = review.chocolate?.name ?? 'チョコレート未登録'
+  const chocolateNameFromRelation =
+    review.chocolate?.name ?? 'チョコレート未登録'
   const chocolateBrand =
     review.brand?.name ??
     review.chocolate?.brand?.name ??
     'メーカー・店舗未設定'
-  const chocolateCategory = review.chocolate?.category?.name ?? 'カテゴリ未設定'
+  const shareTitle =
+    review.chocolateName?.length > 0
+      ? review.chocolateName
+      : `${chocolateBrand} ${chocolateNameFromRelation}`.trim()
+  const chocolateHeading =
+    review.chocolateName?.length > 0
+      ? review.chocolateName
+      : chocolateNameFromRelation
   const userName = review.user?.name ?? '匿名'
   const avatarColor = useMemo(() => getAvatarColor(userName), [userName])
   const createdAtLabel = useMemo(() => {
@@ -177,14 +185,21 @@ export function ReviewContent({
               {chocolateBrand}
             </span>
             <br></br>
-            {chocolateName}
+            {chocolateHeading}
           </h1>
-         
+
           <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-emerald-50 bg-emerald-50/40 p-3 text-sm text-gray-700">
-            
             <div className="flex flex-wrap items-center gap-2">
-              <ScoreStars label="ミント感" value={review.mintiness} variant="chip" />
-              <ScoreStars label="チョコ感" value={review.chocoRichness} variant="chip" />
+              <ScoreStars
+                label="ミント感"
+                value={review.mintiness}
+                variant="chip"
+              />
+              <ScoreStars
+                label="チョコ感"
+                value={review.chocoRichness}
+                variant="chip"
+              />
             </div>
           </div>
         </div>
@@ -196,7 +211,7 @@ export function ReviewContent({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imageUrl}
-              alt={`${chocolateName}の投稿画像`}
+              alt={`${shareTitle}の投稿画像`}
               className="h-full w-full object-cover"
               loading="lazy"
             />
@@ -220,7 +235,7 @@ export function ReviewContent({
         </div>
 
         <div className="mt-6 w-full md:mt-0 md:w-1/2">
-          <div className="rounded-xl border border-emerald-100 bg-white p-2 sm:p-4 shadow">
+          <div className="rounded-xl border border-emerald-100 bg-white p-2 shadow sm:p-4">
             {typeof lat === 'number' && typeof lng === 'number' ? (
               <Map lat={lat} lng={lng} />
             ) : (
@@ -245,8 +260,9 @@ export function ReviewContent({
       <div className="mt-6 flex flex-col gap-3 text-sm text-gray-500 sm:flex-row sm:items-center">
         <ShareButton
           url={shareUrl}
-          title={review.title}
+          title={shareTitle}
           showCopyButton={false}
+          showNativeShare={false}
           className="sm:ml-auto"
         />
       </div>
