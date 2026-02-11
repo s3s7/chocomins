@@ -181,7 +181,7 @@ export default async function Home() {
               <Button
                 asChild
                 size="lg"
-                className="rounded-full border border-transparent bg-[#8FCBAB] px-6 py-3 text-lg text-slate-900 shadow-lg hover:bg-[#7BB898] hover:shadow-xl"
+                className="rounded-full border border-transparent bg-[#8FCBAB] px-6 py-3  text-slate-900 shadow-lg hover:bg-[#7BB898] hover:shadow-xl"
               >
                 <Link href={primaryCta.href}>{primaryCta.label}</Link>
               </Button>

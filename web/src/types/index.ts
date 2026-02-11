@@ -49,6 +49,7 @@ export const ErrorCodes = {
   UNAUTHORIZED: 'UNAUTHORIZED',
   NOT_FOUND: 'NOT_FOUND',
   FORBIDDEN: 'FORBIDDEN',
+  BRAND_EXISTS: 'BRAND_EXISTS',
 } as const
 
 export type ErrorCode = keyof typeof ErrorCodes

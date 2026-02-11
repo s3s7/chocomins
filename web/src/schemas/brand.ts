@@ -3,6 +3,7 @@ import { z } from 'zod'
 export const brandSchema = z.object({
   name: z.string().min(1, 'メーカー・店舗名は必須です'),
   country: z.string().min(1).optional(),
+  imagePath: z.string().optional(),
 })
 
 export type BrandInput = z.infer<typeof brandSchema>

@@ -52,11 +52,17 @@ import { supabaseClient } from './supabase-client'
 
 const BUCKET = 'review-images'
 
+type ImgEditorOptions = {
+  endpoint?: string
+}
+
 export class ImgEditor {
   private supabase
+  private endpoint: string
 
-  constructor() {
+  constructor(options?: ImgEditorOptions) {
     this.supabase = supabaseClient
+    this.endpoint = options?.endpoint ?? '/api/reviews/image-upload'
   }
 
   // 署名発行APIを叩いて、署名トークンでアップロードする
@@ -72,7 +78,7 @@ export class ImgEditor {
     // if (!res.ok) {
     //   throw new Error('署名付きアップロードの準備に失敗しました')
     // }
-    const res = await fetch('/api/reviews/image-upload', {
+    const res = await fetch(this.endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ext }),

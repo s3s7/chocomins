@@ -15,6 +15,20 @@ export async function updateBrand(
     return { isSuccess: false, errorCode: ErrorCodes.UNAUTHORIZED }
 
   const rawCountry = formData.get('country')?.toString()
+  const imagePathRaw = formData.get('imagePath')
+  const imagePath: string | null | undefined =
+    imagePathRaw === null
+      ? undefined
+      : imagePathRaw.toString().length === 0
+        ? null
+        : imagePathRaw.toString()
+
+  if (
+    typeof imagePath === 'string' &&
+    !imagePath.startsWith(`brands/${session.user.id}/`)
+  ) {
+    return { isSuccess: false, errorCode: ErrorCodes.INVALID_INPUT }
+  }
   const input: EditBrandInput = {
     brandId: formData.get('brandId')?.toString() ?? '',
     name: formData.get('name')?.toString() ?? '',
@@ -36,6 +50,7 @@ export async function updateBrand(
       country: parsed.data.country,
       userId: session.user.id,
       userRole: session.user.role,
+      imagePath,
     })
 
     revalidatePath('/brands')
