@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma'
 
 type CreateReviewInput = {
-  chocolateName: string
+  title: string
   content: string
   mintiness: number
   chocoRichness: number
@@ -15,7 +15,7 @@ type CreateReviewInput = {
 export async function createReviewInDB(input: CreateReviewInput) {
   return await prisma.review.create({
     data: {
-      chocolateName: input.chocolateName,
+      title: input.title,
       content: input.content,
       mintiness: input.mintiness,
       chocoRichness: input.chocoRichness,

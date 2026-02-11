@@ -54,7 +54,7 @@ export function ReviewItem({
       <li className="space-y-2 rounded border p-4">
         <Link href={`/reviews/${review.id}`} className="block">
           <h3 className="text-lg font-semibold text-blue-600 hover:underline">
-            {review.chocolateName?.length ? review.chocolateName : 'レビュー'}
+            {review.title?.length ? review.title : 'レビュー'}
           </h3>
         </Link>
         <p className="text-sm text-gray-600">

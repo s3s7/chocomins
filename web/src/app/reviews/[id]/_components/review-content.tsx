@@ -130,13 +130,10 @@ export function ReviewContent({
     review.chocolate?.brand?.name ??
     'メーカー・店舗未設定'
   const shareTitle =
-    review.chocolateName?.length > 0
-      ? review.chocolateName
+    review.title?.length > 0
+      ? review.title
       : `${chocolateBrand} ${chocolateNameFromRelation}`.trim()
-  const chocolateHeading =
-    review.chocolateName?.length > 0
-      ? review.chocolateName
-      : chocolateNameFromRelation
+  const chocolateHeading = shareTitle
   const userName = review.user?.name ?? '匿名'
   const avatarColor = useMemo(() => getAvatarColor(userName), [userName])
   const createdAtLabel = useMemo(() => {

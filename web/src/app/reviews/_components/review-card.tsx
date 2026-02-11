@@ -104,10 +104,7 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
     'メーカー・店舗未設定'
   const placeholderImageUrl = '/no_image.webp'
   const reviewLabel =
-    review.chocolateName?.length > 0
-      ? review.chocolateName
-      : chocolateNameFromRelation
-  const chocolateHeading = reviewLabel
+    review.title?.length > 0 ? review.title : chocolateNameFromRelation
 
   // ★投稿画像があればそれを、なければ no_image
   const imageUrl = buildReviewImageUrl(review.imagePath) ?? placeholderImageUrl
@@ -130,7 +127,7 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
 
       <div className="mt-5 space-y-1">
         <p className="text-sm font-semibold text-gray-500">{chocolateBrand}</p>
-        <p className="text-xl font-bold text-gray-900">{chocolateHeading}</p>
+        <p className="text-xl font-bold text-gray-900">{reviewLabel}</p>
       </div>
 
       <h3 className="mt-4 text-lg font-semibold text-gray-900">

@@ -60,7 +60,7 @@ export const ReviewForm = () => {
   const form = useForm<ReviewInput>({
     resolver: zodResolver(reviewSchema),
     defaultValues: {
-      chocolateName: '',
+      title: '',
       content: '',
       mintiness: 0,
       chocoRichness: 0,
@@ -107,7 +107,7 @@ export const ReviewForm = () => {
     }
 
     const formData = new FormData()
-    formData.append('chocolateName', values.chocolateName)
+    formData.append('title', values.title)
     formData.append('content', values.content)
     formData.append('mintiness', String(values.mintiness))
     formData.append('chocoRichness', String(values.chocoRichness))
@@ -178,7 +178,7 @@ export const ReviewForm = () => {
       >
         <FormField
           control={form.control}
-          name="chocolateName"
+          name="title"
           render={({ field }) => (
             <FormItem>
               <FormLabel>チョコレート名</FormLabel>
