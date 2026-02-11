@@ -105,9 +105,26 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
 
   const cardInner = (
     <>
-      <span>{chocolateName}</span>
-      <div className="mt-5 flex flex-wrap items-center gap-2 text-xs text-gray-500">
-        <span>メーカー・店舗名：{chocolateBrand}</span>
+      <div className="mb-4 w-full overflow-hidden rounded-2xl border border-emerald-50 bg-[#c3c88d]">
+        <Image
+          src={imageUrl}
+          alt={review.imagePath ? `${review.title} の投稿画像` : 'No Image'}
+          width={600}
+          height={400}
+          className="h-48 w-full object-cover"
+          loading="lazy"
+          sizes="(max-width: 1024px) 100vw, 33vw"
+          // ローカルSupabaseのときだけ最適化をOFF
+          unoptimized={IS_LOCAL_SUPABASE}
+        />
+      </div>
+
+   
+      <div className="mt-5 space-y-1">
+        <p className="text-sm font-semibold text-gray-500">
+          {chocolateBrand}
+        </p>
+        <p className="text-xl font-bold text-gray-900">{chocolateName}</p>
       </div>
 
       <h3 className="mt-4 text-lg font-semibold text-gray-900">
@@ -121,20 +138,6 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
             {rating} / 5
           </span>
         </div>
-      </div>
-
-      <div className="mt-4 w-full overflow-hidden rounded-2xl border border-emerald-50 bg-[#c3c88d]">
-        <Image
-          src={imageUrl}
-          alt={review.imagePath ? `${review.title} の投稿画像` : 'No Image'}
-          width={600}
-          height={400}
-          className="h-48 w-full object-cover"
-          loading="lazy"
-          sizes="(max-width: 1024px) 100vw, 33vw"
-          // ★ここがポイント：ローカルSupabaseのときだけ最適化をOFF
-          unoptimized={IS_LOCAL_SUPABASE}
-        />
       </div>
     </>
   )
