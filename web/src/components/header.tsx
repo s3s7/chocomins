@@ -59,14 +59,14 @@ export function Header() {
 
   // ヘッダー背景：
   // - ホーム：上は透明、スクロールで白+ぼかし
-  // - ホーム以外：常に白
+  // - ホーム以外：BEDDE2（背景色）
   const headerClass = [
     'fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between px-4 transition-colors duration-300',
     isHome
       ? scrolled
         ? 'bg-white/80 text-slate-900 backdrop-blur border-b border-slate-200'
         : 'bg-transparent text-slate-900'
-      : 'bg-white text-slate-900 border-b border-slate-200',
+      : 'bg-[#BEDDE2] text-slate-900 border-slate-200',
   ].join(' ')
 
   const logoClass = [

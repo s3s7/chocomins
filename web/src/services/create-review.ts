@@ -6,7 +6,8 @@ type CreateReviewInput = {
   mintiness: number
   chocoRichness: number
   userId: string
-  chocolateId: string
+  chocolateId?: string | null
+  brandId: string
   placeId?: string
   imagePath?: string
 }
@@ -19,7 +20,8 @@ export async function createReviewInDB(input: CreateReviewInput) {
       mintiness: input.mintiness,
       chocoRichness: input.chocoRichness,
       userId: input.userId,
-      chocolateId: input.chocolateId,
+      brandId: input.brandId,
+      chocolateId: input.chocolateId ?? null,
       placeId: input.placeId,
       imagePath: input.imagePath,
     },

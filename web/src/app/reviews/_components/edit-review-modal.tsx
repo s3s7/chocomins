@@ -53,7 +53,7 @@ type Props = {
   onCloseAction: () => void
 }
 
-type ChocolateOption = {
+type BrandOption = {
   id: string
   name: string
 }
@@ -83,10 +83,8 @@ const buildReviewImageUrl = (imagePath?: string | null) => {
 
 export function EditReviewModal({ review, open, onCloseAction }: Props) {
   const [state, dispatch, isPending] = useActionState(updateReview, null)
-  const [chocolateOptions, setChocolateOptions] = useState<ChocolateOption[]>(
-    [],
-  )
-  const [chocolateLoading, setChocolateLoading] = useState(true)
+  const [brandOptions, setBrandOptions] = useState<BrandOption[]>([])
+  const [brandLoading, setBrandLoading] = useState(true)
   const [placeSelection, setPlaceSelection] = useState<PlaceSelection>({})
 
   // --- 画像まわり ---
@@ -114,7 +112,7 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
       content: review.content,
       mintiness: review.mintiness,
       chocoRichness: review.chocoRichness ?? 0,
-      chocolateId: review.chocolateId,
+      brandId: review.brandId ?? '',
       address: '',
       // imagePath はフォーム入力としては持たせなくてもOK（FormDataで送る）
     },
@@ -150,7 +148,7 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
     formData.append('content', values.content)
     formData.append('mintiness', String(values.mintiness))
     formData.append('chocoRichness', String(values.chocoRichness))
-    formData.append('chocolateId', values.chocolateId)
+    formData.append('brandId', values.brandId)
 
     if (placeSelection.googlePlaceId) {
       formData.append('googlePlaceId', placeSelection.googlePlaceId)
@@ -223,21 +221,21 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
   }, [state, form, onCloseAction])
 
   useEffect(() => {
-    const fetchChocolates = async () => {
+    const fetchBrands = async () => {
       try {
-        const response = await fetch('/api/chocolates', { cache: 'no-store' })
-        if (!response.ok) throw new Error('Failed to fetch chocolates')
+        const response = await fetch('/api/brands', { cache: 'no-store' })
+        if (!response.ok) throw new Error('Failed to fetch brands')
         const data = await response.json()
-        setChocolateOptions(data.chocolates ?? [])
+        setBrandOptions(data.brands ?? [])
       } catch (error) {
-        console.error('Failed to load chocolates', error)
-        toast.error('チョコレート一覧の取得に失敗しました')
+        console.error('Failed to load brands', error)
+        toast.error('メーカー・店舗一覧の取得に失敗しました')
       } finally {
-        setChocolateLoading(false)
+        setBrandLoading(false)
       }
     }
 
-    fetchChocolates()
+    fetchBrands()
   }, [])
 
   return (
@@ -273,45 +271,43 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
 
             <FormField
               control={form.control}
-              name="chocolateId"
+              name="brandId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>チョコレート</FormLabel>
+                  <FormLabel>メーカー・店舗</FormLabel>
                   <Select
                     name={field.name}
                     onValueChange={field.onChange}
-                    value={field.value || undefined}
+                    value={field.value === '' ? undefined : field.value}
                     disabled={
-                      isPending ||
-                      chocolateLoading ||
-                      chocolateOptions.length === 0
+                      isPending || brandLoading || brandOptions.length === 0
                     }
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue
                           placeholder={
-                            chocolateLoading ? '取得中...' : '選択してください'
+                            brandLoading ? '取得中...' : '選択してください'
                           }
                         />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {chocolateOptions.length === 0 ? (
+                      {brandOptions.length === 0 ? (
                         <div className="text-muted-foreground px-2 py-2 text-sm">
-                          チョコレートが登録されていません
+                          メーカー・店舗が登録されていません
                         </div>
                       ) : (
-                        chocolateOptions.map((chocolate) => (
-                          <SelectItem key={chocolate.id} value={chocolate.id}>
-                            {chocolate.name}
+                        brandOptions.map((brand) => (
+                          <SelectItem key={brand.id} value={brand.id}>
+                            {brand.name}
                           </SelectItem>
                         ))
                       )}
                     </SelectContent>
                   </Select>
                   <FormDescription>
-                    登録済みのチョコレートから選択してください
+                    登録済みのメーカー・店舗から選択してください（必須）
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

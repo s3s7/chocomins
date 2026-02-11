@@ -8,7 +8,8 @@ type UpdateReviewInput = {
   content: string
   mintiness: number
   chocoRichness: number
-  chocolateId: string
+  chocolateId?: string | null
+  brandId: string
   userId: string
   userRole: string
   placeId?: string | null
@@ -24,6 +25,7 @@ export async function updateReviewInDB({
   mintiness,
   chocoRichness,
   chocolateId,
+  brandId,
   userId,
   userRole,
   placeId,
@@ -55,7 +57,8 @@ export async function updateReviewInDB({
       content,
       mintiness,
       chocoRichness,
-      chocolateId,
+      ...(chocolateId !== undefined ? { chocolateId } : {}),
+      brandId,
       ...(placeId !== undefined ? { placeId: placeId ?? null } : {}),
       // ★imagePath が渡されたときだけ更新する
       ...(imagePath !== undefined ? { imagePath } : {}),
