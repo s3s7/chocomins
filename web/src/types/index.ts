@@ -16,6 +16,7 @@ export type ReviewWithUser = Review & {
         category?: Pick<Category, 'name'> | null
       })
     | null
+  brand?: Pick<Brand, 'name'> | null
   place:
     | (Pick<Place, 'lat' | 'lng' | 'address' | 'name'> & {
         lat: number | null

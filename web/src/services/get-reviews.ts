@@ -18,6 +18,9 @@ export async function getReviews() {
           },
         },
       },
+      brand: {
+        select: { name: true },
+      },
       place: {
         select: { lat: true, lng: true, address: true, name: true },
       },

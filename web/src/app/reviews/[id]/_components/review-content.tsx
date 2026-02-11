@@ -124,7 +124,10 @@ export function ReviewContent({
   const imageUrl = buildReviewImageUrl(review.imagePath) ?? placeholderImageUrl
   const shareUrl = `/reviews/${review.id}`
   const chocolateName = review.chocolate?.name ?? 'チョコレート未登録'
-  const chocolateBrand = review.chocolate?.brand?.name ?? 'メーカー・店舗未設定'
+  const chocolateBrand =
+    review.brand?.name ??
+    review.chocolate?.brand?.name ??
+    'メーカー・店舗未設定'
   const chocolateCategory = review.chocolate?.category?.name ?? 'カテゴリ未設定'
   const userName = review.user?.name ?? '匿名'
   const avatarColor = useMemo(() => getAvatarColor(userName), [userName])
