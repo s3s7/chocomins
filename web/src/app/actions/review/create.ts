@@ -41,7 +41,7 @@ export async function createReview(
       : undefined
 
   const input: ReviewInput = {
-    chocolateName: formData.get('chocolateName')?.toString() ?? '',
+    title: formData.get('title')?.toString() ?? '',
     content: formData.get('content')?.toString() ?? '',
     mintiness: Number(formData.get('mintiness') ?? 0),
     chocoRichness: Number(formData.get('chocoRichness') ?? 0),
@@ -74,7 +74,7 @@ export async function createReview(
     }
 
     await createReviewInDB({
-      chocolateName: parsed.data.chocolateName,
+      title: parsed.data.title,
       content: parsed.data.content,
       mintiness: parsed.data.mintiness,
       chocoRichness: parsed.data.chocoRichness,

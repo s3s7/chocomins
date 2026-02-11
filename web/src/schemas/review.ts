@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const reviewSchema = z.object({
-  chocolateName: z
+  title: z
     .string()
     .min(1, 'チョコレート名は必須です')
     .max(30, 'チョコレート名は30文字以内で入力してください'),
