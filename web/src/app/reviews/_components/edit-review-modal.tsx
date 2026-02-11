@@ -59,6 +59,7 @@ type ChocolateOption = {
 }
 
 const imgEditor = new ImgEditor()
+const NO_CHOCOLATE_VALUE = '__NO_CHOCOLATE__'
 
 const MAX_BYTES = 5 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
@@ -114,7 +115,7 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
       content: review.content,
       mintiness: review.mintiness,
       chocoRichness: review.chocoRichness ?? 0,
-      chocolateId: review.chocolateId,
+      chocolateId: review.chocolateId ?? undefined,
       address: '',
       // imagePath はフォーム入力としては持たせなくてもOK（FormDataで送る）
     },
@@ -150,7 +151,9 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
     formData.append('content', values.content)
     formData.append('mintiness', String(values.mintiness))
     formData.append('chocoRichness', String(values.chocoRichness))
-    formData.append('chocolateId', values.chocolateId)
+    if (values.chocolateId) {
+      formData.append('chocolateId', values.chocolateId)
+    }
 
     if (placeSelection.googlePlaceId) {
       formData.append('googlePlaceId', placeSelection.googlePlaceId)
@@ -279,13 +282,13 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
                   <FormLabel>チョコレート</FormLabel>
                   <Select
                     name={field.name}
-                    onValueChange={field.onChange}
-                    value={field.value || undefined}
-                    disabled={
-                      isPending ||
-                      chocolateLoading ||
-                      chocolateOptions.length === 0
+                    onValueChange={(value) =>
+                      field.onChange(
+                        value === NO_CHOCOLATE_VALUE ? undefined : value,
+                      )
                     }
+                    value={field.value ?? NO_CHOCOLATE_VALUE}
+                    disabled={isPending || chocolateLoading}
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
@@ -297,6 +300,7 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
+                      <SelectItem value={NO_CHOCOLATE_VALUE}>紐付けなし</SelectItem>
                       {chocolateOptions.length === 0 ? (
                         <div className="text-muted-foreground px-2 py-2 text-sm">
                           チョコレートが登録されていません

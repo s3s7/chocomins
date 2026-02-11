@@ -16,7 +16,7 @@ export const reviewSchema = z.object({
     .number<number>()
     .min(0, 'チョコ感は0以上である必要があります')
     .max(5, 'チョコ感は5以下である必要があります'),
-  chocolateId: z.string().min(1, 'チョコレートは必須です'),
+  chocolateId: z.string().min(1).optional(),
   address: z.string().optional(),
   imagePath: z.string().optional(),
 })

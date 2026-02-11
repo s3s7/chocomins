@@ -36,8 +36,8 @@ model Review {
   chocoRichness Int?
   published     Boolean   @default(true)
   userId        String
-  chocolateId   String
-  chocolate     Chocolate @relation(fields: [chocolateId], references: [id])
+  chocolateId   String?
+  chocolate     Chocolate? @relation(fields: [chocolateId], references: [id])
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments      Comment[]
   // 場所情報（Google Places）への参照（任意）
