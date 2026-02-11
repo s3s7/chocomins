@@ -196,7 +196,6 @@ export function Header() {
             <Button asChild size="lg" className={authButtonClass}>
               <Link href="/brands">メーカー / 店舗一覧</Link>
             </Button>
-
           </div>
         )}
       </div>

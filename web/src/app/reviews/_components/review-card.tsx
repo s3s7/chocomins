@@ -96,7 +96,8 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
   const userName = review.user?.name ?? '匿名'
   const avatarColor = useMemo(() => getAvatarColor(userName), [userName])
   const rating = clampRating(review.mintiness)
-  const chocolateNameFromRelation = review.chocolate?.name ?? 'チョコレート未登録'
+  const chocolateNameFromRelation =
+    review.chocolate?.name ?? 'チョコレート未登録'
   const chocolateBrand =
     review.brand?.name ??
     review.chocolate?.brand?.name ??
@@ -128,9 +129,7 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
       </div>
 
       <div className="mt-5 space-y-1">
-        <p className="text-sm font-semibold text-gray-500">
-          {chocolateBrand}
-        </p>
+        <p className="text-sm font-semibold text-gray-500">{chocolateBrand}</p>
         <p className="text-xl font-bold text-gray-900">{chocolateHeading}</p>
       </div>
 

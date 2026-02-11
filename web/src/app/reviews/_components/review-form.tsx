@@ -209,7 +209,9 @@ export const ReviewForm = () => {
                 name={field.name}
                 onValueChange={field.onChange}
                 value={field.value === '' ? undefined : field.value}
-                disabled={isPending || brandLoading || brandOptions.length === 0}
+                disabled={
+                  isPending || brandLoading || brandOptions.length === 0
+                }
               >
                 <FormControl>
                   <SelectTrigger className="w-full">

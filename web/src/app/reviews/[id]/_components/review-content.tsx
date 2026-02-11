@@ -55,7 +55,7 @@ const ScoreStars = ({
 
   return (
     <div className="rounded-2xl border border-emerald-100 bg-gradient-to-b from-emerald-50 to-white px-4 py-3 shadow-sm">
-      <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+      <p className="text-xs font-semibold tracking-wide text-emerald-700 uppercase">
         {label}
       </p>
       <div className="mt-2 flex items-center gap-1">
@@ -137,7 +137,6 @@ export function ReviewContent({
     review.chocolateName?.length > 0
       ? review.chocolateName
       : chocolateNameFromRelation
-  const chocolateCategory = review.chocolate?.category?.name ?? 'カテゴリ未設定'
   const userName = review.user?.name ?? '匿名'
   const avatarColor = useMemo(() => getAvatarColor(userName), [userName])
   const createdAtLabel = useMemo(() => {
@@ -188,12 +187,19 @@ export function ReviewContent({
             <br></br>
             {chocolateHeading}
           </h1>
-         
+
           <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-emerald-50 bg-emerald-50/40 p-3 text-sm text-gray-700">
-            
             <div className="flex flex-wrap items-center gap-2">
-              <ScoreStars label="ミント感" value={review.mintiness} variant="chip" />
-              <ScoreStars label="チョコ感" value={review.chocoRichness} variant="chip" />
+              <ScoreStars
+                label="ミント感"
+                value={review.mintiness}
+                variant="chip"
+              />
+              <ScoreStars
+                label="チョコ感"
+                value={review.chocoRichness}
+                variant="chip"
+              />
             </div>
           </div>
         </div>
@@ -229,7 +235,7 @@ export function ReviewContent({
         </div>
 
         <div className="mt-6 w-full md:mt-0 md:w-1/2">
-          <div className="rounded-xl border border-emerald-100 bg-white p-2 sm:p-4 shadow">
+          <div className="rounded-xl border border-emerald-100 bg-white p-2 shadow sm:p-4">
             {typeof lat === 'number' && typeof lng === 'number' ? (
               <Map lat={lat} lng={lng} />
             ) : (

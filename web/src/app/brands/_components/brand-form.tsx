@@ -172,7 +172,11 @@ export const BrandForm = () => {
         /> */}
 
         <Button type="submit" disabled={isPending || imageUploading}>
-          {imageUploading ? '画像アップロード中...' : isPending ? '追加中...' : '追加'}
+          {imageUploading
+            ? '画像アップロード中...'
+            : isPending
+              ? '追加中...'
+              : '追加'}
         </Button>
       </form>
     </Form>

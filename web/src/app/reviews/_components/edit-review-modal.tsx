@@ -252,20 +252,6 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
 
             <FormField
               control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>タイトル</FormLabel>
-                  <FormControl>
-                    <Input placeholder="タイトルを入力" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="chocolateName"
               render={({ field }) => (
                 <FormItem>
