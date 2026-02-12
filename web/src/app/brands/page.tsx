@@ -6,7 +6,6 @@ export default async function BrandListPage() {
   const session = await auth()
   const brands = await getBrands()
   const currentUserRole = session?.user?.role ?? ''
-  const currentUserId = session?.user?.id ?? ''
 
   return (
     <main className="mx-auto max-w-6xl space-y-6 p-6">
@@ -14,7 +13,6 @@ export default async function BrandListPage() {
       <BrandList
         brands={brands}
         currentUserRole={currentUserRole}
-        currentUserId={currentUserId}
       />
     </main>
   )

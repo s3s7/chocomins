@@ -269,8 +269,8 @@ export function ReviewContent({
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Button
               type="button"
-              variant="outline"
               onClick={() => setEditing(true)}
+              className="rounded-full border border-transparent bg-[#8FCBAB] px-6 py-2 text-slate-900 shadow-lg hover:bg-[#7BB898] hover:shadow-xl"
             >
               編集
             </Button>

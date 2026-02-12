@@ -137,7 +137,11 @@ export function SignUpForm() {
           )}
         />
 
-        <Button type="submit" disabled={isPending}>
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="rounded-full border border-transparent bg-[#8FCBAB] px-6 py-3 text-slate-900 shadow-lg hover:bg-[#7BB898] hover:shadow-xl"
+        >
           {isPending ? '登録中...' : '新規登録'}
         </Button>
       </form>

@@ -181,10 +181,10 @@ export const ReviewForm = () => {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>チョコレート名</FormLabel>
+              <FormLabel>商品名</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="チョコレート名を入力"
+                  placeholder="商品名を入力"
                   className="!bg-white"
                   {...field}
                 />
