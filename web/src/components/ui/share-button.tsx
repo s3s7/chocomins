@@ -84,10 +84,10 @@ export default function ShareButton({
       '_blank',
       'noopener,noreferrer',
     )
-    if (!opened) {
-      // ポップアップブロック対策
-      window.location.href = intent.toString()
-    }
+    // if (!opened) {
+    //   // ポップアップブロック対策
+    //   window.location.href = intent.toString()
+    // }
   }
 
   return (

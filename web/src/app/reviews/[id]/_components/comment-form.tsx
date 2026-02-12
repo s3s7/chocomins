@@ -69,7 +69,7 @@ export function CommentForm({ reviewId }: { reviewId: string }) {
         <Button
           type="submit"
           disabled={isPending}
-          className="bg-[#CFE6DA] text-gray-800 hover:bg-[#b7dacf]"
+          className="rounded-full border border-transparent bg-[#8FCBAB] px-6 py-3 text-slate-900 shadow-lg hover:bg-[#7BB898] hover:shadow-xl"
         >
           {isPending ? '送信中...' : 'コメントを投稿'}
         </Button>

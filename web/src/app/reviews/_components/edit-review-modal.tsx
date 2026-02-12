@@ -474,7 +474,11 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
               <Button type="button" variant="outline" onClick={onCloseAction}>
                 キャンセル
               </Button>
-              <Button type="submit" disabled={isPending || imageUploading}>
+              <Button
+                type="submit"
+                disabled={isPending || imageUploading}
+                className="bg-[#CFE6DA] text-gray-800 hover:bg-[#b7dacf]"
+              >
                 {isPending
                   ? '保存中...'
                   : imageUploading

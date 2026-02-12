@@ -160,8 +160,8 @@ export function PlaceAutocompleteField({
           if (NativePlaceEl) {
             try {
               const el = new NativePlaceEl()
-              el.placeholder = '場所を検索'
-              el.setAttribute('aria-label', '場所を検索')
+              el.placeholder = '場所を登録'
+              el.setAttribute('aria-label', '場所を登録')
               try {
                 el.setAttribute('name', 'address')
               } catch {}
@@ -223,7 +223,7 @@ export function PlaceAutocompleteField({
               'gmp-place-autocomplete',
             ) as PlaceAutocompleteElement
             el.placeholder = '住所を入力して候補から選択'
-            el.setAttribute('aria-label', '場所を検索')
+            el.setAttribute('aria-label', '場所を登録')
             try {
               el.id = 'place-search-element'
               el.setAttribute('aria-labelledby', 'place-search-label')
@@ -281,7 +281,7 @@ export function PlaceAutocompleteField({
       render={({ field }) => (
         <FormItem>
           <FormLabel id="place-search-label" htmlFor="place-search-field">
-            場所を検索（任意）
+            場所を登録（任意）
           </FormLabel>
 
           <FormControl>
@@ -289,7 +289,7 @@ export function PlaceAutocompleteField({
               <Input
                 id="place-search-field"
                 type="search"
-                aria-label="場所を検索"
+                aria-label="場所を登録"
                 placeholder={
                   gmapsReady ? '住所を入力（候補表示）' : '住所を入力'
                 }

@@ -338,7 +338,11 @@ export function EditChocolateModal({ chocolate, open, onCloseAction }: Props) {
               <Button type="button" variant="outline" onClick={onCloseAction}>
                 キャンセル
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button
+                type="submit"
+                disabled={isPending}
+                className="bg-[#CFE6DA] text-gray-800 hover:bg-[#b7dacf]"
+              >
                 {isPending ? '保存中...' : '保存'}
               </Button>
             </div>

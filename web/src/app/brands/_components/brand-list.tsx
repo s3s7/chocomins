@@ -4,13 +4,11 @@ import { BrandItem } from './brand-item'
 type BrandListProps = {
   brands: Brand[]
   currentUserRole: string
-  currentUserId: string
 }
 
 export function BrandList({
   brands,
   currentUserRole,
-  currentUserId,
 }: BrandListProps) {
   if (brands.length === 0) {
     return <p className="text-gray-500">メーカー・店舗はまだありません。</p>
@@ -23,7 +21,6 @@ export function BrandList({
           key={brand.id}
           brand={brand}
           currentUserRole={currentUserRole}
-          currentUserId={currentUserId}
         />
       ))}
     </ul>

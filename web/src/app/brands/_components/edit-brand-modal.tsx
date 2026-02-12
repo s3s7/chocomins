@@ -260,7 +260,11 @@ export function EditBrandModal({ brand, open, onCloseAction }: Props) {
               <Button type="button" variant="outline" onClick={onCloseAction}>
                 キャンセル
               </Button>
-              <Button type="submit" disabled={isPending || imageUploading}>
+              <Button
+                type="submit"
+                disabled={isPending || imageUploading}
+                className="bg-[#CFE6DA] text-gray-800 hover:bg-[#b7dacf]"
+              >
                 {isPending || imageUploading ? '保存中...' : '保存'}
               </Button>
             </div>

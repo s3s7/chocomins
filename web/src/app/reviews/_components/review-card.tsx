@@ -40,6 +40,18 @@ const getAvatarColor = (seed: string) => {
 
 const getInitial = (name?: string | null) => name?.trim()?.[0] ?? '？'
 
+const REVIEW_CONTENT_PREVIEW_LENGTH = 82
+
+const getContentPreview = (
+  content?: string | null,
+  limit = REVIEW_CONTENT_PREVIEW_LENGTH,
+) => {
+  if (!content) return ''
+  const trimmed = content.trim()
+  if (!trimmed) return ''
+  return trimmed.length > limit ? `${trimmed.slice(0, limit)}…` : trimmed
+}
+
 function StarRating({ rating }: { rating: number }) {
   const stars = useMemo(() => [1, 2, 3, 4, 5], [])
   return (
@@ -96,6 +108,10 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
   const userName = review.user?.name ?? '匿名'
   const avatarColor = useMemo(() => getAvatarColor(userName), [userName])
   const rating = clampRating(review.mintiness)
+  const contentPreview = useMemo(
+    () => getContentPreview(review.content),
+    [review.content],
+  )
   const chocolateNameFromRelation =
     review.chocolate?.name ?? 'チョコレート未登録'
   const chocolateBrand =
@@ -111,7 +127,7 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
 
   const cardInner = (
     <>
-      <div className="mb-4 w-full overflow-hidden rounded-2xl border border-emerald-50 bg-[#c3c88d]">
+      <div className="mb-4 w-full overflow-hidden rounded-2xl border border-emerald-50">
         <Image
           src={imageUrl}
           alt={review.imagePath ? `${reviewLabel} の投稿画像` : 'No Image'}
@@ -138,6 +154,12 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
           </span>
         </div>
       </div>
+
+      {contentPreview && (
+        <p className="text-sm leading-relaxed text-gray-600">
+          {contentPreview}
+        </p>
+      )}
     </>
   )
 
