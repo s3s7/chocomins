@@ -38,10 +38,7 @@ type BrandItemProps = {
   currentUserRole: string
 }
 
-export function BrandItem({
-  brand,
-  currentUserRole,
-}: BrandItemProps) {
+export function BrandItem({ brand, currentUserRole }: BrandItemProps) {
   const [isPending, startTransition] = useTransition()
   const isAdmin = currentUserRole === Role.ADMIN
   const [editing, setEditing] = useState(false)
