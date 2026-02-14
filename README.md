@@ -50,6 +50,7 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
 | ORM | Prisma:6.19.0 |
 | Web API |  Google Places API / Google Maps JavaScript API |
 | データベースサーバー | PostgreSQL(Superbase) |
+| ストレージ | Superbase Storage |
 | 認証 | NextAuth.js |
 | 環境構築 | Docker |
 | CI/CD | GitHub Actions |
