@@ -49,8 +49,8 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
 | CSSフレームワーク | Tailwind CSS + shadcn/ui |
 | ORM | Prisma:6.19.0 |
 | Web API |  Google Places API / Google Maps JavaScript API |
-| データベースサーバー | PostgreSQL(Superbase) |
-| ストレージ | Superbase Storage |
+| データベースサーバー | PostgreSQL(Supabase) |
+| ストレージ | Supabase Storage |
 | 認証 | NextAuth.js |
 | 環境構築 | Docker |
 | CI/CD | GitHub Actions |
