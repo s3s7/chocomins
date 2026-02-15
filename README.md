@@ -70,12 +70,12 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
 
 <table width="700" align="center" cellpadding="0" cellspacing="0" border="0">
   <tr>
-    <th width="50%">ギフト記録一覧・詳細</th>
-    <th width="50%">ギフト記録投稿</th>
+    <th width="50%">レビュー記録一覧・詳細</th>
+    <th width="50%">レビュー投稿</th>
   </tr>
   <tr>
     <td width="50%" align="center">
-      <img src="https://i.gyazo.com/b486abe7751ecc40d35d6dbc1e381f84.gif" width="350">
+      <img src="https://i.gyazo.com/af4ce40e7f79c72427dc2f767c5d63fb.gif" width="350">
     </td>
     <td width="50%" align="center">
      <img src="https://i.gyazo.com/0c598e26f724270468509ab0a2d7ed16.gif" width="350">
