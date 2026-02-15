@@ -36,34 +36,9 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
 
 
 # ■主要な機能
-- 商品登録機能
-- レビュー機能
+- メーカー/店舗管理機能
+- レビュー管理機能
 - コメント機能
-
-## ギフト相手管理
-
-<table width="700" align="center" cellpadding="0" cellspacing="0" border="0">
-  <tr>
-    <th width="50%">ギフト相手の一覧・詳細</th>
-    <th width="50%">ギフト相手を登録</th>
-  </tr>
-  <tr>
-    <td width="50%" align="center">
-      <img src="https://i.gyazo.com/79a87805bc4d67131233d961ae1d5029.gif" width="350">
-    </td>
-    <td width="50%" align="center">
-      <img src="https://i.gyazo.com/cc1e1c7afc4708f0b3a56b637bb3131d.gif" width="350">
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      ギフト相手を一覧で管理。関係性・誕生日・好きなものや趣味・苦手なもの・住所・メモを登録できます。
-    </td>
-    <td width="50%">
-      ギフト相手を作成。誕生日や好きなものや住所やメモなどを登録し、ギフト選びの参考にできます
-    </td>
-  </tr>
-</table>
 
 
 ## レビュー記録管理
@@ -117,15 +92,15 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
 </table>
 
 <br>
-
+## メーカー/店舗管理
 <table width="700" align="center" cellpadding="0" cellspacing="0" border="0">
   <tr>
-    <th width="50%">公開/非公開切り替え</th>
+    <th width="50%">メーカー/店舗の一覧</th>
     <th width="50%">SNSシェア</th>
   </tr>
   <tr>
     <td width="50%" align="center">
-      <img src="https://i.gyazo.com/a66853f85a7b9ac871c8a985b5366f20.gif" width="350">
+      <img src="https://i.gyazo.com/09d7675ecc8d08e9559a0e8cdbeaeef4.gif" width="350">
     </td>
     <td width="50%" align="center">
       <img src="https://i.gyazo.com/35744efd31c40dc19cf480b6fc2c5c27.gif" width="350">
@@ -133,7 +108,7 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
   </tr>
   <tr>
     <td width="50%">
-      ギフト記録の公開・非公開を自由に切り替え可能。プライベートなギフトは非公開、おすすめしたいギフトは公開設定に。
+      ギフト相手を一覧で管理。関係性・誕生日・好きなものや趣味・苦手なもの・住所・メモを登録できます。
     </td>
     <td width="50%">
       おすすめのギフト記録をXでシェアしてアイディアを共有しよう！
@@ -141,6 +116,7 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
   </tr>
 </table>
 
+<br>
 
 ## ユーザー機能
 
@@ -151,18 +127,18 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
   </tr>
   <tr>
     <td width="50%" align="center">
-      <img src="https://i.gyazo.com/e12657643ea9d7a53d2eecae8f792b9c.gif" width="350">
+      <img src="https://i.gyazo.com/06d49a772cf39d82a44a860ab8d16477.gif" width="350">
     </td>
     <td width="50%" align="center">
-      <img src="https://i.gyazo.com/e1e8b71547bb0ef4eeeb6b2286ce8efb.gif" width="350">
+      <img src="https://i.gyazo.com/f2bad80660a00ea2d85e739b0d5e08a5.gif" width="350">
     </td>
   </tr>
   <tr>
     <td width="50%">
-      メールアドレス＋パスワード、またはLine連携でログイン。
+      メールアドレス＋パスワードでログイン。
     </td>
     <td width="50%">
-      マイページではプロフィールの閲覧・編集ができます。総ギフト数、総ギフト相手数、総記念日設定数などまとめて確認できます
+      マイページではプロフィールの閲覧・編集ができます。
     </td>
   </tr>
 </table>
