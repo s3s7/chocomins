@@ -59,6 +59,8 @@ export function PlaceAutocompleteField({
   const placeElementInstanceRef = useRef<PlaceAutocompleteElement | null>(null)
 
   useEffect(() => {
+    let cancelled = false
+
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
     if (!apiKey) return
 
@@ -93,13 +95,37 @@ export function PlaceAutocompleteField({
       setTimeout(() => mo.disconnect(), 5000)
     }
 
+    const applySizingFix = (el: HTMLElement) => {
+      // C: 生成した要素にも “はみ出し対策” を強制
+      el.style.display = 'block'
+      el.style.width = '100%'
+      el.style.maxWidth = '100%'
+      el.style.minWidth = '0'
+      el.style.boxSizing = 'border-box'
+    }
+
+    const cleanup = () => {
+      const el = placeElementInstanceRef.current
+      if (el) {
+        try {
+          // removeEventListener は handler が同一参照じゃないと効かないので、
+          // ここでは要素自体を remove して確実に後始末します
+          el.remove()
+        } catch {}
+      }
+      placeElementInstanceRef.current = null
+    }
+
     loadGoogleMapsPlaces(apiKey)
       .then(() => {
+        if (cancelled) return
         setGmapsReady(true)
+
         const toNonEmptyString = (value?: string | null) => {
           if (typeof value === 'string' && value.length > 0) return value
           return undefined
         }
+
         const normalizeCoordinate = (
           candidate?: number | null | (() => number | null | undefined),
         ) => {
@@ -113,6 +139,7 @@ export function PlaceAutocompleteField({
           }
           return typeof candidate === 'number' ? candidate : undefined
         }
+
         const derivePlaceName = (place?: GooglePlaceResult | null) => {
           if (!place) return undefined
           const displayName = place.displayName
@@ -129,17 +156,21 @@ export function PlaceAutocompleteField({
           }
           return toNonEmptyString(place.name ?? undefined)
         }
+
         const applyPlaceResult = (place?: GooglePlaceResult | null) => {
           if (!place) return
           const formatted =
             toNonEmptyString(place.formattedAddress ?? undefined) ??
             toNonEmptyString(place.formatted_address ?? undefined)
+
           const locationSource = place.location ?? place.geometry?.location
           const lat = normalizeCoordinate(locationSource?.lat)
           const lng = normalizeCoordinate(locationSource?.lng)
+
           if (formatted) {
             form.setValue('address', formatted)
           }
+
           onSelectionChange({
             googlePlaceId:
               toNonEmptyString(place.id ?? undefined) ??
@@ -151,31 +182,43 @@ export function PlaceAutocompleteField({
           })
         }
 
+        // 既存要素が残ってたら一旦掃除（ホットリロード等）
+        cleanup()
+
         if (
           placeElementContainerRef.current &&
           !placeElementInstanceRef.current
         ) {
           const NativePlaceEl =
             window.google?.maps?.places?.PlaceAutocompleteElement
+
           if (NativePlaceEl) {
             try {
-              const el = new NativePlaceEl()
+              const el = new NativePlaceEl() as PlaceAutocompleteElement
+
+              // C: ここで sizing fix
+              applySizingFix(el as unknown as HTMLElement)
+
               el.placeholder = '場所を登録'
               el.setAttribute('aria-label', '場所を登録')
+
               try {
                 el.setAttribute('name', 'address')
               } catch {}
+
               try {
                 el.id = 'place-search-element'
                 el.setAttribute('aria-labelledby', 'place-search-label')
                 el.setAttribute('name', 'place')
               } catch {}
+
               const current = form.getValues('address')
               if (current) {
                 try {
                   el.value = current
                 } catch {}
               }
+
               const handlerSelect = (event: Event) => {
                 void (async () => {
                   const e = event as GmpSelectEventLike
@@ -187,12 +230,7 @@ export function PlaceAutocompleteField({
                   if (!place) return
 
                   await place.fetchFields?.({
-                    fields: [
-                      'id',
-                      'displayName',
-                      'formattedAddress',
-                      'location',
-                    ],
+                    fields: ['id', 'displayName', 'formattedAddress', 'location'],
                   })
 
                   applyPlaceResult(place as unknown as GooglePlaceResult)
@@ -201,7 +239,8 @@ export function PlaceAutocompleteField({
 
               el.addEventListener('gmp-select', handlerSelect)
               placeElementContainerRef.current.appendChild(el)
-              observeInnerInput(el)
+              observeInnerInput(el as unknown as HTMLElement)
+
               placeElementInstanceRef.current = el
               setPlaceElementReady(true)
               return
@@ -222,42 +261,49 @@ export function PlaceAutocompleteField({
             const el = document.createElement(
               'gmp-place-autocomplete',
             ) as PlaceAutocompleteElement
+
+            // C: ここで sizing fix
+            applySizingFix(el as unknown as HTMLElement)
+
             el.placeholder = '住所を入力して候補から選択'
             el.setAttribute('aria-label', '場所を登録')
+
             try {
               el.id = 'place-search-element'
               el.setAttribute('aria-labelledby', 'place-search-label')
               el.setAttribute('name', 'place')
             } catch {}
+
             const current = form.getValues('address')
             if (current) {
               try {
                 el.value = current
               } catch {}
             }
+
             const handlerSelect = (event: Event) => {
               void (async () => {
                 try {
                   const detailEvent = event as PlaceSelectEvent
                   const prediction = detailEvent.detail?.placePrediction
                   if (!prediction?.toPlace) return
+
                   const place = prediction.toPlace()
                   if (!place) return
+
                   await place.fetchFields?.({
-                    fields: [
-                      'id',
-                      'displayName',
-                      'formattedAddress',
-                      'location',
-                    ],
+                    fields: ['id', 'displayName', 'formattedAddress', 'location'],
                   })
+
                   applyPlaceResult(place)
                 } catch {}
               })()
             }
+
             el.addEventListener('gmp-select', handlerSelect)
             placeElementContainerRef.current.appendChild(el)
-            observeInnerInput(el)
+            observeInnerInput(el as unknown as HTMLElement)
+
             placeElementInstanceRef.current = el
             setPlaceElementReady(true)
             return
@@ -272,6 +318,11 @@ export function PlaceAutocompleteField({
       .catch((e) => {
         console.warn('Google Mapsの読み込みに失敗しました', e)
       })
+
+    return () => {
+      cancelled = true
+      cleanup()
+    }
   }, [form, onSelectionChange])
 
   return (
@@ -290,9 +341,7 @@ export function PlaceAutocompleteField({
                 id="place-search-field"
                 type="search"
                 aria-label="場所を登録"
-                placeholder={
-                  gmapsReady ? '住所を入力（候補表示）' : '住所を入力'
-                }
+                placeholder={gmapsReady ? '住所を入力（候補表示）' : '住所を入力'}
                 {...field}
                 autoComplete="off"
               />
@@ -308,9 +357,12 @@ export function PlaceAutocompleteField({
             )}
           </FormControl>
 
+          {/* B: container div に min-w-0 と w-full を追加 */}
           <div
             ref={placeElementContainerRef}
-            className={`rounded-md border bg-white ${placeElementReady ? 'block' : 'hidden'}`}
+            className={`min-w-0 w-full rounded-md border bg-white ${
+              placeElementReady ? 'block' : 'hidden'
+            }`}
           />
 
           <FormMessage />

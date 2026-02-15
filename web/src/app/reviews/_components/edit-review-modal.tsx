@@ -477,7 +477,7 @@ export function EditReviewModal({ review, open, onCloseAction }: Props) {
               <Button
                 type="submit"
                 disabled={isPending || imageUploading}
-                className="bg-[#CFE6DA] text-gray-800 hover:bg-[#b7dacf]"
+                className="rounded-full border border-transparent bg-[#8FCBAB] px-6 py-3 text-slate-900 shadow-lg hover:bg-[#7BB898] hover:shadow-xl"
               >
                 {isPending
                   ? '保存中...'

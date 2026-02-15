@@ -1,13 +1,7 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import {
-  Calendar,
-  Gift,
-  Users,
-  Eye,
-  type LucideIcon,
-} from 'lucide-react'
+import { Calendar, Gift, Users, Eye, type LucideIcon } from 'lucide-react'
 import { Zen_Maru_Gothic } from 'next/font/google'
 
 import { auth } from '@/lib/auth'
