@@ -14,43 +14,45 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Textarea } from '@/components/ui/textarea'
+import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { getErrorMessage } from '@/lib/error-messages'
-import { editCommentSchema, EditCommentInput } from '@/schemas/comment'
-import { updateComment } from '@/app/actions/comment/update'
-import { CommentWithUser } from '@/types'
+import { updateProfile } from '@/app/actions/user/update-profile'
+import { updateProfileSchema, UpdateProfileInput } from '@/schemas/user'
+import { useRouter } from 'next/navigation'
 
-type EditCommentModalProps = {
-  comment: CommentWithUser
+type ProfileEditModalProps = {
   open: boolean
   onClose: () => void
+  name: string
+  email: string
 }
 
-export function EditCommentModal({
-  comment,
+export function ProfileEditModal({
   open,
   onClose,
-}: EditCommentModalProps) {
-  const [state, dispatch, isPending] = useActionState(updateComment, null)
+  name,
+  email,
+}: ProfileEditModalProps) {
+  const [state, dispatch, isPending] = useActionState(updateProfile, null)
+  const router = useRouter()
 
-  const form = useForm<EditCommentInput>({
-    resolver: zodResolver(editCommentSchema),
+  const form = useForm<UpdateProfileInput>({
+    resolver: zodResolver(updateProfileSchema),
     defaultValues: {
-      commentId: comment.id,
-      content: comment.content,
-      reviewId: comment.reviewId,
+      name,
+      email,
     },
   })
 
-  const onSubmit = (values: EditCommentInput) => {
+  const onSubmit = (values: UpdateProfileInput) => {
     const formData = new FormData()
-    formData.append('commentId', values.commentId)
-    formData.append('reviewId', values.reviewId)
-    formData.append('content', values.content)
+    formData.append('name', values.name)
+    formData.append('email', values.email)
 
     startTransition(() => {
       dispatch(formData)
@@ -61,22 +63,19 @@ export function EditCommentModal({
     if (!state) return
 
     if (state.isSuccess) {
-      toast.success('コメントを更新しました')
+      toast.success('プロフィールを更新しました！')
+      router.refresh()
       onClose()
     } else if (state.errorCode) {
       toast.error(getErrorMessage(state.errorCode))
     }
-  }, [state, onClose])
+  }, [state, onClose, router])
 
   useEffect(() => {
     if (!open) return
 
-    form.reset({
-      commentId: comment.id,
-      content: comment.content,
-      reviewId: comment.reviewId,
-    })
-  }, [open, comment.id, comment.content, comment.reviewId, form])
+    form.reset({ name, email })
+  }, [open, name, email, form])
 
   return (
     <Dialog
@@ -87,25 +86,49 @@ export function EditCommentModal({
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>コメントを編集</DialogTitle>
+          <DialogTitle>プロフィール情報を編集</DialogTitle>
         </DialogHeader>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <input type="hidden" {...form.register('commentId')} />
-            <input type="hidden" {...form.register('reviewId')} />
             <FormField
               control={form.control}
-              name="content"
+              name="name"
               render={({ field }) => (
                 <FormItem>
+                  <FormLabel>名前</FormLabel>
                   <FormControl>
-                    <Textarea {...field} rows={4} disabled={isPending} />
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      autoComplete="name"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <div className="flex justify-end gap-2">
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>メールアドレス</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="email"
+                      disabled={isPending}
+                      autoComplete="email"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex justify-end gap-2 pt-2">
               <Button
                 type="button"
                 variant="ghost"
@@ -119,7 +142,7 @@ export function EditCommentModal({
                 disabled={isPending}
                 className="rounded-full border border-transparent bg-[#8FCBAB] px-6 py-3 text-slate-900 shadow-lg hover:bg-[#7BB898] hover:shadow-xl"
               >
-                {isPending ? '更新中...' : '更新する'}
+                {isPending ? '保存中...' : '保存'}
               </Button>
             </div>
           </form>
