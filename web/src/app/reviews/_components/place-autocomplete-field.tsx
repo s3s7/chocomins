@@ -230,7 +230,12 @@ export function PlaceAutocompleteField({
                   if (!place) return
 
                   await place.fetchFields?.({
-                    fields: ['id', 'displayName', 'formattedAddress', 'location'],
+                    fields: [
+                      'id',
+                      'displayName',
+                      'formattedAddress',
+                      'location',
+                    ],
                   })
 
                   applyPlaceResult(place as unknown as GooglePlaceResult)
@@ -292,7 +297,12 @@ export function PlaceAutocompleteField({
                   if (!place) return
 
                   await place.fetchFields?.({
-                    fields: ['id', 'displayName', 'formattedAddress', 'location'],
+                    fields: [
+                      'id',
+                      'displayName',
+                      'formattedAddress',
+                      'location',
+                    ],
                   })
 
                   applyPlaceResult(place)
@@ -341,7 +351,9 @@ export function PlaceAutocompleteField({
                 id="place-search-field"
                 type="search"
                 aria-label="場所を登録"
-                placeholder={gmapsReady ? '住所を入力（候補表示）' : '住所を入力'}
+                placeholder={
+                  gmapsReady ? '住所を入力（候補表示）' : '住所を入力'
+                }
                 {...field}
                 autoComplete="off"
               />
@@ -360,7 +372,7 @@ export function PlaceAutocompleteField({
           {/* B: container div に min-w-0 と w-full を追加 */}
           <div
             ref={placeElementContainerRef}
-            className={`min-w-0 w-full rounded-md border bg-white ${
+            className={`w-full min-w-0 rounded-md border bg-white ${
               placeElementReady ? 'block' : 'hidden'
             }`}
           />

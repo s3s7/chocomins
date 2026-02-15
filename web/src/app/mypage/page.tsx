@@ -1,5 +1,7 @@
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
+import { ProfileCard } from './_components/profile-card'
+import { getUserById } from '@/services/get-user-by-id'
 
 export default async function MyPage() {
   const session = await auth()
@@ -8,8 +10,13 @@ export default async function MyPage() {
     redirect('/')
   }
 
-  const name = session.user.name ?? '未設定'
-  const email = session.user.email ?? '未設定'
+  const user = await getUserById(session.user.id)
+  if (!user) {
+    redirect('/')
+  }
+
+  const name = user.name ?? '未設定'
+  const email = user.email ?? '未設定'
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6 p-6">
@@ -20,16 +27,7 @@ export default async function MyPage() {
         </p>
       </div>
 
-      <div className="bg-card space-y-4 rounded-lg border p-6">
-        <div>
-          <p className="text-muted-foreground text-sm">名前</p>
-          <p className="text-lg font-semibold">{name}</p>
-        </div>
-        <div>
-          <p className="text-muted-foreground text-sm">メールアドレス</p>
-          <p className="text-lg font-semibold">{email}</p>
-        </div>
-      </div>
+      <ProfileCard name={name} email={email} />
     </div>
   )
 }

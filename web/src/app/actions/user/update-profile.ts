@@ -2,39 +2,45 @@
 
 import { auth } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
-import { deleteCommentSchema, DeleteCommentInput } from '@/schemas/comment'
+import { updateProfileSchema, UpdateProfileInput } from '@/schemas/user'
 import { ActionResult, ErrorCodes } from '@/types'
-import { deleteCommentFromDB } from '@/services/delete-comment'
+import { updateUserProfileInDB } from '@/services/update-user'
 
-export async function deleteComment(formData: FormData): Promise<ActionResult> {
+export async function updateProfile(
+  _: ActionResult | null,
+  formData: FormData,
+): Promise<ActionResult> {
   const session = await auth()
   if (!session?.user) {
     return { isSuccess: false, errorCode: ErrorCodes.UNAUTHORIZED }
   }
 
-  const input: DeleteCommentInput = {
-    commentId: formData.get('commentId')?.toString() ?? '',
-    reviewId: formData.get('reviewId')?.toString() ?? '',
+  const input: UpdateProfileInput = {
+    name: formData.get('name')?.toString() ?? '',
+    email: formData.get('email')?.toString() ?? '',
   }
 
-  const parsed = deleteCommentSchema.safeParse(input)
+  const parsed = updateProfileSchema.safeParse(input)
   if (!parsed.success) {
     return { isSuccess: false, errorCode: ErrorCodes.INVALID_INPUT }
   }
 
   try {
-    await deleteCommentFromDB({
-      commentId: parsed.data.commentId,
+    await updateUserProfileInDB({
       userId: session.user.id,
+      name: parsed.data.name,
+      email: parsed.data.email,
     })
 
-    revalidatePath(`/reviews/${parsed.data.reviewId}`)
+    revalidatePath('/mypage')
     return { isSuccess: true }
   } catch (err) {
-    console.error('deleteComment error:', err)
+    console.error('updateProfile error:', err)
 
     if (err instanceof Error) {
       switch (err.message) {
+        case ErrorCodes.USER_EXISTS:
+          return { isSuccess: false, errorCode: ErrorCodes.USER_EXISTS }
         case ErrorCodes.NOT_FOUND:
           return { isSuccess: false, errorCode: ErrorCodes.NOT_FOUND }
         case ErrorCodes.FORBIDDEN:

@@ -64,7 +64,7 @@ export const ReviewForm = () => {
       content: '',
       mintiness: 0,
       chocoRichness: 0,
-      brandId: '',
+      brandId: '', // 未選択は空文字で統一
       address: '',
       imagePath: undefined,
     },
@@ -208,7 +208,8 @@ export const ReviewForm = () => {
               <Select
                 name={field.name}
                 onValueChange={field.onChange}
-                value={field.value === '' ? undefined : field.value}
+                // ★ ここが修正点：undefined にしない（常に string）
+                value={field.value ?? ''}
                 disabled={
                   isPending || brandLoading || brandOptions.length === 0
                 }
