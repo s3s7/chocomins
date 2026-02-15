@@ -279,6 +279,7 @@ export function ReviewContent({
               variant="destructive"
               onClick={handleDelete}
               disabled={isDeleting}
+              className="rounded-full px-6 py-2 shadow-lg"
             >
               {isDeleting ? '削除中...' : '削除'}
             </Button>
@@ -287,12 +288,12 @@ export function ReviewContent({
       )}
 
       <div className="mt-6 flex justify-center">
-        <Link
-          href="/reviews"
-          className="inline-flex items-center rounded-lg bg-emerald-500 px-6 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-600"
+        <Button
+          asChild
+          className="rounded-full border border-transparent bg-[#8FCBAB] px-6 py-2 text-slate-900 shadow-lg hover:bg-[#7BB898] hover:shadow-xl"
         >
-          みんなのレビューに戻る
-        </Link>
+          <Link href="/reviews">みんなのレビューに戻る</Link>
+        </Button>
       </div>
 
       <EditReviewModal

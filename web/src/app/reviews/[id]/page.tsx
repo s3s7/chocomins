@@ -42,7 +42,11 @@ export default async function ReviewDetailPage({
           </div>
 
           <Suspense fallback={<CommentSkeleton />}>
-            <CommentList reviewId={review.id} showHeading={false} />
+            <CommentList
+              reviewId={review.id}
+              showHeading={false}
+              currentUserId={currentUserId}
+            />
           </Suspense>
         </div>
       </div>

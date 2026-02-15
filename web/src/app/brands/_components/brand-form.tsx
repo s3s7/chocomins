@@ -171,7 +171,11 @@ export const BrandForm = () => {
           )}
         /> */}
 
-        <Button type="submit" disabled={isPending || imageUploading}>
+        <Button
+          type="submit"
+          disabled={isPending || imageUploading}
+          className="rounded-full border border-transparent bg-[#8FCBAB] px-6 py-3 text-slate-900 shadow-lg hover:bg-[#7BB898] hover:shadow-xl"
+        >
           {imageUploading
             ? '画像アップロード中...'
             : isPending
