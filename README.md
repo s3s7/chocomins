@@ -100,7 +100,7 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
   </tr>
   <tr>
     <td width="50%" align="center">
-      <img src="https://i.gyazo.com/acfdea28a723fdb0a570254dd481175c.gif" width="350">
+      <img src="https://i.gyazo.com/a5881a27a2d8bcd8e1440ef8794c94af.gif" width="350">
     </td>
     <td width="50%" align="center">
       <img src="https://i.gyazo.com/bba3fbb1a09941e7a0740316719d8a1a.gif" width="350">
