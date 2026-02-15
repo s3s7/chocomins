@@ -76,7 +76,7 @@ export default function ShareButton({
 
   const handleShareOnX = () => {
     const intent = new URL('https://x.com/intent/post')
-    intent.searchParams.set('text', title)
+    intent.searchParams.set('text', `${title}\n#ちょこみんず  #チョコミント`)
     intent.searchParams.set('url', absoluteUrl)
 
     const opened = window.open(
