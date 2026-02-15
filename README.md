@@ -169,4 +169,4 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
 
 
 # ■ER図
-[![Image from Gyazo](https://i.gyazo.com/889efa86113c2428a472d3f5d1df862a.png)](https://gyazo.com/889efa86113c2428a472d3f5d1df862a)
+[![Image from Gyazo](https://i.gyazo.com/a998630e71ed1e042e12392e235a3a3c.png)](https://gyazo.com/a998630e71ed1e042e12392e235a3a3c)
