@@ -78,7 +78,7 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
       <img src="https://i.gyazo.com/b486abe7751ecc40d35d6dbc1e381f84.gif" width="350">
     </td>
     <td width="50%" align="center">
-     <img src="https://i.gyazo.com/a5eae68955c441b7ee33bf8bc66a811a.gif" width="350">
+     <img src="https://i.gyazo.com/0c598e26f724270468509ab0a2d7ed16.gif" width="350">
     </td>
   </tr>
   <tr>
