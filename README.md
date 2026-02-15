@@ -103,7 +103,7 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
       <img src="https://i.gyazo.com/acfdea28a723fdb0a570254dd481175c.gif" width="350">
     </td>
     <td width="50%" align="center">
-      <img src="https://i.gyazo.com/8436c2ebfc2a243c25cd083892771f84.gif" width="350">
+      <img src="https://i.gyazo.com/bba3fbb1a09941e7a0740316719d8a1a.gif" width="350">
     </td>
   </tr>
   <tr>
@@ -128,7 +128,7 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
       <img src="https://i.gyazo.com/a66853f85a7b9ac871c8a985b5366f20.gif" width="350">
     </td>
     <td width="50%" align="center">
-      <img src="https://i.gyazo.com/a66853f85a7b9ac871c8a985b5366f20.gif" width="350">
+      <img src="https://i.gyazo.com/35744efd31c40dc19cf480b6fc2c5c27.gif" width="350">
     </td>
   </tr>
   <tr>
