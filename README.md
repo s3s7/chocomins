@@ -92,7 +92,9 @@ Xでの共有機能、チョコミントやチョコが流行るイベントの�
 </table>
 
 <br>
-## メーカー/店舗管理
+
+## メーカー/店舗管理、SNSシェア
+
 <table width="700" align="center" cellpadding="0" cellspacing="0" border="0">
   <tr>
     <th width="50%">メーカー/店舗の一覧</th>
