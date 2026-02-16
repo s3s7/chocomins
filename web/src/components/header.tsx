@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Role } from '@prisma/client'
@@ -9,6 +9,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Zen_Maru_Gothic } from 'next/font/google'
 import { Button } from '@/components/ui/button'
+import { MenuIcon, XIcon } from 'lucide-react'
 import {
   Menubar,
   MenubarContent,
@@ -30,6 +31,8 @@ export function Header() {
   const isHome = pathname === '/'
 
   const [scrolled, setScrolled] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const isAdmin = session?.user?.role === Role.ADMIN
 
   // ホームだけスクロール監視（ホーム以外は常に白背景）
   useEffect(() => {
@@ -45,17 +48,53 @@ export function Header() {
 
   const handleLogout = async () => {
     const confirmLogout = window.confirm('本当にログアウトしますか？')
-    if (!confirmLogout) return
+    if (!confirmLogout) return false
 
     try {
       await signOut({ redirect: false })
       toast.success('ログアウトしました')
       router.push('/')
+      return true
     } catch (err) {
       console.error(err)
       toast.error('ログアウトに失敗しました')
+      return false
     }
   }
+
+  const closeMobileMenu = () => setMobileMenuOpen(false)
+
+  const handleMobileLogout = async () => {
+    const loggedOut = await handleLogout()
+    if (loggedOut) {
+      closeMobileMenu()
+    }
+  }
+
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      return
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeMobileMenu()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = originalOverflow
+    }
+  }, [mobileMenuOpen])
+
+  useEffect(() => {
+    closeMobileMenu()
+  }, [pathname])
 
   // ヘッダー背景：
   // - ホーム：上は透明、スクロールで白+ぼかし
@@ -88,6 +127,44 @@ export function Header() {
   const authButtonClass =
     'rounded-full border border-black/60 bg-white px-6 py-3 text-slate-900 hover:bg-slate-50'
 
+  const mobileNavLinkClass =
+    'block w-full rounded-full border border-slate-200 px-4 py-3 text-left text-base font-medium text-slate-900 hover:bg-slate-50'
+
+  const guestLinks = useMemo(
+    () => [
+      { label: 'ログイン', href: '/signin' },
+      { label: '新規登録', href: '/signup' },
+      { label: 'レビュー一覧', href: '/reviews' },
+      { label: 'メーカー / 店舗一覧', href: '/brands' },
+    ],
+    [],
+  )
+
+  const reviewLinks = useMemo(
+    () => [
+      { label: '一覧', href: '/reviews' },
+      { label: '入力', href: '/reviews/new' },
+    ],
+    [],
+  )
+
+  const brandLinks = useMemo(
+    () => [
+      { label: '一覧', href: '/brands' },
+      { label: '入力', href: '/brands/new' },
+    ],
+    [],
+  )
+
+  const otherLinks = useMemo(
+    () =>
+      [
+        { label: 'マイページ', href: '/mypage' },
+        ...(isAdmin ? [{ label: '管理者ページ', href: '/admin' }] : []),
+      ],
+    [isAdmin],
+  )
+
   return (
     <header className={headerClass}>
       <Link href="/" className={logoClass}>
@@ -102,29 +179,22 @@ export function Header() {
         />
       </Link>
 
-      <div className="flex items-center space-x-4">
-        {session?.user ? (
-          // ===== ログイン後：Menubar =====
-          <div className="flex items-center space-x-3">
+      <div className="flex items-center gap-3">
+        <div className="hidden md:flex items-center space-x-4">
+          {session?.user ? (
             <Menubar className={menubarClass}>
               <MenubarMenu>
                 <MenubarTrigger className={menuTriggerClass}>
                   レビュー
                 </MenubarTrigger>
                 <MenubarContent className="bg-white text-gray-900">
-                  <MenubarItem asChild>
-                    <Link href="/reviews" className="flex w-full items-center">
-                      一覧
-                    </Link>
-                  </MenubarItem>
-                  <MenubarItem asChild>
-                    <Link
-                      href="/reviews/new"
-                      className="flex w-full items-center"
-                    >
-                      入力
-                    </Link>
-                  </MenubarItem>
+                  {reviewLinks.map((link) => (
+                    <MenubarItem asChild key={link.href}>
+                      <Link href={link.href} className="flex w-full items-center">
+                        {link.label}
+                      </Link>
+                    </MenubarItem>
+                  ))}
                 </MenubarContent>
               </MenubarMenu>
 
@@ -133,19 +203,13 @@ export function Header() {
                   メーカー・店舗
                 </MenubarTrigger>
                 <MenubarContent className="bg-white text-gray-900">
-                  <MenubarItem asChild>
-                    <Link href="/brands" className="flex w-full items-center">
-                      一覧
-                    </Link>
-                  </MenubarItem>
-                  <MenubarItem asChild>
-                    <Link
-                      href="/brands/new"
-                      className="flex w-full items-center"
-                    >
-                      入力
-                    </Link>
-                  </MenubarItem>
+                  {brandLinks.map((link) => (
+                    <MenubarItem asChild key={link.href}>
+                      <Link href={link.href} className="flex w-full items-center">
+                        {link.label}
+                      </Link>
+                    </MenubarItem>
+                  ))}
                 </MenubarContent>
               </MenubarMenu>
 
@@ -154,19 +218,13 @@ export function Header() {
                   その他
                 </MenubarTrigger>
                 <MenubarContent className="bg-white text-gray-900">
-                  <MenubarItem asChild>
-                    <Link href="/mypage" className="flex w-full items-center">
-                      マイページ
-                    </Link>
-                  </MenubarItem>
-
-                  {session.user.role === Role.ADMIN && (
-                    <MenubarItem asChild>
-                      <Link href="/admin" className="flex w-full items-center">
-                        管理者ページ
+                  {otherLinks.map((link) => (
+                    <MenubarItem asChild key={link.href}>
+                      <Link href={link.href} className="flex w-full items-center">
+                        {link.label}
                       </Link>
                     </MenubarItem>
-                  )}
+                  ))}
 
                   <MenubarItem
                     variant="destructive"
@@ -177,28 +235,141 @@ export function Header() {
                 </MenubarContent>
               </MenubarMenu>
             </Menubar>
-          </div>
-        ) : (
-          // ===== 未ログイン：全部「普通のボタン」+ 「一覧」表記 =====
-          <div className="flex items-center gap-3">
-            <Button asChild size="lg" className={authButtonClass}>
-              <Link href="/signin">ログイン</Link>
-            </Button>
+          ) : (
+            <div className="flex items-center gap-3">
+              {guestLinks.map((link) => (
+                <Button asChild size="lg" className={authButtonClass} key={link.href}>
+                  <Link href={link.href}>{link.label}</Link>
+                </Button>
+              ))}
+            </div>
+          )}
+        </div>
 
-            <Button asChild size="lg" className={authButtonClass}>
-              <Link href="/signup">新規登録</Link>
-            </Button>
-
-            <Button asChild size="lg" className={authButtonClass}>
-              <Link href="/reviews">レビュー一覧</Link>
-            </Button>
-
-            <Button asChild size="lg" className={authButtonClass}>
-              <Link href="/brands">メーカー / 店舗一覧</Link>
-            </Button>
-          </div>
-        )}
+        <button
+          type="button"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-black/60 bg-white text-slate-900 shadow-sm transition-colors hover:bg-slate-50 md:hidden"
+          aria-label={mobileMenuOpen ? 'メニューを閉じる' : 'メニューを開く'}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-menu-panel"
+          onClick={() => setMobileMenuOpen((prev) => !prev)}
+        >
+          {mobileMenuOpen ? (
+            <XIcon className="h-5 w-5" aria-hidden="true" />
+          ) : (
+            <MenuIcon className="h-5 w-5" aria-hidden="true" />
+          )}
+        </button>
       </div>
+
+      {mobileMenuOpen && (
+        <div className="md:hidden" aria-hidden={!mobileMenuOpen}>
+          <div
+            className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm"
+            onClick={closeMobileMenu}
+          />
+          <div
+            id="mobile-menu-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-label="メインメニュー"
+            className="fixed inset-y-0 right-0 z-[70] flex h-full w-72 max-w-full flex-col bg-white p-6 text-slate-900 shadow-2xl"
+          >
+            <div className="mb-6 flex items-center justify-between">
+              <p className="text-lg font-semibold">メニュー</p>
+              <button
+                type="button"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200"
+                onClick={closeMobileMenu}
+                aria-label="メニューを閉じる"
+              >
+                <XIcon className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
+
+            {session?.user ? (
+              <nav className="flex flex-1 flex-col gap-6" aria-label="ログイン済みメニュー">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                    レビュー
+                  </p>
+                  <div className="mt-2 space-y-2">
+                    {reviewLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className={mobileNavLinkClass}
+                        onClick={closeMobileMenu}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                    メーカー・店舗
+                  </p>
+                  <div className="mt-2 space-y-2">
+                    {brandLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className={mobileNavLinkClass}
+                        onClick={closeMobileMenu}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {!!otherLinks.length && (
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                      その他
+                    </p>
+                    <div className="mt-2 space-y-2">
+                      {otherLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className={mobileNavLinkClass}
+                          onClick={closeMobileMenu}
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  className="mt-auto block w-full rounded-full border border-red-200 px-4 py-3 text-left text-base font-semibold text-red-600 hover:bg-red-50"
+                  onClick={() => void handleMobileLogout()}
+                >
+                  ログアウト
+                </button>
+              </nav>
+            ) : (
+              <nav className="flex flex-col gap-3" aria-label="未ログインメニュー">
+                {guestLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={mobileNavLinkClass}
+                    onClick={closeMobileMenu}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   )
 }
