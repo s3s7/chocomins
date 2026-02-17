@@ -116,7 +116,7 @@ export function Header() {
   // Menubar 全体は箱を作らない（外枠なし）
   const menubarClass = 'bg-transparent p-0 border-0 shadow-none'
 
-  // MenubarTrigger の見た目（ピル型 + 黒い枠）
+  // MenubarTrigger の見た目
   const menuTriggerClass = [
     'bg-white text-slate-900 border-black/60',
     'hover:bg-slate-50',
