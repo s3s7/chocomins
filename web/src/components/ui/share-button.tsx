@@ -42,6 +42,14 @@ export default function ShareButton({
     }
   }, [url])
 
+  // X共有用のintent URL（<a>で使う）
+  const xIntentUrl = useMemo(() => {
+    const intent = new URL('https://x.com/intent/post')
+    intent.searchParams.set('text', `${title}\n#ちょこみんず  #チョコミント`)
+    intent.searchParams.set('url', absoluteUrl)
+    return intent.toString()
+  }, [title, absoluteUrl])
+
   const handleShare = async () => {
     try {
       await navigator.share({
@@ -72,22 +80,6 @@ export default function ShareButton({
       setShowCopiedMessage(true)
       setTimeout(() => setShowCopiedMessage(false), 2000)
     }
-  }
-
-  const handleShareOnX = () => {
-    const intent = new URL('https://x.com/intent/post')
-    intent.searchParams.set('text', `${title}\n#ちょこみんず  #チョコミント`)
-    intent.searchParams.set('url', absoluteUrl)
-
-    const opened = window.open(
-      intent.toString(),
-      '_blank',
-      'noopener,noreferrer',
-    )
-    // if (!opened) {
-    //   // ポップアップブロック対策
-    //   window.location.href = intent.toString()
-    // }
   }
 
   return (
@@ -121,14 +113,15 @@ export default function ShareButton({
       )}
 
       {showXButton && (
-        <button
-          onClick={handleShareOnX}
+        <a
+          href={xIntentUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-muted-foreground hover:text-foreground inline-flex items-center gap-2 transition-colors"
           aria-label="Share on X"
-          type="button"
         >
           <FaXTwitter className="h-4 w-4" aria-hidden="true" />
-        </button>
+        </a>
       )}
     </div>
   )
