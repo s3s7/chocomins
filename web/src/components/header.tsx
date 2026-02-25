@@ -72,14 +72,10 @@ export function Header() {
   }
 
   useEffect(() => {
-    if (!mobileMenuOpen) {
-      return
-    }
+    if (!mobileMenuOpen) return
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeMobileMenu()
-      }
+      if (event.key === 'Escape') closeMobileMenu()
     }
 
     window.addEventListener('keydown', handleKeyDown)
@@ -105,7 +101,7 @@ export function Header() {
       ? scrolled
         ? 'bg-white/80 text-slate-900 backdrop-blur border-b border-slate-200'
         : 'bg-transparent text-slate-900'
-      : 'bg-[#BEDDE2] text-slate-900 border-slate-200',
+      : 'bg-[#BEDDE2] text-slate-900 border-b border-slate-200',
   ].join(' ')
 
   const logoClass = [
@@ -157,117 +153,124 @@ export function Header() {
   )
 
   const otherLinks = useMemo(
-    () =>
-      [
-        { label: 'マイページ', href: '/mypage' },
-        ...(isAdmin ? [{ label: '管理者ページ', href: '/admin' }] : []),
-      ],
+    () => [
+      { label: 'マイページ', href: '/mypage' },
+      ...(isAdmin ? [{ label: '管理者ページ', href: '/admin' }] : []),
+    ],
     [isAdmin],
   )
 
   return (
-    <header className={headerClass}>
-      <Link href="/" className={logoClass}>
-        <span className="leading-none whitespace-nowrap">ちょこみんず</span>
-        <Image
-          src="/leaf.png"
-          alt="ちょこみんずのロゴ"
-          width={53}
-          height={53}
-          className="ml-0"
-          priority
-        />
-      </Link>
+    <>
+      {/* Header本体 */}
+      <header className={headerClass}>
+        <Link href="/" className={logoClass}>
+          <span className="leading-none whitespace-nowrap">ちょこみんず</span>
+          <Image
+            src="/leaf.png"
+            alt="ちょこみんずのロゴ"
+            width={53}
+            height={53}
+            className="ml-0"
+            priority
+          />
+        </Link>
 
-      <div className="flex items-center gap-3">
-        <div className="hidden md:flex items-center space-x-4">
-          {session?.user ? (
-            <Menubar className={menubarClass}>
-              <MenubarMenu>
-                <MenubarTrigger className={menuTriggerClass}>
-                  レビュー
-                </MenubarTrigger>
-                <MenubarContent className="bg-white text-gray-900">
-                  {reviewLinks.map((link) => (
-                    <MenubarItem asChild key={link.href}>
-                      <Link href={link.href} className="flex w-full items-center">
-                        {link.label}
-                      </Link>
+        <div className="flex items-center gap-3">
+          {/* PCメニュー */}
+          <div className="hidden md:flex items-center space-x-4">
+            {session?.user ? (
+              <Menubar className={menubarClass}>
+                <MenubarMenu>
+                  <MenubarTrigger className={menuTriggerClass}>
+                    レビュー
+                  </MenubarTrigger>
+                  <MenubarContent className="bg-white text-gray-900">
+                    {reviewLinks.map((link) => (
+                      <MenubarItem asChild key={link.href}>
+                        <Link href={link.href} className="flex w-full items-center">
+                          {link.label}
+                        </Link>
+                      </MenubarItem>
+                    ))}
+                  </MenubarContent>
+                </MenubarMenu>
+
+                <MenubarMenu>
+                  <MenubarTrigger className={menuTriggerClass}>
+                    メーカー・店舗
+                  </MenubarTrigger>
+                  <MenubarContent className="bg-white text-gray-900">
+                    {brandLinks.map((link) => (
+                      <MenubarItem asChild key={link.href}>
+                        <Link href={link.href} className="flex w-full items-center">
+                          {link.label}
+                        </Link>
+                      </MenubarItem>
+                    ))}
+                  </MenubarContent>
+                </MenubarMenu>
+
+                <MenubarMenu>
+                  <MenubarTrigger className={menuTriggerClass}>
+                    その他
+                  </MenubarTrigger>
+                  <MenubarContent className="bg-white text-gray-900">
+                    {otherLinks.map((link) => (
+                      <MenubarItem asChild key={link.href}>
+                        <Link href={link.href} className="flex w-full items-center">
+                          {link.label}
+                        </Link>
+                      </MenubarItem>
+                    ))}
+
+                    <MenubarItem
+                      variant="destructive"
+                      onSelect={() => void handleLogout()}
+                    >
+                      ログアウト
                     </MenubarItem>
-                  ))}
-                </MenubarContent>
-              </MenubarMenu>
+                  </MenubarContent>
+                </MenubarMenu>
+              </Menubar>
+            ) : (
+              <div className="flex items-center gap-3">
+                {guestLinks.map((link) => (
+                  <Button asChild size="lg" className={authButtonClass} key={link.href}>
+                    <Link href={link.href}>{link.label}</Link>
+                  </Button>
+                ))}
+              </div>
+            )}
+          </div>
 
-              <MenubarMenu>
-                <MenubarTrigger className={menuTriggerClass}>
-                  メーカー・店舗
-                </MenubarTrigger>
-                <MenubarContent className="bg-white text-gray-900">
-                  {brandLinks.map((link) => (
-                    <MenubarItem asChild key={link.href}>
-                      <Link href={link.href} className="flex w-full items-center">
-                        {link.label}
-                      </Link>
-                    </MenubarItem>
-                  ))}
-                </MenubarContent>
-              </MenubarMenu>
-
-              <MenubarMenu>
-                <MenubarTrigger className={menuTriggerClass}>
-                  その他
-                </MenubarTrigger>
-                <MenubarContent className="bg-white text-gray-900">
-                  {otherLinks.map((link) => (
-                    <MenubarItem asChild key={link.href}>
-                      <Link href={link.href} className="flex w-full items-center">
-                        {link.label}
-                      </Link>
-                    </MenubarItem>
-                  ))}
-
-                  <MenubarItem
-                    variant="destructive"
-                    onSelect={() => void handleLogout()}
-                  >
-                    ログアウト
-                  </MenubarItem>
-                </MenubarContent>
-              </MenubarMenu>
-            </Menubar>
-          ) : (
-            <div className="flex items-center gap-3">
-              {guestLinks.map((link) => (
-                <Button asChild size="lg" className={authButtonClass} key={link.href}>
-                  <Link href={link.href}>{link.label}</Link>
-                </Button>
-              ))}
-            </div>
-          )}
+          {/* SPハンバーガーボタン */}
+          <button
+            type="button"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-black/60 bg-white text-slate-900 shadow-sm transition-colors hover:bg-slate-50 md:hidden"
+            aria-label={mobileMenuOpen ? 'メニューを閉じる' : 'メニューを開く'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu-panel"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+          >
+            {mobileMenuOpen ? (
+              <XIcon className="h-5 w-5" aria-hidden="true" />
+            ) : (
+              <MenuIcon className="h-5 w-5" aria-hidden="true" />
+            )}
+          </button>
         </div>
-
-        <button
-          type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-black/60 bg-white text-slate-900 shadow-sm transition-colors hover:bg-slate-50 md:hidden"
-          aria-label={mobileMenuOpen ? 'メニューを閉じる' : 'メニューを開く'}
-          aria-expanded={mobileMenuOpen}
-          aria-controls="mobile-menu-panel"
-          onClick={() => setMobileMenuOpen((prev) => !prev)}
-        >
-          {mobileMenuOpen ? (
-            <XIcon className="h-5 w-5" aria-hidden="true" />
-          ) : (
-            <MenuIcon className="h-5 w-5" aria-hidden="true" />
-          )}
-        </button>
-      </div>
+      </header>
 
       {mobileMenuOpen && (
-        <div className="md:hidden" aria-hidden={!mobileMenuOpen}>
+        <div className="md:hidden text-slate-900" aria-hidden={!mobileMenuOpen}>
+          {/* overlay */}
           <div
             className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm"
             onClick={closeMobileMenu}
           />
+
+          {/* panel */}
           <div
             id="mobile-menu-panel"
             role="dialog"
@@ -370,6 +373,6 @@ export function Header() {
           </div>
         </div>
       )}
-    </header>
+    </>
   )
 }
