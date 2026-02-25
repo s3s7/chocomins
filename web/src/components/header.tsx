@@ -262,7 +262,6 @@ export function Header() {
         </div>
       </header>
 
-      {/* ✅ ここがポイント：モバイルメニューを<header>の外に出す */}
       {mobileMenuOpen && (
         <div className="md:hidden text-slate-900" aria-hidden={!mobileMenuOpen}>
           {/* overlay */}
