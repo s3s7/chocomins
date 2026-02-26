@@ -158,7 +158,7 @@
 | CSSフレームワーク | Tailwind CSS + shadcn/ui |
 | ORM | Prisma:6.19.0 |
 | Web API |  Google Places API / Google Maps JavaScript API |
-| データベースサーバー | PostgreSQL(Supabase) |
+| データベースサーバー | PostgreSQL |
 | ストレージ | Supabase Storage |
 | 認証 | NextAuth.js |
 | 環境構築 | Docker |
