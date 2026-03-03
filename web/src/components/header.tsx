@@ -178,7 +178,7 @@ export function Header() {
 
         <div className="flex items-center gap-3">
           {/* PCメニュー */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden items-center space-x-4 md:flex">
             {session?.user ? (
               <Menubar className={menubarClass}>
                 <MenubarMenu>
@@ -188,7 +188,10 @@ export function Header() {
                   <MenubarContent className="bg-white text-gray-900">
                     {reviewLinks.map((link) => (
                       <MenubarItem asChild key={link.href}>
-                        <Link href={link.href} className="flex w-full items-center">
+                        <Link
+                          href={link.href}
+                          className="flex w-full items-center"
+                        >
                           {link.label}
                         </Link>
                       </MenubarItem>
@@ -203,7 +206,10 @@ export function Header() {
                   <MenubarContent className="bg-white text-gray-900">
                     {brandLinks.map((link) => (
                       <MenubarItem asChild key={link.href}>
-                        <Link href={link.href} className="flex w-full items-center">
+                        <Link
+                          href={link.href}
+                          className="flex w-full items-center"
+                        >
                           {link.label}
                         </Link>
                       </MenubarItem>
@@ -218,7 +224,10 @@ export function Header() {
                   <MenubarContent className="bg-white text-gray-900">
                     {otherLinks.map((link) => (
                       <MenubarItem asChild key={link.href}>
-                        <Link href={link.href} className="flex w-full items-center">
+                        <Link
+                          href={link.href}
+                          className="flex w-full items-center"
+                        >
                           {link.label}
                         </Link>
                       </MenubarItem>
@@ -236,7 +245,12 @@ export function Header() {
             ) : (
               <div className="flex items-center gap-3">
                 {guestLinks.map((link) => (
-                  <Button asChild size="lg" className={authButtonClass} key={link.href}>
+                  <Button
+                    asChild
+                    size="lg"
+                    className={authButtonClass}
+                    key={link.href}
+                  >
                     <Link href={link.href}>{link.label}</Link>
                   </Button>
                 ))}
@@ -263,7 +277,7 @@ export function Header() {
       </header>
 
       {mobileMenuOpen && (
-        <div className="md:hidden text-slate-900" aria-hidden={!mobileMenuOpen}>
+        <div className="text-slate-900 md:hidden" aria-hidden={!mobileMenuOpen}>
           {/* overlay */}
           <div
             className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm"
@@ -291,9 +305,12 @@ export function Header() {
             </div>
 
             {session?.user ? (
-              <nav className="flex flex-1 flex-col gap-6" aria-label="ログイン済みメニュー">
+              <nav
+                className="flex flex-1 flex-col gap-6"
+                aria-label="ログイン済みメニュー"
+              >
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                  <p className="text-xs font-semibold tracking-[0.2em] text-slate-500 uppercase">
                     レビュー
                   </p>
                   <div className="mt-2 space-y-2">
@@ -311,7 +328,7 @@ export function Header() {
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                  <p className="text-xs font-semibold tracking-[0.2em] text-slate-500 uppercase">
                     メーカー・店舗
                   </p>
                   <div className="mt-2 space-y-2">
@@ -330,7 +347,7 @@ export function Header() {
 
                 {!!otherLinks.length && (
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                    <p className="text-xs font-semibold tracking-[0.2em] text-slate-500 uppercase">
                       その他
                     </p>
                     <div className="mt-2 space-y-2">
@@ -357,7 +374,10 @@ export function Header() {
                 </button>
               </nav>
             ) : (
-              <nav className="flex flex-col gap-3" aria-label="未ログインメニュー">
+              <nav
+                className="flex flex-col gap-3"
+                aria-label="未ログインメニュー"
+              >
                 {guestLinks.map((link) => (
                   <Link
                     key={link.href}
