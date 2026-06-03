@@ -208,7 +208,6 @@ export const ReviewForm = () => {
               <Select
                 name={field.name}
                 onValueChange={field.onChange}
-                // ★ ここが修正点：undefined にしない（常に string）
                 value={field.value ?? ''}
                 disabled={
                   isPending || brandLoading || brandOptions.length === 0
