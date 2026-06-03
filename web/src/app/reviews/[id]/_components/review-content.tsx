@@ -16,6 +16,7 @@ import { Star } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import ShareButton from '@/components/ui/share-button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 
 const clampScore = (value?: number | null) =>
   typeof value === 'number' ? Math.max(0, Math.min(5, value)) : 0
@@ -204,15 +205,28 @@ export function ReviewContent({
 
       <div className="mt-6 md:flex md:space-x-6">
         <div className="w-full md:w-1/2">
-          <div className="h-[250px] w-full overflow-hidden rounded-xl shadow-md">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={imageUrl}
-              alt={`${shareTitle}の投稿画像`}
-              className="h-full w-full object-cover"
-              loading="lazy"
-            />
-          </div>
+          <Dialog>
+            <DialogTrigger asChild>
+              <div className="h-[250px] w-full cursor-pointer overflow-hidden rounded-xl shadow-md">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={imageUrl}
+                  alt={`${shareTitle}の投稿画像`}
+                  className="h-full w-full object-cover transition-opacity hover:opacity-90"
+                  loading="lazy"
+                />
+              </div>
+            </DialogTrigger>
+            <DialogContent className="max-w-3xl border-0 bg-black/90 p-2">
+              <DialogTitle className="sr-only">{shareTitle}の投稿画像</DialogTitle>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={imageUrl}
+                alt={`${shareTitle}の投稿画像`}
+                className="max-h-[80vh] w-full object-contain"
+              />
+            </DialogContent>
+          </Dialog>
           <div className="mt-4 flex items-center gap-3 text-sm text-gray-600">
             <Avatar className="h-10 w-10">
               <AvatarFallback

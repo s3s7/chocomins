@@ -23,22 +23,14 @@ export default function ShareButton({
 }: ShareButtonProps) {
   const [canShare, setCanShare] = useState(false)
   const [showCopiedMessage, setShowCopiedMessage] = useState(false)
+  const [absoluteUrl, setAbsoluteUrl] = useState(url)
 
   useEffect(() => {
     setCanShare(typeof navigator !== 'undefined' && 'share' in navigator)
-  }, [])
-
-  // urlが相対だった場合に絶対URLに寄せる（保険）
-  const absoluteUrl = useMemo(() => {
     try {
-      return new URL(
-        url,
-        typeof window !== 'undefined'
-          ? window.location.origin
-          : 'https://example.com',
-      ).toString()
+      setAbsoluteUrl(new URL(url, window.location.origin).toString())
     } catch {
-      return url
+      setAbsoluteUrl(url)
     }
   }, [url])
 
