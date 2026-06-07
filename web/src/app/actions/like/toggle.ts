@@ -14,20 +14,20 @@ export async function toggleLike(reviewId: string): Promise<ActionResult> {
 
   const userId = session.user.id
 
-  // try {
-  //   const existing = await prisma.like.findUnique({
-  //     where: { userId_reviewId: { userId, reviewId } },
-  //   })
+  try {
+    const existing = await prisma.like.findUnique({
+      where: { userId_reviewId: { userId, reviewId } },
+    })
 
-  //   if (existing) {
-  //     await prisma.like.delete({
-  //       where: { userId_reviewId: { userId, reviewId } },
-  //     })
-  //   } else {
-  //     await prisma.like.create({
-  //       data: { userId, reviewId },
-  //     })
-  //   }
+    if (existing) {
+      await prisma.like.delete({
+        where: { userId_reviewId: { userId, reviewId } },
+      })
+    } else {
+      await prisma.like.create({
+        data: { userId, reviewId },
+      })
+    }
 
   //   revalidatePath(`/reviews/${reviewId}`)
   //   revalidatePath('/reviews')
@@ -35,5 +35,5 @@ export async function toggleLike(reviewId: string): Promise<ActionResult> {
   // } catch (err) {
   //   console.error('toggleLike error:', err)
   //   return { isSuccess: false, errorCode: ErrorCodes.SERVER_ERROR }
-  // }
+  }
 }
