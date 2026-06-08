@@ -29,11 +29,11 @@ export async function toggleLike(reviewId: string): Promise<ActionResult> {
       })
     }
 
-  //   revalidatePath(`/reviews/${reviewId}`)
-  //   revalidatePath('/reviews')
-  //   return { isSuccess: true }
-  // } catch (err) {
-  //   console.error('toggleLike error:', err)
-  //   return { isSuccess: false, errorCode: ErrorCodes.SERVER_ERROR }
+    revalidatePath(`/reviews/${reviewId}`)
+    revalidatePath('/reviews')
+    return { isSuccess: true }
+  } catch (err) {
+    console.error('toggleLike error:', err)
+    return { isSuccess: false, errorCode: ErrorCodes.SERVER_ERROR }
   }
 }
