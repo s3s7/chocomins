@@ -25,6 +25,8 @@ export type ReviewWithUser = Review & {
         name?: string | null
       })
     | null
+  likeCount?: number
+  isLiked?: boolean
 }
 
 export type ChocolateWithRelations = Chocolate & {
