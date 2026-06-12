@@ -4,9 +4,9 @@ import { auth } from '@/lib/auth'
 
 export default async function ReviewListPage() {
   const session = await auth()
-  const reviews = await getReviews()
   const currentUserId = session?.user?.id ?? ''
   const currentUserRole = session?.user?.role ?? ''
+  const reviews = await getReviews(currentUserId || undefined)
 
   return (
     <main className="mx-auto max-w-6xl space-y-6 p-6">

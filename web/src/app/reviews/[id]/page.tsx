@@ -15,7 +15,7 @@ export default async function ReviewDetailPage({
   const { id } = await params
   const session = await auth()
 
-  const review = await getReviewById(id)
+  const review = await getReviewById(id, session?.user?.id)
   if (!review) notFound()
 
   const currentUserId = session?.user?.id ?? ''
@@ -28,6 +28,7 @@ export default async function ReviewDetailPage({
           review={review}
           currentUserId={currentUserId}
           currentUserRole={currentUserRole}
+          isLoggedIn={!!session?.user}
         />
 
         <div className="mt-8 border-t border-gray-200 pt-6">

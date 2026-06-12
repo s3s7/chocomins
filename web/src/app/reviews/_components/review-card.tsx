@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useMemo } from 'react'
-import { Star } from 'lucide-react'
+import { Heart, Star } from 'lucide-react'
 import Image from 'next/image'
 
 import { ReviewWithUser } from '@/types'
@@ -153,6 +153,12 @@ export function ReviewCard({ review, href }: ReviewCardProps) {
             {rating} / 5
           </span>
         </div>
+        {(review.likeCount ?? 0) > 0 && (
+          <div className="flex items-center gap-1 text-xs text-pink-400">
+            <Heart className="h-3.5 w-3.5 fill-pink-400" />
+            <span>{review.likeCount}</span>
+          </div>
+        )}
       </div>
 
       {contentPreview && (
