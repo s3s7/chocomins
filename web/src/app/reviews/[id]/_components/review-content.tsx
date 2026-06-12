@@ -15,6 +15,7 @@ import { ImgEditor } from '@/lib/img-editor'
 import { Star } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import ShareButton from '@/components/ui/share-button'
+import { LikeButton } from '@/components/ui/like-button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 
@@ -98,12 +99,14 @@ type ReviewContentProps = {
   review: ReviewWithUser
   currentUserId: string
   currentUserRole: string
+  isLoggedIn?: boolean
 }
 
 export function ReviewContent({
   review,
   currentUserId,
   currentUserRole,
+  isLoggedIn = false,
 }: ReviewContentProps) {
   const lat = review.place?.lat ?? null
   const lng = review.place?.lng ?? null
@@ -269,6 +272,12 @@ export function ReviewContent({
       </div>
 
       <div className="mt-6 flex flex-col gap-3 text-sm text-gray-500 sm:flex-row sm:items-center">
+        <LikeButton
+          reviewId={review.id}
+          initialLikeCount={review.likeCount ?? 0}
+          initialIsLiked={review.isLiked ?? false}
+          isLoggedIn={isLoggedIn}
+        />
         <ShareButton
           url={shareUrl}
           title={shareTitle}

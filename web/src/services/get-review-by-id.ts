@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 
-export async function getReviewById(reviewId: string) {
+export async function getReviewById(reviewId: string, currentUserId?: string) {
   const review = await prisma.review.findUnique({
     where: { id: reviewId },
     include: {
@@ -22,20 +22,33 @@ export async function getReviewById(reviewId: string) {
       place: {
         select: { lat: true, lng: true, address: true, name: true },
       },
+      _count: {
+        select: { likes: true },
+      },
+      ...(currentUserId
+        ? { likes: { where: { userId: currentUserId }, select: { userId: true } } }
+        : {}),
     },
   })
 
   if (!review) return null
 
+  const { _count, likes, ...rest } = review as typeof review & {
+    _count: { likes: number }
+    likes?: { userId: string }[]
+  }
+
   return {
-    ...review,
-    place: review.place
+    ...rest,
+    likeCount: _count.likes,
+    isLiked: currentUserId ? (likes ?? []).length > 0 : false,
+    place: rest.place
       ? {
-          ...review.place,
-          lat: review.place.lat ?? null,
-          lng: review.place.lng ?? null,
-          address: review.place.address ?? null,
-          name: review.place.name ?? null,
+          ...rest.place,
+          lat: rest.place.lat ?? null,
+          lng: rest.place.lng ?? null,
+          address: rest.place.address ?? null,
+          name: rest.place.name ?? null,
         }
       : null,
   }
